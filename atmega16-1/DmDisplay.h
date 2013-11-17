@@ -1,6 +1,10 @@
 #ifndef DMDISPLAY_H
 #define DMDISPLAY_H
 
+#include <avr/io.h>
+#include <util/delay.h>
+#include <string.h>
+
 #include "font5x7.h"
 #include "pinDefs.h"
 
@@ -18,11 +22,11 @@ class DmDisplay
 		void setRow(uint8_t);
 		void lcdChar(const char *);
 		void resetColumnAdress();
-	private:
 		enum
 		{
 			INSTRUCT,DATA
 		};
 };
+
 
 #endif

@@ -12,6 +12,7 @@ DmDisplay::DmDisplay()
 	init();
 	_delay_ms(100);
 }
+
 void DmDisplay::init()
 {
 	write(0xE2, INSTRUCT);
@@ -27,6 +28,7 @@ void DmDisplay::init()
 	write(0xAF, INSTRUCT);
 	write(0x40, INSTRUCT);
 }
+
 //type = wheter it's instruction/command or data.
 void DmDisplay::write(uint8_t data, int type)
 {
