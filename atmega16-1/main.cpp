@@ -3,370 +3,82 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 
-/*
- * using a atmega16
- * with a glcd, this display: http://tkkrlab.nl/wiki/Glcd_48x100
- * 
- * A0, Read/Write and Enable are 
- * connected to port D
- * 
- * A0 is connected to: PD6
- * R/W is connected to: PD5
- * Enable is connected to: PD4
- * */
+#include "DmDisplay.h"
 
-/* Start of defines for easy line controle
- * 
- * This wil spare me a lot of typing :)
- * 
- * */
- 
-#define A0 						_BV(PD6)
-#define RW 						_BV(PD5)
-#define ENABLE 					_BV(PD4)
-#define LCD_POWER 				_BV(PD3)
+DmDisplay lcd;
 
-#define FUNCTIONPORT 			PORTD
-#define FUNCTIONDIR 			(DDRD)
-#define FUNCTIONPORT_TO_OUTPUT	(FUNCTIONDIR |=  (A0|RW|ENABLE|LCD_POWER))
-#define FUNCTIONPORT_TO_INPUT 	(FUNCTIONDIR &= ~(A0|RW|ENABLE|LCD_POWER))
-
-#define SET_A0 					(FUNCTIONPORT |= A0)
-#define SET_RW 					(FUNCTIONPORT |= RW)
-#define SET_ENABLE 				(FUNCTIONPORT |= ENABLE) 
-#define SET_POWER				(FUNCTIONPORT |= LCD_POWER)
-
-#define CLEAR_A0				(FUNCTIONPORT &= ~(A0))
-#define CLEAR_RW				(FUNCTIONPORT &= ~(RW))
-#define CLEAR_ENABLE			(FUNCTIONPORT &= ~(ENABLE))
-#define CLEAR_POWER				(FUNCTIONPORT &= ~(LCD_POWER))
-
-#define DATA_PORT 				PORTA
-#define DATA_DIR 				(DDRA)
-#define DATAPORT_TO_OUTPUT 		(DATA_DIR = 0xFF)
-#define DATAPORT_TO_INPUT		(DATA_DIR = 0x00)
-
-/* End of defines for easy use.*/
-
-// 5x7 Font
-char lcdFont[][5] = {
-{ 0x00 , 0x00 , 0x00 , 0x00 , 0x00 }, 		
-{ 0x00 , 0x00 , 0x5F , 0x00 , 0x00 }, 
-{ 0x00 , 0x07 , 0x00 , 0x07 , 0x00 }, 
-{ 0x14 , 0x7F , 0x14 , 0x7F , 0x14 }, 
-{ 0x24 , 0x2A , 0x7F , 0x2A , 0x12 }, 
-{ 0x23 , 0x13 , 0x08 , 0x64 , 0x62 }, 
-{ 0x36 , 0x49 , 0x55 , 0x22 , 0x50 }, 
-{ 0x00 , 0x05 , 0x03 , 0x00 , 0x00 }, 
-{ 0x00 , 0x1C , 0x22 , 0x41 , 0x00 }, 
-{ 0x00 , 0x41 , 0x22 , 0x1C , 0x00 }, 
-{ 0x08 , 0x2A , 0x1C , 0x2A , 0x08 }, 
-{ 0x08 , 0x08 , 0x3E , 0x08 , 0x08 }, 
-{ 0x00 , 0x50 , 0x30 , 0x00 , 0x00 }, 
-{ 0x08 , 0x08 , 0x08 , 0x08 , 0x08 }, 
-{ 0x00 , 0x60 , 0x60 , 0x00 , 0x00 }, 
-{ 0x20 , 0x10 , 0x08 , 0x04 , 0x02 }, 
-{ 0x3E , 0x51 , 0x49 , 0x45 , 0x3E }, 
-{ 0x00 , 0x42 , 0x7F , 0x40 , 0x00 }, 
-{ 0x42 , 0x61 , 0x51 , 0x49 , 0x46 }, 
-{ 0x21 , 0x41 , 0x45 , 0x4B , 0x31 }, 
-{ 0x18 , 0x14 , 0x12 , 0x7F , 0x10 }, 
-{ 0x27 , 0x45 , 0x45 , 0x45 , 0x39 }, 
-{ 0x3C , 0x4A , 0x49 , 0x49 , 0x30 }, 
-{ 0x01 , 0x71 , 0x09 , 0x05 , 0x03 }, 
-{ 0x36 , 0x49 , 0x49 , 0x49 , 0x36 }, 
-{ 0x06 , 0x49 , 0x49 , 0x29 , 0x1E }, 
-{ 0x00 , 0x36 , 0x36 , 0x00 , 0x00 }, 
-{ 0x00 , 0x56 , 0x36 , 0x00 , 0x00 }, 
-{ 0x00 , 0x08 , 0x14 , 0x22 , 0x41 }, 
-{ 0x14 , 0x14 , 0x14 , 0x14 , 0x14 }, 
-{ 0x41 , 0x22 , 0x14 , 0x08 , 0x00 }, 
-{ 0x02 , 0x01 , 0x51 , 0x09 , 0x06 }, 
-{ 0x32 , 0x49 , 0x79 , 0x41 , 0x3E }, 
-{ 0x7E , 0x11 , 0x11 , 0x11 , 0x7E }, 
-{ 0x7F , 0x49 , 0x49 , 0x49 , 0x36 }, 
-{ 0x3E , 0x41 , 0x41 , 0x41 , 0x22 }, 
-{ 0x7F , 0x41 , 0x41 , 0x22 , 0x1C }, 
-{ 0x7F , 0x49 , 0x49 , 0x49 , 0x41 }, 
-{ 0x7F , 0x09 , 0x09 , 0x01 , 0x01 }, 
-{ 0x3E , 0x41 , 0x41 , 0x51 , 0x32 }, 
-{ 0x7F , 0x08 , 0x08 , 0x08 , 0x7F }, 
-{ 0x00 , 0x41 , 0x7F , 0x41 , 0x00 }, 
-{ 0x20 , 0x40 , 0x41 , 0x3F , 0x01 }, 
-{ 0x7F , 0x08 , 0x14 , 0x22 , 0x41 }, 
-{ 0x7F , 0x40 , 0x40 , 0x40 , 0x40 }, 
-{ 0x7F , 0x02 , 0x04 , 0x02 , 0x7F }, 
-{ 0x7F , 0x04 , 0x08 , 0x10 , 0x7F }, 
-{ 0x3E , 0x41 , 0x41 , 0x41 , 0x3E }, 
-{ 0x7F , 0x09 , 0x09 , 0x09 , 0x06 }, 
-{ 0x3E , 0x41 , 0x51 , 0x21 , 0x5E }, 
-{ 0x7F , 0x09 , 0x19 , 0x29 , 0x46 }, 
-{ 0x46 , 0x49 , 0x49 , 0x49 , 0x31 }, 
-{ 0x01 , 0x01 , 0x7F , 0x01 , 0x01 }, 
-{ 0x3F , 0x40 , 0x40 , 0x40 , 0x3F }, 
-{ 0x1F , 0x20 , 0x40 , 0x20 , 0x1F }, 
-{ 0x7F , 0x20 , 0x18 , 0x20 , 0x7F }, 
-{ 0x63 , 0x14 , 0x08 , 0x14 , 0x63 }, 
-{ 0x03 , 0x04 , 0x78 , 0x04 , 0x03 }, 
-{ 0x61 , 0x51 , 0x49 , 0x45 , 0x43 }, 
-{ 0x00 , 0x00 , 0x7F , 0x41 , 0x41 }, 
-{ 0x02 , 0x04 , 0x08 , 0x10 , 0x20 }, 
-{ 0x41 , 0x41 , 0x7F , 0x00 , 0x00 }, 
-{ 0x04 , 0x02 , 0x01 , 0x02 , 0x04 }, 
-{ 0x40 , 0x40 , 0x40 , 0x40 , 0x40 }, 
-{ 0x00 , 0x01 , 0x02 , 0x04 , 0x00 }, 
-{ 0x20 , 0x54 , 0x54 , 0x54 , 0x78 }, 
-{ 0x7F , 0x48 , 0x44 , 0x44 , 0x38 }, 
-{ 0x38 , 0x44 , 0x44 , 0x44 , 0x20 }, 
-{ 0x38 , 0x44 , 0x44 , 0x48 , 0x7F }, 
-{ 0x38 , 0x54 , 0x54 , 0x54 , 0x18 }, 
-{ 0x08 , 0x7E , 0x09 , 0x01 , 0x02 }, 
-{ 0x08 , 0x14 , 0x54 , 0x54 , 0x3C }, 
-{ 0x7F , 0x08 , 0x04 , 0x04 , 0x78 }, 
-{ 0x00 , 0x44 , 0x7D , 0x40 , 0x00 }, 
-{ 0x20 , 0x40 , 0x44 , 0x3D , 0x00 }, 
-{ 0x00 , 0x7F , 0x10 , 0x28 , 0x44 }, 
-{ 0x00 , 0x41 , 0x7F , 0x40 , 0x00 }, 
-{ 0x7C , 0x04 , 0x18 , 0x04 , 0x78 }, 
-{ 0x7C , 0x08 , 0x04 , 0x04 , 0x78 }, 
-{ 0x38 , 0x44 , 0x44 , 0x44 , 0x38 }, 
-{ 0x7C , 0x14 , 0x14 , 0x14 , 0x08 }, 
-{ 0x08 , 0x14 , 0x14 , 0x18 , 0x7C }, 
-{ 0x7C , 0x08 , 0x04 , 0x04 , 0x08 }, 
-{ 0x48 , 0x54 , 0x54 , 0x54 , 0x20 }, 
-{ 0x04 , 0x3F , 0x44 , 0x40 , 0x20 }, 
-{ 0x3C , 0x40 , 0x40 , 0x20 , 0x7C }, 
-{ 0x1C , 0x20 , 0x40 , 0x20 , 0x1C }, 
-{ 0x3C , 0x40 , 0x30 , 0x40 , 0x3C }, 
-{ 0x44 , 0x28 , 0x10 , 0x28 , 0x44 }, 
-{ 0x0C , 0x50 , 0x50 , 0x50 , 0x3C }, 
-{ 0x44 , 0x64 , 0x54 , 0x4C , 0x44 }, 
-{ 0x00 , 0x08 , 0x36 , 0x41 , 0x00 }, 
-{ 0x00 , 0x00 , 0x7F , 0x00 , 0x00 }, 
-{ 0x00 , 0x41 , 0x36 , 0x08 , 0x00 }, 
-{ 0x08 , 0x08 , 0x2A , 0x1C , 0x08 }, 
-{ 0x08 , 0x1C , 0x2A , 0x08 , 0x08 }
-};
-
-class DmDisplay
+void writeLCDcontrast(int contrastVal)
 {
-	public:
-		enum
-		{
-			INSTRUCT,DATA
-		};
-		
-		DmDisplay();
-		void init();
-		void blinkControlLines();
-		void write(uint8_t, int);
-		void write(uint8_t);
-		void setContrast(uint8_t);
-		void setMarker(uint8_t, bool);
-		void invertDisplay(bool);
-		void setRow(uint8_t);
-		void lcdChar(const char *);
-		void resetColumnAdress();
-};
-
-DmDisplay::DmDisplay()
-{
-	FUNCTIONPORT_TO_OUTPUT;
-	DATAPORT_TO_OUTPUT;
-	
-	CLEAR_POWER;
-	_delay_ms(100);
-	SET_POWER;
-	_delay_ms(100);
-	init();
-	_delay_ms(100);
+	char str[21];
+	sprintf(str, " -> Contrast: %d    ", contrastVal);
+	lcd.lcdChar(str);
 }
-void DmDisplay::init()
-{
-	write(0xE2, INSTRUCT);
-	_delay_ms(1000);
-	write(0xA1, INSTRUCT);
-	write(0xA2, INSTRUCT);
-	write(0x2C, INSTRUCT);
-	write(0x2E, INSTRUCT);
-	write(0x2F, INSTRUCT);
-	write(0xA6, INSTRUCT);
-	write(0x8F, INSTRUCT);
-	write(0xA4, INSTRUCT);
-	write(0xAF, INSTRUCT);
-	write(0x40, INSTRUCT);
-}
-//type = wheter it's instruction/command or data.
-void DmDisplay::write(uint8_t data, int type)
-{
-	DATA_PORT &= 0x00;
-	if(type == DATA)
-	{
-		CLEAR_RW;
-		SET_A0;
-		
-		DATA_PORT = data;
-		
-		SET_ENABLE;
-		_delay_us(10);
-		CLEAR_ENABLE;
-		_delay_us(10);
-		SET_ENABLE;
-	}
-	else if(type == INSTRUCT)
-	{
-		CLEAR_RW;
-		CLEAR_A0;
-		
-		DATA_PORT = data;
-		
-		SET_ENABLE;
-		_delay_us(10);
-		CLEAR_ENABLE;
-		_delay_us(10);
-		SET_ENABLE;
-	}
-}
-
-void DmDisplay::setContrast(uint8_t contrast)
-{
-	write(0x80+contrast, INSTRUCT);
-}
-
-void DmDisplay::setMarker(uint8_t marker, bool state)
-{
-	uint8_t heighNibble, lowNibble;
-	uint8_t lcd_marker = 0;
-	
-	switch(marker)
-	{
-		case 1:
-			lcd_marker = 20;
-			break;
-		case 2:
-			lcd_marker = 31;
-			break;
-		case 3:
-			lcd_marker = 32;
-			break;
-		case 4:
-			lcd_marker = 57;
-			break;
-		case 5:
-			lcd_marker = 69;
-			break;
-		case 6:
-			lcd_marker = 78;
-			break;
-	}
-	
-	lowNibble = lcd_marker & 0xF;
-	heighNibble = lcd_marker;
-	heighNibble = (heighNibble >> 4);
-	heighNibble |= 0x10;
-	
-	write(0xB6, INSTRUCT);
-	write(heighNibble, INSTRUCT);
-	write(lowNibble, INSTRUCT);
-	
-	write(1, DATA);
-}
-
-void DmDisplay::invertDisplay(bool reverse)
-{
-	write(0xA6+(!reverse), INSTRUCT);
-}
-
-void DmDisplay::setRow(uint8_t row)
-{
-	uint8_t page = 0xB0 + (row-1);
-	
-	write(page, INSTRUCT);
-	write(0x08, INSTRUCT);
-	write(0x00, INSTRUCT);
-	
-	lcdChar("                    ");
-	
-	write(page, INSTRUCT);
-	write(0x08, INSTRUCT);
-	write(0x00, INSTRUCT);
-}
-
-void DmDisplay::lcdChar(const char *str)
-{
-	int charCount = strlen(str);
-	
-	//if there are more chars then 
-	//there is room on a line.
-	if(charCount > 20)
-	{
-		charCount = 20;
-	}
-	
-	//start read-modify-write
-	write(0xE0, INSTRUCT);
-	for(int i = 0;i<charCount;i++)
-	{
-		uint8_t currentChar = str[i];
-		uint8_t lcd_char = currentChar-32;
-		for(uint8_t byte = 0;byte<5;byte++)
-		{
-			write(lcdFont[lcd_char][byte], DATA);
-		}
-	}
-	//end of read-modify-write
-	write(0xEE, INSTRUCT);
-	//reset column address
-	resetColumnAdress();
-}
-
-void DmDisplay::resetColumnAdress()
-{
-	write(0x10, INSTRUCT);
-	write(0x00, INSTRUCT);
-}
-
-//for testing purposes
-void DmDisplay::blinkControlLines()
-{
-	SET_A0;
-	SET_ENABLE;
-	SET_RW;
-	_delay_ms(250);
-	CLEAR_A0;
-	CLEAR_ENABLE;
-	CLEAR_RW;
-	_delay_ms(250);
-}
-
-DmDisplay display;
-
 void writeSomeTestText()//DmDisplay display)
 {
-	display.setRow(1);
-	display.lcdChar("012345678901234567890");
-	display.setRow(2);
-	display.lcdChar("ABCDEFGHIJKLMNPQRSTUV");
-	display.setRow(3);
-	display.lcdChar("wxyzabcdefghijklmnopq");
-	display.setRow(4);
-	display.lcdChar("  !#$%&'( )@^-");
-	display.setRow(5);
-	display.lcdChar("  *+-/<>?;:[]");
-	display.setRow(6);
-	display.lcdChar("* AVR rules !! *");
+	lcd.setRow(1);
+	lcd.lcdChar("012345678901234567890");
+	lcd.setRow(2);
+	lcd.lcdChar("ABCDEFGHIJKLMNPQRSTUV");
+	lcd.setRow(3);
+	lcd.lcdChar("wxyzabcdefghijklmnopq");
+	lcd.setRow(4);
+	lcd.lcdChar("  !#$%&'( )@^-");
+	lcd.setRow(5);
+	lcd.lcdChar("  *+-/<>?;:[]");
+	lcd.setRow(6);
+	lcd.lcdChar("* AVR rules !! *");
 }
 
 int main(void)
 {
 	while(1)
 	{
-		writeSomeTestText();//display);
-		//display.setMarker(3,1);
+		for (int l = 0; l <= 3; l++)
+		{
+			for (uint8_t i = 1; i <= 6; i++) 
+			{
+				lcd.setMarker(i, true);
+				_delay_ms(400);
+				lcd.setMarker(i, false);
+				_delay_ms(100);
+			}
+		}
+		lcd.setRow(6);
+		for(uint8_t j = 1; j <= 4; j++) 
+		{
+			lcd.invertDisplay(true);
+			_delay_ms(400);
+			lcd.lcdChar("*-*-LCD REVERSED-*-*");
+			lcd.invertDisplay(false);
+			_delay_ms(800);
+			lcd.resetColumnAdress();
+			lcd.lcdChar("#-#-#-LCD NORMAL-#-#");
+			lcd.invertDisplay(true);
+		}
+
+
+		for (int k = 0; k < 32; k++)
+		{
+			writeLCDcontrast(k);
+			lcd.setContrast(k);
+			_delay_ms(250);
+		}
+		for (int k = 31; k >= 0; k --) {
+			writeLCDcontrast(k);
+			lcd.setContrast(k);
+			_delay_ms(250);
+		}
+			writeLCDcontrast(16);
+			lcd.setContrast(16);
 	}
+	//while(1)
+	//{
+		//writeSomeTestText();
+		//_delay_ms(1000);
+	//}
 	return 0;
 }
