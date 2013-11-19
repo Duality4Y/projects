@@ -6,10 +6,16 @@
 
 #include <string.h>
 #include <stdio.h>
-
 #include "DmDisplay.h"
 
 DmDisplay lcd;
+
+int bogusfunction()
+{
+	int i = 2;
+	int k = 3;
+	return i<k;
+}
 
 void writeLCDcontrast(int contrastVal)
 {

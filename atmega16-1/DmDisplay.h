@@ -4,7 +4,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <string.h>
-
 #include "font5x7.h"
 #include "pinDefs.h"
 
@@ -28,5 +27,6 @@ class DmDisplay
 		};
 };
 
+#include "DmDisplay.cpp"
 
 #endif
