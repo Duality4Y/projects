@@ -14,6 +14,7 @@ class DmDisplay
 		void init();
 		void blinkControlLines();
 		void write(uint8_t, int);
+		void write(uint8_t);
 		void setContrast(uint8_t);
 		void setMarker(uint8_t, bool);
 		void invertDisplay(bool);
