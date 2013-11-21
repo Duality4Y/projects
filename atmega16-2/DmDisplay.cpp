@@ -60,7 +60,6 @@ void DmDisplay::write(uint8_t data, int type)
 		SET_ENABLE;
 	}
 }
-
 void DmDisplay::setContrast(uint8_t contrast)
 {
 	write(0x80+contrast, INSTRUCT);
@@ -115,13 +114,13 @@ void DmDisplay::setRow(uint8_t row)
 	uint8_t page = 0xB0 + (row-1);
 	
 	write(page, INSTRUCT);
-	write(0x08, INSTRUCT);
+	write(0x10, INSTRUCT);
 	write(0x00, INSTRUCT);
 	
 	lcdChar("                    ");
 	
 	write(page, INSTRUCT);
-	write(0x08, INSTRUCT);
+	write(0x10, INSTRUCT);
 	write(0x00, INSTRUCT);
 }
 

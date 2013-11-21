@@ -5,6 +5,7 @@
 #include <util/delay.h>
 
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include "DmDisplay.h"
 
@@ -16,26 +17,24 @@ uint16_t screenSize = screenWidth*screenHeight;
 uint8_t screenByteSize = screenSize/8;
 char screenBuf[screenByteWidth][screenByteHeight];
 
+//for string representation of binary numbers;
+
+char string[21];
+
 DmDisplay lcd;
 
-void setCol(int col)
+void setPage(uint8_t col)
 {
-	int high = col/16;
-	int low = col%16;
-	lcd.write(0x10+high, lcd.INSTRUCT);
-	lcd.write(0x00+low, lcd.INSTRUCT);
+	
 }
 
-void setCursor(uint8_t x, uint8_t y)
+void setCol(uint8_t row)
 {
-	lcd.setRow(y);
-	setCol(x);
+	
 }
 
 void writePixel(uint8_t x, uint8_t y)
 {
-	setCursor(x,y);
-	lcd.write((1<<(y/8)), lcd.DATA);
 }
 
 void writeLCDcontrast(int contrastVal)
@@ -59,14 +58,37 @@ void writeSomeTestText()//DmDisplay display)
 	lcd.setRow(6);
 	lcd.lcdChar("* AVR rules !! *");
 }
+void toggleDisplay(int state)
+{
+	int new_state = (0xAE + state);
+	lcd.write(new_state, lcd.INSTRUCT);
+}
+
+char *numbToBin(uint8_t number)
+{
+	itoa(number, string, 2);
+	return string;
+}
 
 int main(void)
 {
 	writePixel(0,0);
 	writePixel(50,20);
+	int col = 80;
+	int com0 = 0x80;
+	int higher = 0x0F;
+	int lower = (col&0x0F)|com0;
+	
+	//lcd.write(higher, lcd.INSTRUCT);
+	//lcd.write(lower, lcd.INSTRUCT);
+	
+	lcd.setRow(1);
+	char formatedText[21];
+	sprintf(formatedText, "higher: %s", numbToBin(higher));
+	lcd.lcdChar(formatedText);
+	//lcd.lcdChar("this is test text");
 	while(1)
 	{
-		
-	}	
+	}
 	return 0;
 }
