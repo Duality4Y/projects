@@ -24,7 +24,7 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=1305;C++;0;16;1;1;0;/home/robert/projects/atmega16-2/main.cpp;0;4
+FILE_NAME_0=1434;C++;0;16;1;1;0;/home/robert/projects/atmega16-2/main.cpp;0;4
 FILE_NAME_1=926;C++;0;16;1;1;0;/home/robert/projects/atmega16-2/DmDisplay.cpp;0;4
 FILE_NAME_2=0;C;0;16;1;1;0;/home/robert/projects/atmega16-2/DmDisplay.h;0;4
 FILE_NAME_3=0;C;0;16;1;1;0;/home/robert/projects/atmega16-2/font5x7.h;0;4
@@ -38,7 +38,7 @@ EX_00_LB=_Upload
 EX_00_CM=avrdude -p atmega16 -c usbasp -e -U flash:w:build.hex
 EX_00_WD=/home/robert/projects/atmega16-2/
 C++FT_00_LB=_Compile
-C++FT_00_CM=avr-gcc -mmcu=atmega16 -Wall -Os -o  build.elf "%f"
+C++FT_00_CM=avr-gcc -fno-split-wide-types -fno-tree-scev-cprop --combine -fwhole-program -mcall-prologues -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -finline-limit=3 -fno-inline-small-functions -mmcu=atmega16 -Wall -Os -o build.elf "%f"
 C++FT_00_WD=/home/robert/projects/atmega16-2/
 C++FT_01_LB=_Build
 C++FT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex

@@ -13,7 +13,7 @@ class DmDisplay
 		DmDisplay();
 		void init();
 		void blinkControlLines();
-		void write(uint8_t, int);
+		void write(uint8_t, uint8_t);
 		void write(uint8_t);
 		void setContrast(uint8_t);
 		void setMarker(uint8_t, bool);
@@ -21,6 +21,11 @@ class DmDisplay
 		void setRow(uint8_t);
 		void lcdChar(const char *);
 		void resetColumnAdress();
+		void setCol(uint8_t col);
+		void toggleDisplayOnOff(bool);
+		void setWriteAddress(uint8_t columnAddr, uint8_t page);
+		void setCursor(uint8_t, uint8_t);
+		void clear();
 		enum
 		{
 			INSTRUCT,DATA

@@ -30,7 +30,7 @@ void DmDisplay::init()
 }
 
 //type = wheter it's instruction/command or data.
-void DmDisplay::write(uint8_t data, int type)
+void DmDisplay::write(uint8_t data, uint8_t type)
 {
 	DATA_PORT &= 0x00;
 	if(type == DATA)
@@ -109,19 +109,42 @@ void DmDisplay::invertDisplay(bool reverse)
 	write(0xA6+(!reverse), INSTRUCT);
 }
 
+void DmDisplay::setCol(uint8_t col)
+{
+	int higher = col>>4;
+	int lower = (col&0x0F);
+	
+	write((0x10|higher), INSTRUCT);
+	write(lower, INSTRUCT);
+}
+
 void DmDisplay::setRow(uint8_t row)
 {
-	uint8_t page = 0xB0 + (row-1);
-	
+	int page = (0xB0|row);
 	write(page, INSTRUCT);
-	write(0x10, INSTRUCT);
-	write(0x00, INSTRUCT);
 	
-	lcdChar("                    ");
+	//I understand the first line
+	//its to get the page addres to set.
+	//but everything after it makes no sens to me,
+	//when I look at the data sheet.
 	
-	write(page, INSTRUCT);
-	write(0x10, INSTRUCT);
-	write(0x00, INSTRUCT);
+	//uint8_t page = 0xB0 + (row);
+	
+	//write(page, INSTRUCT);
+	//write(0x10, INSTRUCT);
+	//write(0x00, INSTRUCT);
+	
+	//lcdChar("                    ");
+	
+	//write(page, INSTRUCT);
+	//write(0x10, INSTRUCT);
+	//write(0x00, INSTRUCT);
+}
+
+void DmDisplay::toggleDisplayOnOff(bool state)
+{
+	int new_state = (0xAE + state);
+	write(new_state, INSTRUCT);
 }
 
 void DmDisplay::lcdChar(const char *str)
@@ -151,7 +174,32 @@ void DmDisplay::lcdChar(const char *str)
 	//reset column address
 	resetColumnAdress();
 }
-
+void DmDisplay::clear()
+{
+	for(int i = 0;i<6;i++)
+	{
+		setRow(i);
+		lcdChar("                    ");
+	}
+}
+void DmDisplay::setWriteAddress(uint8_t columnAddr, uint8_t page)
+{
+	setRow(page);
+	setCol(columnAddr);
+}
+void DmDisplay::setCursor(uint8_t x, uint8_t y)
+{
+	// this function wil do nothing if you specify numbers
+	// outside of the screen
+	if(x < 20)
+	{
+		if(y < 6)
+		{
+			//font width is 5
+			setWriteAddress(x*5, y);
+		}	
+	}
+}
 void DmDisplay::resetColumnAdress()
 {
 	write(0x10, INSTRUCT);
