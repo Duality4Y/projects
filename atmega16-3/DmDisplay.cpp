@@ -201,6 +201,10 @@ void DmDisplay::setCursor(uint8_t x, uint8_t y)
 		}	
 	}
 }
+void DmDisplay::home()
+{
+	setCursor(0,0);
+}
 void DmDisplay::resetColumnAdress()
 {
 	write(0x10, INSTRUCT);
