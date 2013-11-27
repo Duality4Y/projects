@@ -170,6 +170,8 @@ uint8_t checkField(uint8_t *field)
 }
 int main(void)
 {
+	for(int i = 0;i<6;i++)
+		lcd.setMarker(i,0);
 	//init analog if needed
 	init_analog();
 	srand(adc_read(0));
@@ -235,7 +237,7 @@ int main(void)
 			//set delay with a potmeter aka frame rate :)
 			//could be done with a adc Interrupt ?
 			//and set value that way?
-			delay(adc_read(1));	
+			delay(adc_read(1)/2);	
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
 			if(changeCount == holdingNumber)
@@ -262,11 +264,11 @@ int main(void)
 				//changeCount shouldn't change if the inbetween states happen te be the same.
 				//that is why setting it to zero.
 				changeCount = 0;
+				iterations++;
+				//set location and nicely print something.
+				lcd.setCursor(0,5);
+				writeFormated(iterations-changeCount,changeCount,"Game of Life");
 			}
-			iterations++;
-			//set location and nicely print something.
-			lcd.setCursor(0,5);
-			writeFormated(iterations-changeCount,changeCount,"Game of Life");
 		}
 		//also turn on led to see if the button read works.
 		if(PINB & (1<<PB2))
