@@ -11,9 +11,8 @@
  * A0 is connected to: PD6
  * R/W is connected to: PD5
  * Enable is connected to: PD4
- * */
-
-/* Start of defines for easy line controle
+ *
+ * Start of defines for easy line controle
  * This wil spare me a lot of typing :)
  * Also this wil make it more portable between AVR's.
  * although if you want data to be on different ports,
