@@ -69,13 +69,13 @@ void writeFormated(const char *aString)
 void writeFormated(int val, const char *aString)
 {
 	char str[21];
-	sprintf(str, "%s: %d   ", aString, val);
+	sprintf(str, "%s:%d  ", aString, val);
 	lcd.lcdChar(str);
 }
 void writeFormated(int val, int val2, const char *aString)
 {
 	char str[21];
-	sprintf(str, "%s: %d, %d ", aString, val, val2);
+	sprintf(str, "%s:%d, %d  ", aString, val, val2);
 	lcd.lcdChar(str);
 }
 //write pixel data not instructions.
