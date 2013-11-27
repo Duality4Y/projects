@@ -3,7 +3,6 @@
  * Edited on: 27 Nov 2013
  * */
 
-
 //clock speed 8mhz
 #define F_CPU 8000000
 
@@ -28,9 +27,16 @@ DmDisplay lcd;
 #define fieldWidth 20
 #define fieldHeight 5
 #define fieldSize (fieldWidth*fieldHeight)
-uint8_t field[fieldSize];
+uint8_t field[fieldSize+1];
 //and include with functions that make the game of life go.
 #include "life.cpp"
+//variables for determining wether we are is a steady state or still evolving.
+uint8_t currentState = 0;
+uint8_t previousState = 0;
+uint8_t changeCount = 0;
+uint8_t holdingNumber = 10;//how many iterations it takes before desiding that there is no evolution happening anymore.
+//for holding how many iterations it took.
+int iterations = 0;
 //-------------------
 
 //init analog
@@ -66,16 +72,28 @@ void writeFormated(int val, const char *aString)
 	sprintf(str, "%s: %d   ", aString, val);
 	lcd.lcdChar(str);
 }
+void writeFormated(int val, int val2, const char *aString)
+{
+	char str[21];
+	sprintf(str, "%s: %d, %d ", aString, val, val2);
+	lcd.lcdChar(str);
+}
 //write pixel data not instructions.
 void writePixelData(uint8_t data)
 {
 	lcd.write(data, lcd.DATA);
 }
-//randomly fill a playing field.
+//randomly create cells at position in field.
 void fillField(uint8_t *field, int position)
 {
 	uint16_t randomVal = rand()%2;
 	field[position] = (bool)randomVal;
+}
+//make a random playing field.
+void createRandomField(uint8_t *field)
+{
+	for(int i = 0;i<fieldSize;i++)
+		fillField(field, i);
 }
 //used to draw a lifing cell with a box
 void writeBlackBox(void)
@@ -140,6 +158,16 @@ void printDebug()
 	lcd.setCursor(0,2);
 	writeLCDvalue(position,">>Position");
 }*/
+uint8_t checkField(uint8_t *field)
+{
+	uint8_t countCels = 0;
+	for(int i = 0;i<fieldSize;i++)
+	{
+		if(field[i])
+			countCels++;
+	}
+	return countCels;
+}
 int main(void)
 {
 	//init analog if needed
@@ -199,36 +227,53 @@ int main(void)
 		}
 		//position keeps position in the field array,
 		//and at the same time drawing location on
-		//screen
+		//screen.
 		position--;
 		if(position == 0)
 		{
-			position = fieldSize;
-			//set location and nicely print something.
-			lcd.setCursor(0,5);
-			writeFormated("Game of Life");
+			position = fieldSize;			
 			//set delay with a potmeter aka frame rate :)
 			//could be done with a adc Interrupt ?
 			//and set value that way?
 			delay(adc_read(1));	
-			
-			//read out pin 6, write pin 7a with state pin 6a
-			//lets see if we can do this with an interupt 0.o :)
-			/*if(PINB & (1<<PB1))
+			//check wether we are in a steady state or just still evolving.
+			currentState = checkField(field);
+			if(changeCount == holdingNumber)
 			{
-				for(int i = 0;i<fieldSize;i++)
-					fillField(field, i);
-				while(PINB & (1<<PB1))
-					PORTB |= (1<<PB0);
+				//reset changeCount
+				changeCount = 0;
+				//reset iteration count.
+				iterations = 0;
+				//create a random playing field.
+				createRandomField(field);
+				//is blocking button won't work because it blocks interrupts,
+				//and it will then also not be able to listen to button.
+				delay(2000);
+			}
+			else if(currentState == previousState)
+			{
+				PORTB |= (1<<PB0);
+				changeCount++;
+			}
+			else
+			{
 				PORTB &= ~(1<<PB0);
-			}*/
+				previousState = currentState;
+				//changeCount shouldn't change if the inbetween states happen te be the same.
+				//that is why setting it to zero.
+				changeCount = 0;
+			}
+			iterations++;
+			//set location and nicely print something.
+			lcd.setCursor(0,5);
+			writeFormated(iterations-changeCount,changeCount,"Game of Life");
 		}
 		//also turn on led to see if the button read works.
 		if(PINB & (1<<PB2))
 		{
 			PORTB |= (1<<PB0);
 		}
-		else
+		else if(currentState != previousState)
 		{
 			PORTB &= ~(1<<PB0);
 		}
@@ -242,8 +287,10 @@ int main(void)
 //released.
 ISR(INT2_vect)
 {
-	for(int i = 0;i<fieldSize;i++)
-		fillField(field, i);
+	createRandomField(field);
+	//reset variables depending on cel count.
+	iterations = 0;
+	changeCount = 0;
 	//dit is blocking
 	//while(PINB & (1<<PB2));
 	//PORTB &= ~(1<<PB0);
