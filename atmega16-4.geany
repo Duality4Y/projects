@@ -13,8 +13,8 @@ detect_indent_width=false
 indent_mode=2
 
 [project]
-name=atmega16-3
-base_path=/home/robert/projects/atmega16-3/
+name=atmega16-4
+base_path=/home/robert/projects/atmega16-4/
 description=
 file_patterns=
 
@@ -23,25 +23,25 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=-1
+current_page=0
 
 [VTE]
-last_dir=/home/robert/projects/atmega16-3
+last_dir=/home/robert/projects/atmega16-4
 
 [build-menu]
 EX_00_LB=_Upload
 EX_00_CM=avrdude -p atmega16 -c usbasp -e -U flash:w:build.hex
-EX_00_WD=/home/robert/projects/atmega16-3/
+EX_00_WD=/home/robert/projects/atmega16-4/
 C++FT_00_LB=_Compile
 C++FT_00_CM=avr-gcc -fno-split-wide-types -fno-tree-scev-cprop --combine -fwhole-program -mcall-prologues -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -finline-limit=3 -fno-inline-small-functions -mmcu=atmega16 -Wall -Os -o build.elf "%f"
-C++FT_00_WD=/home/robert/projects/atmega16-3/
+C++FT_00_WD=/home/robert/projects/atmega16-4/
 C++FT_01_LB=_Build
 C++FT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
-C++FT_01_WD=/home/robert/projects/atmega16-3/
+C++FT_01_WD=/home/robert/projects/atmega16-4/
 filetypes=C++;None;
 NoneFT_00_LB=_Compile
 NoneFT_00_CM=avr-g++ -mmcu=atmega16 -Wall -Os -o build.elf "%f"
-NoneFT_00_WD=/home/robert/projects/atmega16-3/
+NoneFT_00_WD=/home/robert/projects/atmega16-4/
 NoneFT_01_LB=_Build
 NoneFT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
-NoneFT_01_WD=/home/robert/projects/atmega16-3/
+NoneFT_01_WD=/home/robert/projects/atmega16-4/
