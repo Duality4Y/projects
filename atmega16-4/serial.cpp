@@ -1,6 +1,8 @@
 #define F_CPU  8000000
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
+#include "blink.cpp"
 
 void init_uart()
 {
@@ -15,7 +17,6 @@ void init_uart()
 
 void uart_put(unsigned char data)
 {
-	//while data bit set wait
 	while((UCSRA&0x20)==0x00);
 	//transmit data 
 	UDR = data;
@@ -24,6 +25,7 @@ void uart_put(unsigned char data)
 unsigned char uart_getdata(void)
 {
 	while((UCSRA&0x80)==0x00);
+	//return recieved data
 	return UDR;
 }
 int main(void)
@@ -32,18 +34,22 @@ int main(void)
 	DDRD &= ~(1<<PD0);
 	//set tx as output (PD1)
 	DDRD |= (1<<PD1);
+	//led pin as output
+	DDRD |= (1<<PD7);
+	//init the uart
 	init_uart();
-	unsigned char uart_byte = 0;
+	//enable global interrupts
+	sei();
+	//enable uart recieve interupt.
+	UCSRB |= (1<<RXCIE);
 	while(1)
 	{
-		uart_byte = uart_getdata();
-		if(uart_byte)
-		{
-			uart_put('@');
-			uart_put(uart_byte);
-		}
-		_delay_ms(1000);
 	}
 	
 	return 1;
+}
+
+ISR(USART_RXC_vect)
+{
+	uart_put(uart_getdata());
 }
