@@ -7,7 +7,7 @@
 
 #define BUFFERSIZE 20
 volatile int string_index = 0;
-char buffer[20];
+char buffer[BUFFERSIZE];
 
 void init_uart()
 {
@@ -50,8 +50,9 @@ int main(void)
 	
 	while(1)
 	{
-		//set zero to get new commands
-		string_index = 0;
+		//set zero to get new commands?
+		//string_index = 0;
+		
 		if(!strcmp(buffer, "led"))
 		{
 			PORTD |= (1<<PD7);
@@ -68,7 +69,6 @@ int main(void)
 			index++;
 		}
 		uart_put('\n');
-		_delay_ms(1000);
 	}
 	
 	return 1;
@@ -77,7 +77,7 @@ int main(void)
 ISR(USART_RXC_vect)
 {
 	unsigned char data = uart_getdata();
-	if(string_index == BUFFERSIZE)
+	if(string_index == BUFFERSIZE-1)
 	{
 		string_index = 0;
 		buffer[string_index] = '\0';
