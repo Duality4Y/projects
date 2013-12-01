@@ -11,6 +11,9 @@ edited: 1-12-2013
 //make use of Wire library.
 #include <Wire.h>
 
+
+//create a class for easely work with multiple sensors if we wanted to.
+
 class DS1621
 {
   public:
@@ -44,6 +47,7 @@ DS1621::DS1621(uint8_t address_)
 
 //this function initializes the ds1621.
 //by setting its configuration register.
+//and starting conversions.
 void DS1621::init()
 {
   dev_id = (control>>1)|address;  //created a device id.
@@ -91,9 +95,7 @@ float DS1621::readFarenheit()
   return (temperature*9)/5+32;
 }
 
-//sprintf
-#include <stdio.h>
-
+//create an instance of ds1621
 DS1621 tempSensor(0x04);
 
 //for timing purposes.
@@ -104,9 +106,6 @@ int interval = 1000;
 //for measuring purposes.
 float celcius = 0;
 float farenHeit = 0;
-
-//for format printing.
-char formatedText[40];
 
 void setup()
 {
