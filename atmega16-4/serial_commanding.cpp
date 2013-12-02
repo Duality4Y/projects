@@ -48,7 +48,7 @@ int main(void)
 	//enable uart recieve interupt.
 	UCSRB |= (1<<RXCIE);
 	
-	while(1)
+	while(!0)
 	{
 		//set zero to get new commands?
 		//string_index = 0;
@@ -71,7 +71,7 @@ int main(void)
 		uart_put('\n');
 	}
 	
-	return 1;
+	main();
 }
 
 ISR(USART_RXC_vect)
