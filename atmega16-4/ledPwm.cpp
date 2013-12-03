@@ -2,39 +2,20 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <util/delay.h>
-
-#include <stdio.h>
-
 #include "uart.cpp"
 
-char formated[21];
-int main(void)
+
+int main()
 {
-	DDRB |= 0xFF;
-	//default baud I use is 9600
-	init_uart();
-	
-	TCCR1B |= (1<<CS10);
-	
-	int pwmMax = 255;
-	int pwmOn = 10;
-	
+	TCCR1B |= (1<<CS10)|(1<<CS11);
+	DDRB |= (1<<PB0);
 	while(1)
 	{
-		if(TCNT1 > 0)
+		if(TCNT1 >= 65000)
 		{
-			PORTB |= 0xFF;
+			PORTB ^= (1<<PB0);
+			TCNT1 = 0;
 		}
-		else
-		{
-			PORTB |= 0xFF;
-		}
-		sprintf(formated, "OCR1A: %d TCNT1: %d \n", OCR1A, TCNT1);
-		uart_put_str(formated);
 	}
-}
-
-ISR(USART_RXC_vect)
-{
+	return 0;
 }
