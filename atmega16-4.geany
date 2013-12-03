@@ -23,22 +23,20 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=7
-FILE_NAME_0=725;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/serial_commanding.cpp;0;4
+current_page=5
+FILE_NAME_0=886;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/serial_commanding.cpp;0;4
 FILE_NAME_1=18;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/blink.cpp;0;4
 FILE_NAME_2=66;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/i2c.cpp;0;4
 FILE_NAME_3=439;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/i2c-ds1621.cpp;0;4
 FILE_NAME_4=0;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/uart.cpp;0;4
-FILE_NAME_5=586;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/ledPwm.cpp;0;4
-FILE_NAME_6=0;C++;0;16;1;1;0;/home/robert/projects/atmega16-3/DmDisplay.cpp;0;4
-FILE_NAME_7=0;C;0;16;1;1;0;/home/robert/projects/atmega16-3/DmDisplay.h;0;4
+FILE_NAME_5=90;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/ledPwm.cpp;0;4
 
 [VTE]
-last_dir=/home/robert/projects/atmega16-4
+last_dir=/home/robert
 
 [build-menu]
 EX_00_LB=_Upload
-EX_00_CM=avrdude -p atmega16 -c usbasp -e -U flash:w:build.hex
+EX_00_CM=avrdude -p atmega16 -c usbasp -e -U flash:w:build.hex -B 3
 EX_00_WD=/home/robert/projects/atmega16-4/
 C++FT_00_LB=_Compile
 C++FT_00_CM=avr-gcc -fno-split-wide-types -fno-tree-scev-cprop --combine -fwhole-program -mcall-prologues -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -finline-limit=3 -fno-inline-small-functions -mmcu=atmega16 -Wall -Os -o build.elf "%f"
