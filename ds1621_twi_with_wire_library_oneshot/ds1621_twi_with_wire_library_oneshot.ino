@@ -1,16 +1,16 @@
 /*
-
-Code for controling a ds1621
-reading tempratures with a Arduino
-using the Wire library.
-
-author: Duality / Robert
-edited: 1-12-2013
+ Code for reading a ds1621 in oneshot.
+ reading temperatures with a arduino.
+ using the Wire lbirary.
+ 
+ author: Duality / Robert
+ edited: 1-12-2013
+ edited: 5-12-2013
+ 
 */
 
-//make use of Wire library.
+// use the wire library
 #include <Wire.h>
-
 
 //create a class for easely work with multiple sensors if we wanted to.
 
@@ -124,38 +124,38 @@ float DS1621::readFarenheit()
   return (temperature*9)/5+32;
 }
 
-//create an instance of ds1621
 DS1621 tempSensor(0x04);
 
-//for timing purposes.
-unsigned long current = 0;
-unsigned long previous = 0;
-int interval = 1000;
-
-//for measuring purposes.
+//for keeping the temperature.
 float celcius = 0;
 float farenHeit = 0;
 
+//make use of interupts.
+#include <avr/interrupt.h>
+
 void setup()
 {
-  //serial print temperature.
+  //init serial for printing out the values.
   Serial.begin(9600);
-  //init the temp chip.
-  tempSensor.init_continuous();
+  //init sensor as oneshot (we decide when we read a value.
+  tempSensor.init_oneShot();
+  //pin2 input.
+  pinMode(2, INPUT);
 }
+
 void loop()
 {
-  //collect readings
-  celcius = tempSensor.readTemperature();
-  farenHeit = tempSensor.readFarenheit();
-  //print readings ones a second.
-  current = millis();
-  if((current - previous) >= interval)
+  //check button if heigh return the temperature
+  if(digitalRead(2))
   {
-    previous = current;
+    celcius = tempSensor.readTemperature();
+    farenHeit = tempSensor.readFarenheit();
     Serial.print("Celcius: ");
     Serial.print(celcius);
     Serial.print(" FarenHeit: ");
     Serial.println(farenHeit);
+    while(digitalRead(2));
   }
 }
+
+
