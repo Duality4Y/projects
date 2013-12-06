@@ -9,8 +9,9 @@
  
 */
 
-// use the wire library
+//make use of Wire library.
 #include <Wire.h>
+
 
 //create a class for easely work with multiple sensors if we wanted to.
 
@@ -43,8 +44,8 @@ DS1621::DS1621(uint8_t address_)
   //setup usage variables.
   config_acces = 0xAC;
   
-  continuousMode = 0x02;
-  oneShotMode = 0x01;
+  continuousMode = 0x00; //there are no flags zet.
+  oneShotMode = 0x01; //sets oneshot flag to 1.
   
   startConversion = 0xEE;
   oneShot = false;
@@ -108,6 +109,7 @@ float DS1621::readTemperature()
   temperature = Wire.read(); //read first byte, being temperature.
   precision = Wire.read(); //read second byte, being the precision.
   //apply and return values.
+  //if second byte (precision) == 0x80, append 0.5.
   if(precision == 0x80)
   {
     return temperature+0.5;
@@ -130,8 +132,8 @@ DS1621 tempSensor(0x04);
 float celcius = 0;
 float farenHeit = 0;
 
-//make use of interupts.
-#include <avr/interrupt.h>
+//make use of delays.
+#include <avr/delay.h>
 
 void setup()
 {
@@ -148,13 +150,20 @@ void loop()
   //check button if heigh return the temperature
   if(digitalRead(2))
   {
+    //read in values.
     celcius = tempSensor.readTemperature();
     farenHeit = tempSensor.readFarenheit();
+    //print out values.
     Serial.print("Celcius: ");
     Serial.print(celcius);
     Serial.print(" FarenHeit: ");
     Serial.println(farenHeit);
+    //wait while button down,
+    //we do not want a continuous reading.
+    //as this is oneshot mode.
     while(digitalRead(2));
+    //debounce
+    _delay_ms(20);
   }
 }
 

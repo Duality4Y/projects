@@ -43,8 +43,8 @@ DS1621::DS1621(uint8_t address_)
   //setup usage variables.
   config_acces = 0xAC;
   
-  continuousMode = 0x02;
-  oneShotMode = 0x01;
+  continuousMode = 0x00; //there are no flags zet.
+  oneShotMode = 0x01; //sets oneshot flag to 1.
   
   startConversion = 0xEE;
   oneShot = false;
@@ -108,6 +108,7 @@ float DS1621::readTemperature()
   temperature = Wire.read(); //read first byte, being temperature.
   precision = Wire.read(); //read second byte, being the precision.
   //apply and return values.
+  //if second byte (precision) == 0x80, append 0.5.
   if(precision == 0x80)
   {
     return temperature+0.5;
