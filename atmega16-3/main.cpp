@@ -31,10 +31,11 @@ uint8_t field[fieldSize+1];
 //and include with functions that make the game of life go.
 #include "life.cpp"
 //variables for determining wether we are is a steady state or still evolving.
-uint8_t currentState = 0;
-uint8_t previousState = 0;
-uint8_t changeCount = 0;
-uint8_t holdingNumber = 10;//how many iterations it takes before desiding that there is no evolution happening anymore.
+uint8_t currentState = 0; 	//keeps current state.
+uint8_t previousState = 0; 	//keeps previous field state.
+uint8_t changeCount = 0; 	//how many iterations. the field is the same.
+uint8_t holdingNumber = 10; //when to deside to change field.
+//(holding number). how many iterations it takes before desiding that there is no evolution happening anymore.
 //for holding how many iterations it took.
 int iterations = 0;
 //-------------------
@@ -69,13 +70,13 @@ void writeFormated(const char *aString)
 void writeFormated(int val, const char *aString)
 {
 	char str[21];
-	sprintf(str, "%s:%d  ", aString, val);
+	sprintf(str, "%s%d", aString, val);
 	lcd.lcdChar(str);
 }
 void writeFormated(int val, int val2, const char *aString)
 {
 	char str[21];
-	sprintf(str, "%s:%d, %d  ", aString, val, val2);
+	sprintf(str, "%s%d, %d  ", aString, val, val2);
 	lcd.lcdChar(str);
 }
 //write pixel data not instructions.
@@ -96,7 +97,7 @@ void createRandomField(uint8_t *field)
 		fillField(field, i);
 }
 //used to draw a lifing cell with a box
-void writeBlackBox(void)
+void writeCell(void)
 {
 	writePixelData(0xFF);
 	writePixelData(0x81);
@@ -132,7 +133,7 @@ void showField(uint8_t *field, int position)
 	//else draw a empty block.
 	if(field[position])
 	{
-		writeBlackBox();
+		writeCell();
 	}
 	else
 	{
@@ -176,24 +177,19 @@ int main(void)
 	init_analog();
 	srand(adc_read(0));
 	
-	//pin 0 on portb output
+	//pin 0 on portb output. same field per interation led.
 	DDRB |= _BV(PB0);
-	//pin 2 on portb input
-	DDRB &= ~(_BV(PB2));
-	//turn on interupt on int2
-	GICR |= (1<<INT2);
-	SREG |= (1<<7);
-	//trigger on rising edge
-	MCUCSR |= (1<<ISC2);
-	sei();
+	
 	//randomly generate a playing field.
 	for(int i = 0;i<fieldSize;i++)
 		fillField(field, i);
+		
 	//set contrast.
 	lcd.setContrast(16);
 	//make sure to start at location 0,0
 	lcd.setCursor(0,0);
-	//position is field size, I refresh screen Backwards.
+	
+	//position is field size, I refresh the screen Backwards.
 	int position = fieldSize;
 	while(1)
 	{
@@ -218,10 +214,10 @@ int main(void)
 				field[position]=0;
 			}
 		}
-		//but if a position in the field is empty
-		//and it has 3 around, that position becomes alife.
 		else
 		{
+			//but if a position in the field is empty
+			//and it has 3 around, that position becomes alife.
 			if(totalAround(field, position)==reproductiveNumber)
 			{
 				field[position]=1;
@@ -237,10 +233,14 @@ int main(void)
 			//set delay with a potmeter aka frame rate :)
 			//could be done with a adc Interrupt ?
 			//and set value that way?
-			delay(adc_read(1)/2);	
+			if(adc_read(1)>100)
+			{
+				delay(adc_read(1)/2);
+			}
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
-			if(changeCount == holdingNumber)
+			//change field if field the same a while, or iterations goes negative (sign of cellulare loop).
+			if(changeCount == holdingNumber || iterations > 1000)
 			{
 				//reset changeCount
 				changeCount = 0;
@@ -261,39 +261,15 @@ int main(void)
 			{
 				PORTB &= ~(1<<PB0);
 				previousState = currentState;
-				//changeCount shouldn't change if the inbetween states happen te be the same.
 				//that is why setting it to zero.
-				changeCount = 0;
 				iterations++;
-				//set location and nicely print something.
-				lcd.setCursor(0,5);
-				writeFormated(iterations-changeCount,changeCount,"Game of Life");
+				//changeCount shouldn't change if the inbetween states happen te be the same.
+				changeCount = 0;
 			}
-		}
-		//also turn on led to see if the button read works.
-		if(PINB & (1<<PB2))
-		{
-			PORTB |= (1<<PB0);
-		}
-		else if(currentState != previousState)
-		{
-			PORTB &= ~(1<<PB0);
+			//set location and nicely print something.
+			lcd.setCursor(0,5);
+			writeFormated(iterations,changeCount,"Game of Life:");
 		}
 	}
 	return 0;
-}
-
-//our pin change interrupt.
-//we have it set to be triggered on rising edge.
-//thus if the button is pressed, not when it is 
-//released.
-ISR(INT2_vect)
-{
-	createRandomField(field);
-	//reset variables depending on cel count.
-	iterations = 0;
-	changeCount = 0;
-	//dit is blocking
-	//while(PINB & (1<<PB2));
-	//PORTB &= ~(1<<PB0);
 }

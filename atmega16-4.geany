@@ -29,10 +29,10 @@ FILE_NAME_1=18;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/blink.cpp;0;4
 FILE_NAME_2=66;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/i2c.cpp;0;4
 FILE_NAME_3=439;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/i2c-ds1621.cpp;0;4
 FILE_NAME_4=0;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/uart.cpp;0;4
-FILE_NAME_5=90;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/ledPwm.cpp;0;4
+FILE_NAME_5=128;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/ledPwm.cpp;0;4
 
 [VTE]
-last_dir=/home/robert
+last_dir=/home/robert/projects/atmega16-4
 
 [build-menu]
 EX_00_LB=_Upload
