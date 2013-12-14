@@ -27,39 +27,44 @@ void writeFormated(int val, int val2, const char *aString)
 	sprintf(str, "%s%d, %d  ", aString, val, val2);
 	lcd.lcdChar(str);
 }
+
+//toggles Enable
+void toggleEnable(void)
+{
+	SET_ENABLE;
+	_delay_us(10);
+	CLEAR_ENABLE;
+	_delay_us(10);
+	SET_ENABLE;
+}
 //reads pixel data at x,y
 uint8_t read(uint8_t x, uint8_t y)
 {
 	uint8_t data = 0;
+	
+	//enter read modify write.
+	lcd.write(0xE0, lcd.INSTRUCT);
+	
 	//set port to input.
 	DATAPORT_TO_INPUT;
-	//enter read modify write
-	lcd.write(0xEE, lcd.INSTRUCT);
-	
-	CLEAR_RW;
+	//clear input port to be sure.
+	DATA_INPUT = 0;
+	//set apropriate controlle lines. 
+	SET_RW;
 	SET_A0;
-	
-	SET_ENABLE;
+	//toggle enable twice. dummy read+actuall read.
+	toggleEnable();
 	_delay_us(10);
-	CLEAR_ENABLE;
+	toggleEnable();
 	_delay_us(10);
-	SET_ENABLE;
-	
-	data = 0;
-	
-	SET_ENABLE;
-	_delay_us(10);
-	CLEAR_ENABLE;
-	_delay_us(10);
-	SET_ENABLE;
-	
+	//read in the data.
 	data = DATA_INPUT;
-	
+	//set the port back to output.
 	DATAPORT_TO_OUTPUT;
+	//write back data we read (datasheet dummy-read -> read -> write. (read modify write)).
 	lcd.write(data, lcd.DATA);
-	
-	//leave read modify write
-	lcd.write(0xE0, lcd.INSTRUCT);
+	//leave read modify write.
+	lcd.write(0xEE, lcd.INSTRUCT);
 	return data;
 }
 
@@ -92,7 +97,7 @@ void writePixel(uint8_t x, uint8_t y)
 	
 	//set right read/write address, and read pixel data.
 	lcd.setWriteReadAddres(x, y_temp);
-	//pixelData = read(x, y_temp);
+	pixelData = read(x, y_temp);
 	
 	//determine what pixel in the pixel column to set.
 	uint8_t pixelByteCol = (1<<(y%8));
@@ -132,10 +137,13 @@ int main(void)
 	{
 		lcd.home();
 		lcd.setContrast(15);
-		for(int x = 0;x<48;x++)
-		{
-			writePixel(x,x);
-		}
+		//for(int x = 0;x<48;x++)
+		//{
+		//	writePixel(x,x);
+		//}
+		for(int y = 0;y<48;y++)
+			writePixel(0,y);
+		
 	}
 	return 0;
 }
