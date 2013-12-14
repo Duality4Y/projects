@@ -10,16 +10,24 @@
 class DmDisplay
 {
 	public:
-		DmDisplay();
-		void init();
-		void blinkControlLines();
-		void write(uint8_t, int);
+		DmDisplay(void);
+		void init(void);
+		void blinkControlLines(void);
+		void write(uint8_t, uint8_t);
+		void write(uint8_t);
 		void setContrast(uint8_t);
 		void setMarker(uint8_t, bool);
 		void invertDisplay(bool);
 		void setRow(uint8_t);
 		void lcdChar(const char *);
-		void resetColumnAdress();
+		void resetColumnAdress(void);
+		void resetRowAdress(void);
+		void setCol(uint8_t col);
+		void toggleDisplayOnOff(bool);
+		void setWriteReadAddres(uint8_t columnAddr, uint8_t page);
+		void setCursor(uint8_t, uint8_t);
+		void clear(void);
+		void home(void);
 		enum
 		{
 			INSTRUCT,DATA
