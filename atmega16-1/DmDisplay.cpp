@@ -8,10 +8,6 @@ DmDisplay::DmDisplay(void)
 {
 	FUNCTIONPORT_TO_OUTPUT;
 	DATAPORT_TO_OUTPUT;
-	
-	CLEAR_POWER;
-	_delay_ms(100);
-	SET_POWER;
 	_delay_ms(100);
 	init();
 	_delay_ms(100);

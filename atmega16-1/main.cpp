@@ -108,6 +108,12 @@ void writePixel(uint8_t x, uint8_t y)
 	lcd.resetRowAdress();
 }
 
+void clearMarkers(void)
+{
+	for(int i = 0;i<7;i++)
+		lcd.setMarker(i, 0);
+}
+
 void writeLCDcontrast(int contrastVal)
 {
 	char str[21];
@@ -141,8 +147,14 @@ int main(void)
 		//{
 		//	writePixel(x,x);
 		//}
+		for(int x = 0;x<100;x++)
+			writePixel(x, 0);
 		for(int y = 0;y<48;y++)
 			writePixel(0,y);
+		for(int x = 0;x<100;x++)
+			writePixel(x, 47);
+		for(int y = 0;y<48;y++)
+			writePixel(99,y);
 		
 	}
 	return 0;
