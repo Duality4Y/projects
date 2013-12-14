@@ -139,6 +139,7 @@ void writeSomeTestText()//DmDisplay display)
 
 int main(void)
 {
+	uint8_t state = 0;
 	while(1)
 	{
 		lcd.home();
@@ -155,7 +156,9 @@ int main(void)
 			writePixel(x, 47);
 		for(int y = 0;y<48;y++)
 			writePixel(99,y);
-		
+		lcd.invertDisplay(state);
+		_delay_ms(1000);
+		state = ~state;
 	}
 	return 0;
 }

@@ -163,7 +163,7 @@ void DmDisplay::lcdChar(const char *str)
 	resetColumnAdress();
 }
 //fill screen with spaces.
-//so it seems cleared.
+//so it seems cleared. well is cleared.
 void DmDisplay::clear(void)
 {
 	for(int i = 0;i<6;i++)
@@ -173,6 +173,7 @@ void DmDisplay::clear(void)
 	}
 }
 //set write location for example writing pixel data.
+//single pixel distances.
 void DmDisplay::setWriteReadAddres(uint8_t columnAddr, uint8_t page)
 {
 	//bound check
@@ -186,6 +187,7 @@ void DmDisplay::setWriteReadAddres(uint8_t columnAddr, uint8_t page)
 	setRow(page);
 }
 //set cursor to location x,y with in bounds of the screen size.
+//uses character distances.
 void DmDisplay::setCursor(uint8_t x, uint8_t y)
 {
 	// this function wil do nothing if you specify numbers
@@ -200,11 +202,13 @@ void DmDisplay::setCursor(uint8_t x, uint8_t y)
 	}
 }
 //sets print location to 0.0
+//uses character distances.
 void DmDisplay::home(void)
 {
 	setCursor(0,0);
 }
 //resets column addres aka sets to position 0,x
+//single pixel distances
 void DmDisplay::resetColumnAdress(void)
 {
 	//write(0x10, INSTRUCT);
@@ -212,6 +216,7 @@ void DmDisplay::resetColumnAdress(void)
 	setCol(0);
 }
 //resets row addres. aka sets to position x,0
+//single pixel distances.
 void DmDisplay::resetRowAdress(void)
 {
 	setRow(0);
