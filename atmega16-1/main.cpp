@@ -40,8 +40,8 @@ void toggleEnable(void)
 	_delay_us(10);
 	SET_ENABLE;
 }
-//reads pixel data at x,y
-uint8_t read(uint8_t x, uint8_t y)
+//reads pixel data, on location set by setWriteReadAdress.
+uint8_t read()
 {
 	uint8_t data = 0;
 	
@@ -77,19 +77,21 @@ void writePixel(uint8_t x, uint8_t y)
 	//for holding existing pixel data.
 	uint8_t pixelData = 0;
 	//boundery check. if bigger then screen size
-	uint8_t y_temp = 0;
-	if(y/8 > 6)
-	{
-			y_temp = 6;
-	}
-	else
-	{
-			y_temp = y/8;
-	}
+	//if((y/8) >= 6)
+	//{
+		//return;
+	//	y_temp = 6;
+	//}
+	//else
+	//{
+	//	y_temp = y/8;
+	//}
+	if((x >= 100)||(y >= 48))
+		return;
 	//set read/write location.
 	//also read pixel data in so we can OR it with the already existing data.
-	lcd.setWriteReadAddres(x, y_temp);
-	pixelData = read(x, y_temp);
+	lcd.setWriteReadAddres(x, y/8);
+	pixelData = read();
 	
 	//determine what pixel in the pixel column to set.
 	uint8_t pixelByteCol = (1<<(y%8));
@@ -115,17 +117,17 @@ void writeLCDcontrast(int contrastVal)
 
 void writeSomeTestText()//DmDisplay display)
 {
-	lcd.setRow(1);
+	lcd.setRow(0);
 	lcd.lcdChar("012345678901234567890");
-	lcd.setRow(2);
+	lcd.setRow(1);
 	lcd.lcdChar("ABCDEFGHIJKLMNPQRSTUV");
-	lcd.setRow(3);
+	lcd.setRow(2);
 	lcd.lcdChar("wxyzabcdefghijklmnopq");
-	lcd.setRow(4);
+	lcd.setRow(3);
 	lcd.lcdChar("  !#$%&'( )@^-");
-	lcd.setRow(5);
+	lcd.setRow(4);
 	lcd.lcdChar("  *+-/<>?;:[]");
-	lcd.setRow(6);
+	lcd.setRow(5);
 	lcd.lcdChar("* AVR rules !! *");
 }
 
@@ -136,8 +138,8 @@ void writeSomeTestText()//DmDisplay display)
 //http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 {
-	uint8_t deltax, deltay, x,y, steep;
-	int8_t error, ystep;
+	int deltax, deltay, x,y, steep;
+	int error, ystep;
 	
 	steep = abs(y1, y2) > abs(x1 ,x2);  
 
@@ -173,22 +175,69 @@ void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 
 void drawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height)
 {
+	//upper x line.
+	drawLine(x,y, x+width, y);
+	//lower x line.
+	drawLine(x, y+height, x+width, y+height);
+	//left y line.
+	drawLine(x,y, x, y+height);
+	//right y line.
+	drawLine(x+width,y, x+width, y+height);
+}
+
+void drawCircle(uint8_t x0, uint8_t y0, uint8_t radius)
+{
+	int error = 1 - radius;
+	int errorY = 1;
+	int errorX = -2 * radius;
+	int x = radius, y = 0;
 	
+	writePixel(x0, y0 + radius);
+	writePixel(x0, y0 - radius);
+	writePixel(x0 + radius, y0);
+	writePixel(x0 - radius, y0);
+	
+	while(y< x)
+	{
+		if(error > 0)
+		{
+			x--;
+			errorX += 2;
+			error += errorX;
+		}
+		y++;
+		errorY += 2;
+		error += errorY;
+		
+		writePixel(x0 + x, y0 + y);
+		writePixel(x0 - x, y0 + y);
+		writePixel(x0 + x, y0 - y);
+		writePixel(x0 - x, y0 - y);
+		writePixel(x0 + y, y0 + x);
+		writePixel(x0 - y, y0 + x);
+		writePixel(x0 + y, y0 - x);
+		writePixel(x0 - y, y0 - x);
+	}
 }
 
 int main(void)
 {
 	lcd.clear();
+	lcd.invertDisplay(1);
+	clearMarkers();
+	lcd.setContrast(20);
 	while(1)
 	{
 		lcd.home();
-		lcd.setContrast(15);
-		drawLine(0,0, 100, 47);
-		
-		drawLine(0,  0,  0,  47);
-		drawLine(0,  0,  99, 0);
-		drawLine(99, 0,  99, 47);
-		drawLine(0,  47, 99, 47);
+		//writeSomeTestText();
+		for(int i = 0;i<10;i++)
+		{
+			//drawCircle(i,i,i*i);
+			//drawLine(0,i*i,i*i,0);
+			drawRect(i*i,i*i,i*4,i*i);
+		}
+		//drawRect(0,0,30,30);
+		//delay(1000);
 	}
 	return 0;
 }
