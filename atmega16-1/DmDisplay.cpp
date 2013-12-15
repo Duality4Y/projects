@@ -170,6 +170,7 @@ void DmDisplay::lcdChar(const char *str)
 //so it seems cleared. well is cleared.
 void DmDisplay::clear(void)
 {
+	home();
 	for(int i = 0;i<6;i++)
 	{
 		setRow(i);
@@ -185,6 +186,10 @@ void DmDisplay::setWriteReadAddres(uint8_t columnAddr, uint8_t page)
 			page = 6;
 	if(columnAddr >= 100)
 			columnAddr = 100;
+	if(page < 0)
+		page = 0;
+	if(columnAddr < 0)
+		columnAddr = 0;
 	//set columnAddr.
 	setCol(columnAddr);
 	//set page adress.

@@ -2,6 +2,8 @@
 #define F_CPU 8000000
 
 #include <avr/io.h>
+#include <math.h>
+#include <stdlib.h>
 #include <util/delay.h>
 
 #include <string.h>
@@ -88,6 +90,8 @@ void writePixel(uint8_t x, uint8_t y)
 	//}
 	if((x >= 100)||(y >= 48))
 		return;
+	if((x < 0) || (y < 0))
+		return;
 	//set read/write location.
 	//also read pixel data in so we can OR it with the already existing data.
 	lcd.setWriteReadAddres(x, y/8);
@@ -172,7 +176,7 @@ void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
     	}
 	}
 }
-
+//drawing a rectangle
 void drawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height)
 {
 	//upper x line.
@@ -184,7 +188,7 @@ void drawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height)
 	//right y line.
 	drawLine(x+width,y, x+width, y+height);
 }
-
+//implementation of bresenham's circle
 void drawCircle(uint8_t x0, uint8_t y0, uint8_t radius)
 {
 	int error = 1 - radius;
@@ -220,23 +224,50 @@ void drawCircle(uint8_t x0, uint8_t y0, uint8_t radius)
 	}
 }
 
+void drawArc(float x, float y, int r, float start_angle, float end_angle)
+{
+	// I know the question is tagged c++, but the idea comes clear in javascript
+	
+	float step = 0.1;
+	for(float i = start_angle; i < end_angle; i = i + step)
+	{
+		float x0 = x+cos(i)*r; 
+		float y0 = y+sin(i)*r;
+		float x1 = x+cos(i+step)*r;
+		float y1 = y+sin(i+step)*r;
+		//writePixel(30 + cos(i) * r, 20 + sin(i) * r); // center point is (50,100)
+		drawLine(x0, y0, x1, y1);
+	}
+}
+
 int main(void)
 {
 	lcd.clear();
-	lcd.invertDisplay(1);
+	lcd.invertDisplay(0);
 	clearMarkers();
 	lcd.setContrast(20);
 	while(1)
 	{
-		lcd.home();
 		//writeSomeTestText();
-		for(int i = 0;i<10;i++)
-		{
+		//for(int i = 0;i<10;i++)
+		//{
 			//drawCircle(i,i,i*i);
 			//drawLine(0,i*i,i*i,0);
-			drawRect(i*i,i*i,i*4,i*i);
+			//drawRect(i*i,i*i,i*4,i*i);
+		//}
+		//drawRect(20,10,30,30);
+		uint8_t x = rand()%100;
+		uint8_t y = rand()%48;
+		uint8_t size = rand()%100;
+		while(size < 15) size = rand()%100;
+		for(int i = 0;i<size;i++)
+		{
+			for(int wall = 10;wall>0;wall--)
+			{
+				drawCircle(x,y,i+wall);
+			}
+			lcd.clear();
 		}
-		//drawRect(0,0,30,30);
 		//delay(1000);
 	}
 	return 0;
