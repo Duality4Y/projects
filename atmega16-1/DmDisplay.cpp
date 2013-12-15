@@ -137,10 +137,13 @@ void DmDisplay::toggleDisplayOnOff(bool state)
 //prints a char to screen, increments column addres by char width.
 void DmDisplay::lcdChar(const char *str)
 {
-	int charCount = strlen(str);
+	//int charCount = strlen(str);
+	
+	int charCount = 0;
+	while(str[charCount] != '\0') charCount++;
 	
 	//if there are more chars then 
-	//there is room on a line.
+	//there is room on a line. just make it line size.
 	if(charCount > 20)
 	{
 		charCount = 20;
@@ -148,6 +151,7 @@ void DmDisplay::lcdChar(const char *str)
 	
 	//start read-modify-write
 	write(0xE0, INSTRUCT);
+	//a loop that write the characters to the screen.
 	for(int i = 0;i<charCount;i++)
 	{
 		uint8_t currentChar = str[i];
@@ -211,8 +215,6 @@ void DmDisplay::home(void)
 //single pixel distances
 void DmDisplay::resetColumnAdress(void)
 {
-	//write(0x10, INSTRUCT);
-	//write(0x00, INSTRUCT);
 	setCol(0);
 }
 //resets row addres. aka sets to position x,0

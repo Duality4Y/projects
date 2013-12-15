@@ -24,11 +24,13 @@ long_line_column=72
 
 [files]
 current_page=3
-FILE_NAME_0=3481;C++;0;16;1;1;0;/home/robert/projects/atmega16-1/DmDisplay.cpp;0;4
-FILE_NAME_1=590;C;0;16;1;1;0;/home/robert/projects/atmega16-1/DmDisplay.h;0;4
-FILE_NAME_2=0;C;0;16;1;1;0;/home/robert/projects/atmega16-1/font5x7.h;0;4
-FILE_NAME_3=2612;C++;0;16;1;1;0;/home/robert/projects/atmega16-1/main.cpp;0;4
-FILE_NAME_4=1380;C;0;16;1;1;0;/home/robert/projects/atmega16-1/pinDefs.h;0;4
+FILE_NAME_0=22;C++;0;16;1;1;0;/home/robert/projects/atmega16-1/DmDisplay.cpp;0;4
+FILE_NAME_1=174;C;0;16;1;1;0;/home/robert/projects/atmega16-1/DmDisplay.h;0;4
+FILE_NAME_2=17;C;0;16;1;1;0;/home/robert/projects/atmega16-1/font5x7.h;0;4
+FILE_NAME_3=3667;C++;0;16;1;1;0;/home/robert/projects/atmega16-1/main.cpp;0;4
+FILE_NAME_4=1191;C;0;16;1;1;0;/home/robert/projects/atmega16-1/pinDefs.h;0;4
+FILE_NAME_5=3490;C++;0;16;1;1;0;/home/robert/Downloads/glcd/glcd.cpp;0;4
+FILE_NAME_6=0;C++;0;16;1;1;0;/home/robert/Downloads/glcd/glcd_Device.cpp;0;4
 
 [VTE]
 last_dir=/home/robert/projects/atmega16-1

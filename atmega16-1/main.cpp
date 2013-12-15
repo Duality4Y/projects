@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include "DmDisplay.h"
 
+#define abs(x, y) 		((x>y) ?  (x-y) : (y-x))
+#define swap(a, b) 		do{a = a+b;b = a - b;a = a-b;}while(0);
+
 DmDisplay lcd;
 
 //writeFormated() for nicely printing things onto the screen.
@@ -74,28 +77,17 @@ void writePixel(uint8_t x, uint8_t y)
 	//for holding existing pixel data.
 	uint8_t pixelData = 0;
 	//boundery check. if bigger then screen size
-	//set to screen size.
-	if(x > 100)
-		x = 100;
-	if(y > 48)
-		y = 48;
-	//set write location for pixel data
-	//if y/8 > 8 that would meen we go of screen since only 48/8 6 big
-	//we make it 6 big if bigger.
-	//also read pixel data in so we can OR it with the already existing data.
 	uint8_t y_temp = 0;
 	if(y/8 > 6)
 	{
-		//lcd.setWriteReadAddres(x, 6);
-		y_temp = 6;
+			y_temp = 6;
 	}
 	else
 	{
-		//lcd.setWriteReadAddres(x, (y/8));
-		y_temp = y/8;
+			y_temp = y/8;
 	}
-	
-	//set right read/write address, and read pixel data.
+	//set read/write location.
+	//also read pixel data in so we can OR it with the already existing data.
 	lcd.setWriteReadAddres(x, y_temp);
 	pixelData = read(x, y_temp);
 	
@@ -104,8 +96,8 @@ void writePixel(uint8_t x, uint8_t y)
 	//write data and or it with what was already there.
 	lcd.write(pixelByteCol|pixelData, lcd.DATA);
 	//reset adress to 0,0
-	lcd.resetColumnAdress();
-	lcd.resetRowAdress();
+	//lcd.resetColumnAdress();
+	//lcd.resetRowAdress();
 }
 
 void clearMarkers(void)
@@ -137,28 +129,66 @@ void writeSomeTestText()//DmDisplay display)
 	lcd.lcdChar("* AVR rules !! *");
 }
 
+//draws a line.
+//based on this line drawing function:
+//https://code.google.com/p/glcd-arduino/downloads/detail?name=glcd-v3-20111205.zip&can=2&q=
+//which source says its actually based on:
+//http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
+{
+	uint8_t deltax, deltay, x,y, steep;
+	int8_t error, ystep;
+	
+	steep = abs(y1, y2) > abs(x1 ,x2);  
+
+	if (steep)
+	{
+		swap(x1, y1);
+		swap(x2, y2);
+	}
+
+	if (x1 > x2)
+	{
+		swap(x1, x2);
+		swap(y1, y2);
+	}
+
+	deltax = x2 - x1;
+	deltay = abs(y2, y1);  
+	error = deltax / 2;
+	y = y1;
+	if(y1 < y2) ystep = 1;  else ystep = -1;
+
+	for(x = x1; x <= x2; x++)
+	{
+		if (steep) writePixel(y,x); else writePixel(x,y);
+   		error = error - deltay;
+		if (error < 0)
+		{
+			y = y + ystep;
+			error = error + deltax;
+    	}
+	}
+}
+
+void drawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height)
+{
+	
+}
+
 int main(void)
 {
-	uint8_t state = 0;
+	lcd.clear();
 	while(1)
 	{
 		lcd.home();
 		lcd.setContrast(15);
-		//for(int x = 0;x<48;x++)
-		//{
-		//	writePixel(x,x);
-		//}
-		for(int x = 0;x<100;x++)
-			writePixel(x, 0);
-		for(int y = 0;y<48;y++)
-			writePixel(0,y);
-		for(int x = 0;x<100;x++)
-			writePixel(x, 47);
-		for(int y = 0;y<48;y++)
-			writePixel(99,y);
-		lcd.invertDisplay(state);
-		_delay_ms(1000);
-		state = ~state;
+		drawLine(0,0, 100, 47);
+		
+		drawLine(0,  0,  0,  47);
+		drawLine(0,  0,  99, 0);
+		drawLine(99, 0,  99, 47);
+		drawLine(0,  47, 99, 47);
 	}
 	return 0;
 }
