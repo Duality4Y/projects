@@ -7,6 +7,9 @@
 #include "font5x7.h"
 #include "pinDefs.h"
 
+#define abs(x, y) 		((x>y) ?  (x-y) : (y-x))
+#define swap(a, b) 		do{a = a+b;b = a - b;a = a-b;}while(0);
+
 class DmDisplay
 {
 	public:
@@ -28,6 +31,16 @@ class DmDisplay
 		void setCursor(uint8_t, uint8_t);
 		void clear(void);
 		void home(void);
+		void clearMarkers(void);
+		void toggleEnable(void);
+		void writePixel(uint8_t, uint8_t);
+		uint8_t read();
+		void drawArc(float, float, int, float, float);
+		void drawCircle(uint8_t, uint8_t, uint8_t);
+		void drawRect(uint8_t, uint8_t, uint8_t, uint8_t);
+		void drawLine(uint8_t, uint8_t, uint8_t, uint8_t);
+		
+		
 		enum
 		{
 			INSTRUCT,DATA
