@@ -1,3 +1,10 @@
+/*
+ * Author: Duality / Robert
+ * Edited: 15-12-2013
+ * 
+ * 
+ * */
+
 //clock speed 8mhz
 #define F_CPU 8000000
 
@@ -15,6 +22,28 @@
 
 DmDisplay lcd;
 
+//init analog
+void init_analog(void)
+{
+	//select 5v analog reference.
+	ADMUX = (1<<REFS0);
+	//enable adc and use a prescaler of 128
+	ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+}
+//adc returns a 10bit int so uint8_t isn't going to do it for us.
+uint16_t adc_read(uint8_t ch)
+{
+	//only check for 3 first bits, or else we would select other options.
+	ch &= 0x07;
+	//clear first 3 bits before ORring, just incase.
+	ADMUX = (ADMUX & 0xF8)|ch;
+	//start conversion
+	ADCSRA |= (1<<ADSC);
+	//wait for it to complete.
+	while(ADCSRA & (1<<ADSC));
+	//return the value.
+	return (ADC);
+}
 //writeFormated() for nicely printing things onto the screen.
 void writeFormated(const char *aString)
 {
@@ -99,11 +128,8 @@ void writePixel(uint8_t x, uint8_t y)
 	
 	//determine what pixel in the pixel column to set.
 	uint8_t pixelByteCol = (1<<(y%8));
-	//write data and or it with what was already there.
+	//write data and or it with that was already there.
 	lcd.write(pixelByteCol|pixelData, lcd.DATA);
-	//reset adress to 0,0
-	//lcd.resetColumnAdress();
-	//lcd.resetRowAdress();
 }
 
 void clearMarkers(void)
@@ -239,36 +265,85 @@ void drawArc(float x, float y, int r, float start_angle, float end_angle)
 		drawLine(x0, y0, x1, y1);
 	}
 }
+//for fun with bubles.
+//returns a random buble size.
+uint8_t randSize(uint8_t max, uint8_t min)
+{
+	uint8_t size = rand()%max;
+	while(size < min) size = rand()%max;
+	return size;
+}
+//creates/draws a buble
+void show_buble(uint8_t x, uint8_t y, uint8_t i)
+{
+	for(int wall = 0;wall<3;wall++)
+	{
+		drawCircle(x,y,i+wall);
+	}
+}
 
+void create_bubbles(uint8_t bubles[][2], uint8_t number_of_bubles)
+{
+	for(uint8_t num = 0;num<number_of_bubles;num++)
+	{
+		bubles[num][0] = rand()%100;
+		bubles[num][1] = rand()%48;
+	}
+}
+
+//for delaying
+void delay(int delay_val)
+{
+	while(delay_val--)
+		_delay_ms(1);
+}
+//fun bubbles exploding or imploding.
+void collapseExplosion(uint8_t type)
+{
+	//max size and min sizes for bubles.
+	static const uint8_t max_size = 22;
+	static const uint8_t min_size = 2;
+	uint8_t size = randSize(max_size, min_size);
+	//number of bubbles.
+	static const uint8_t numBubles = 4;
+	uint8_t bubles[numBubles][2] = {};
+	create_bubbles(bubles, numBubles);
+	//for delaying the refresh.
+	uint8_t delay_val = 10;
+	if(type)
+	{
+		for(int i = 0;i<size;i++)
+		{
+			for(int buble = 0;buble < numBubles;buble++)
+				show_buble(bubles[buble][0], bubles[buble][1], i);
+			delay(delay_val);
+			lcd.clear();
+		}
+	}
+	else
+	{
+		for(int i = size;i>0;i--)
+		{
+			for(int buble = 0;buble < numBubles;buble++)
+				show_buble(bubles[buble][0], bubles[buble][1], i);
+			delay(delay_val);
+			lcd.clear();
+		}
+	}
+}
 int main(void)
 {
 	lcd.clear();
-	lcd.invertDisplay(0);
+	lcd.invertDisplay(true);
 	clearMarkers();
-	lcd.setContrast(20);
+	lcd.setContrast(16);
+	//init analog if needed
+	init_analog();
+	srand(adc_read(0));
 	while(1)
 	{
-		//writeSomeTestText();
-		//for(int i = 0;i<10;i++)
-		//{
-			//drawCircle(i,i,i*i);
-			//drawLine(0,i*i,i*i,0);
-			//drawRect(i*i,i*i,i*4,i*i);
-		//}
-		//drawRect(20,10,30,30);
-		uint8_t x = rand()%100;
-		uint8_t y = rand()%48;
-		uint8_t size = rand()%100;
-		while(size < 15) size = rand()%100;
-		for(int i = 0;i<size;i++)
-		{
-			for(int wall = 10;wall>0;wall--)
-			{
-				drawCircle(x,y,i+wall);
-			}
-			lcd.clear();
-		}
-		//delay(1000);
+		collapseExplosion(1);
+		collapseExplosion(0);
 	}
 	return 0;
 }

@@ -110,7 +110,7 @@ void DmDisplay::setMarker(uint8_t marker, bool state)
 //inverts display turns pixels that are on off, and off to on.
 void DmDisplay::invertDisplay(bool reverse)
 {
-	write(0xA6+(!reverse), INSTRUCT);
+	write(0xA6+(reverse), INSTRUCT);
 }
 //sets column address, thus which column of bytes to address. (bytes represents pixels.)
 void DmDisplay::setCol(uint8_t col)
