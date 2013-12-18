@@ -1,0 +1,39 @@
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=avr-dobbelsteen
+base_path=/home/robert/projects/avr-dobbelsteen/
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=0
+FILE_NAME_0=1252;C;0;16;1;1;0;/home/robert/projects/avr-dobbelsteen/main.c;0;4
+
+[VTE]
+last_dir=/home/robert/projects/avr-dobbelsteen
+
+[build-menu]
+EX_00_LB=_Upload
+EX_00_CM=avrdude -p t84 -c usbasp -e -U flash:w:build.hex -B 3
+EX_00_WD=
+CFT_00_LB=_Compile
+CFT_00_CM=avr-gcc -mmcu=attiny84 -Os -o build.elf "%f"
+CFT_00_WD=
+filetypes=C;
+NF_00_LB=_Make
+NF_00_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
+NF_00_WD=
+CFT_01_LB=_Build
+CFT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
+CFT_01_WD=
