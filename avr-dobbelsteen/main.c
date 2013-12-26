@@ -10,6 +10,7 @@
  * 18-12
  * 
  * edited tilting discision.
+ * made it more reliable.
  *	
  * */
 #define F_CPU 8000000
@@ -66,7 +67,7 @@ void throw_dice()
 	for(i = 0;i<=number_of_sides;i++)
 	{
 		throw_number(i);
-		delay(250+i*i*10);
+		delay(i*i*20+100);
 	}
 }
 void get_motion(uint8_t *sw1, uint8_t *sw2)
