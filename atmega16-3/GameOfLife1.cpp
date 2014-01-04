@@ -1,6 +1,12 @@
 /*
  * author: Robert van der Tuuk
  * Edited on: 27 Nov 2013
+ * 
+ * Edited on: 4 Jan 2014
+ * - created a system with to arrays, in one the change is stored, and the other the field is.
+ *   this makes it work finally,
+ *   gliders work oscilators work.
+ *   hack even the lightweight glider works.
  * */
 
 //clock speed 8mhz
