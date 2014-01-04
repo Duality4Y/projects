@@ -1,5 +1,5 @@
-#ifndef __FONT5X7_H__
-#define __FONT5X7_H__
+#ifndef FONT5X7_H
+#define FONT5X7_H
 
 // 5x7 Font
 char Font[][5] = {

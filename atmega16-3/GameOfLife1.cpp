@@ -27,7 +27,9 @@ DmDisplay lcd;
 #define fieldWidth 20
 #define fieldHeight 5
 #define fieldSize (fieldWidth*fieldHeight)
-uint8_t field[fieldSize+1];
+uint8_t field[fieldSize];
+//also create a buffer for holding all the changes.
+uint8_t buffer[fieldSize];
 //and include with functions that make the game of life go.
 #include "life.cpp"
 //variables for determining wether we are is a steady state or still evolving.
@@ -42,6 +44,26 @@ uint8_t iterations = 0;
 uint8_t position = 0;
 //-------------------
 
+// field
+uint8_t stable[fieldSize] = {
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	};
+
+//put a costume "pattern" onto the playing field.
+void insert_field(uint8_t *pattern, uint8_t *field)
+{
+	int size = fieldSize;
+	while(size--)field[size] = pattern[size];
+}
+void switch_back_buffer(uint8_t *buffer, uint8_t *field)
+{
+	int size = fieldSize;
+	while(size--) buffer[size] = field[size];
+}
 //init analog
 void init_analog(void)
 {
@@ -97,6 +119,11 @@ void createRandomField(uint8_t *field)
 {
 	for(int i = 0;i<fieldSize;i++)
 		random_fillField(field, i);
+}
+void clearArray(uint8_t *buffer)
+{
+	int size = fieldSize;
+	while(size--)buffer[size] = 0;
 }
 //used to draw a lifing cell with a box
 void writeCell(void)
@@ -182,8 +209,12 @@ int main(void)
 	//led stays on if iterations between fields are the same (same number of cells)
 	DDRB |= _BV(PB0);
 	
+	//clear the buffer.
+	clearArray(buffer);
 	//randomly generate a playing field.
-	createRandomField(field);
+	//createRandomField(field);
+	//put a pattern we created onto the field.
+	insert_field(stable, field);
 	
 	//set contrast.
 	lcd.setContrast(20);
@@ -192,7 +223,7 @@ int main(void)
 	
 	//position is field size, I refresh the screen Backwards.
 	position = fieldSize;
-	while(1)
+	while(position--)
 	{
 		//display field with current position
 		showField(field, position);
@@ -202,51 +233,37 @@ int main(void)
 		//if 2 or 3 around it lives, else it dies.
 		if(field[position])
 		{
-			/*
 			if(totalAround(field, position)==surviveAbility)
 			{
-				field[position]=1;
+				buffer[position]=1;
 			}
 			else if(totalAround(field, position)==surviveAbility+1)
 			{
-				field[position]=1;
+				buffer[position]=1;
 			}
 			else
 			{
-				field[position]=0;
-			}*/
-			if((totalAround(field, position)>3) || (totalAround(field, position) < 2))
-			{
-				field[position] = 0;
-			}
-			else
-			{
-				field[position] = 1;
+				buffer[position]=0;
 			}
 		}
 		else
 		{
 			//but if a position in the field is empty
 			//and it has 3 around, that position becomes alife.
-			/*
+			
 			if(totalAround(field, position)==reproductiveNumber)
 			{
-				field[position]=1;
-			}
-			*/
-			if(totalAround(field, position) == 3)
-			{
-				field[position] = 1;
+				buffer[position] = 1;
 			}
 			else
 			{
-				field[position] = 0;
+				buffer[position] = 0;
 			}
 		}
+		switch_back_buffer(field, buffer);
 		//position keeps position in the field array,
 		//and at the same time drawing location on
 		//screen.
-		position--;
 		if(position == 0)
 		{
 			//reset position to 0
@@ -271,6 +288,8 @@ int main(void)
 				iterations = 0;
 				//create a random playing field.
 				createRandomField(field);
+				//put a pattern we created onto the field.
+				//insert_field(stable, field);
 				
 				//is blocking button won't work because it blocks interrupts,
 				//and it will then also not be able to listen to button.

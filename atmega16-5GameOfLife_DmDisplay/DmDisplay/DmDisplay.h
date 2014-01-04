@@ -1,5 +1,5 @@
-#ifndef __DMDISPLAY_H__
-#define __DMDISPLAY_H__
+#ifndef DMDISPLAY_H
+#define DMDISPLAY_H
 
 #include <avr/io.h>
 #include <util/delay.h>

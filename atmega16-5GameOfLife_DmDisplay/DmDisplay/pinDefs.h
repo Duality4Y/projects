@@ -1,5 +1,5 @@
-#ifndef __PINDEFS_H__
-#define __PINDEFS_H__
+#ifndef PINDEFS_H
+#define PINDEFS_H
 
 /*
  * using a atmega16

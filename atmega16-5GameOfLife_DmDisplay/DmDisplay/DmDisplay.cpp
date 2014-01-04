@@ -35,13 +35,13 @@ void DmDisplay::init(void)
 //if INSTRUCT it's instruction data.
 void DmDisplay::write(uint8_t data, uint8_t type)
 {
-	DATA_PORT_CLEAR;
+	DATA_PORT &= 0x00;
 	if(type == DATA)
 	{
 		CLEAR_RW;
 		SET_A0;
 		
-		DATA_PORT(data);
+		DATA_PORT = data;
 		
 		SET_ENABLE;
 		_delay_us(10);
@@ -54,7 +54,7 @@ void DmDisplay::write(uint8_t data, uint8_t type)
 		CLEAR_RW;
 		CLEAR_A0;
 		
-		DATA_PORT(data);
+		DATA_PORT = data;
 		
 		SET_ENABLE;
 		_delay_us(10);
@@ -333,8 +333,6 @@ void DmDisplay::drawCircle(uint8_t x0, uint8_t y0, uint8_t radius)
 //this thing fails big time.
 void DmDisplay::drawArc(float x, float y, int r, float start_angle, float end_angle)
 {
-	// I know the question is tagged c++, but the idea comes clear in javascript
-	
 	float step = 0.1;
 	for(float i = start_angle; i < end_angle; i = i + step)
 	{
