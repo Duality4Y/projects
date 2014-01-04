@@ -46,10 +46,10 @@ uint8_t position = 0;
 
 // field
 uint8_t stable[fieldSize] = {
-	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,
-	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
 
@@ -59,10 +59,10 @@ void insert_field(uint8_t *pattern, uint8_t *field)
 	int size = fieldSize;
 	while(size--)field[size] = pattern[size];
 }
-void switch_back_buffer(uint8_t *buffer, uint8_t *field)
+void switch_buffer(uint8_t *buffer, uint8_t *field)
 {
 	int size = fieldSize;
-	while(size--) buffer[size] = field[size];
+	while(size--) field[size] = buffer[size];
 }
 //init analog
 void init_analog(void)
@@ -260,12 +260,12 @@ int main(void)
 				buffer[position] = 0;
 			}
 		}
-		switch_back_buffer(field, buffer);
 		//position keeps position in the field array,
 		//and at the same time drawing location on
 		//screen.
 		if(position == 0)
 		{
+			switch_buffer(buffer, field);
 			//reset position to 0
 			position = fieldSize;
 			//set delay with a potmeter aka frame rate :)
