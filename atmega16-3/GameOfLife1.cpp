@@ -45,13 +45,13 @@ uint8_t changeCount = 0; 	//how many iterations. the field is the same.
 uint8_t holdingNumber = 10; //when to deside to change field.
 //(holding number). how many iterations it takes before desiding that there is no evolution happening anymore.
 //for holding how many iterations it took.
-uint8_t iterations = 0;
+int iterations = 0;
 //keeps position in field.
 uint8_t position = 0;
 //-------------------
 
-// field
-uint8_t stable[fieldSize] = {
+// a pattern
+uint8_t lightweight_spaceship[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,
@@ -59,16 +59,24 @@ uint8_t stable[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
 
+uint8_t house[fieldSize] = {
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	};
+uint8_t *stable = house;
 //put a costume "pattern" onto the playing field.
-void insert_field(uint8_t *pattern, uint8_t *field)
+void insert_pattern(uint8_t *pattern, uint8_t *field)
 {
 	int size = fieldSize;
 	while(size--)field[size] = pattern[size];
 }
-void switch_buffer(uint8_t *buffer, uint8_t *field)
+void copy_buffer(uint8_t *buffer, uint8_t *field)
 {
-	int size = fieldSize;
-	while(size--) field[size] = buffer[size];
+	//int size = fieldSize;
+	//while(size--) field[size] = buffer[size];
 }
 //init analog
 void init_analog(void)
@@ -97,7 +105,7 @@ void writeFormated(const char *aString)
 {
 	lcd.lcdChar(aString);
 }
-void writeFormated(int val, const char *aString)
+void writeFormated(uint8_t val, const char *aString)
 {
 	char str[21];
 	sprintf(str, "%s%d", aString, val);
@@ -220,10 +228,10 @@ int main(void)
 	//randomly generate a playing field.
 	//createRandomField(field);
 	//put a pattern we created onto the field.
-	insert_field(stable, field);
+	insert_pattern(stable, field);
 	
 	//set contrast.
-	lcd.setContrast(20);
+	lcd.setContrast(17);
 	//make sure to start at location 0,0
 	lcd.setCursor(0,0);
 	
@@ -271,18 +279,19 @@ int main(void)
 		//screen.
 		if(position == 0)
 		{
-			switch_buffer(buffer, field);
+			//insert changes into the field.
+			copy_buffer(buffer, field);
 			//reset position to 0
 			position = fieldSize;
 			//set delay with a potmeter aka frame rate :)
 			//could be done with a adc Interrupt ?
 			//and set value that way?
 			
-			//if(adc_read(1)>100)
-			//{
-			//	delay(adc_read(1)/2);
-			//}
-			delay(200);
+			if(adc_read(1)>100)
+			{
+				delay(adc_read(1)/2);
+			}
+			//delay(200);
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
 			//change field if field the same a while, or iterations goes above a certain number which meens it's probaly in a loop
@@ -317,9 +326,9 @@ int main(void)
 				//changeCount shouldn't change if the inbetween states happen te be the same.
 				changeCount = 0;
 			}
-			//set location and nicely print something.
-			lcd.setCursor(0,5);
-			writeFormated(iterations,changeCount,"Game of Life:");
+		//set location and nicely print something.
+		lcd.setCursor(0,5);
+		writeFormated(iterations,changeCount,"Game of Life:");
 		}
 	}
 	return 0;
