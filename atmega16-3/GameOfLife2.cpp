@@ -7,6 +7,10 @@
  *   this makes it work finally,
  *   gliders work oscilators work.
  *   hack even the lightweight glider works.
+ * 
+ * Edited on: 6 Jan 2014
+ * - Created a way to reset the field by pushing a button.
+ * 
  * */
 
 //clock speed 8mhz
@@ -296,7 +300,8 @@ int main(void)
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
 			//change field if field the same a while, or iterations goes above a certain number which meens it's probaly in a loop
-			if(changeCount == holdingNumber || iterations > 1000)
+			//check if button is pressed and create a new field.
+			if(changeCount == holdingNumber || (iterations > 1000) || (PINB & (1<<PB2)))
 			{
 				//reset changeCount
 				changeCount = 0;
