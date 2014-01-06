@@ -10,7 +10,10 @@
  * 
  * Edited on: 6 Jan 2014
  * - Created a way to reset the field by pushing a button.
- * 
+ * - going to try and implement shapes that are stored in pagemem.
+ *   Keep shapes in stucts so you don't need a whole field with a few
+ *   cells in it. It wil also contain it's max width and max height. and size of the shape.
+ *   Also thinking about keeping a position (start position) in that struct.
  * */
 
 //clock speed 8mhz
@@ -25,6 +28,8 @@
 
 //the code for working with the display. 
 #include "DmDisplay.h"
+//contains life forms.
+#include "lifeForms.h"
 
 //display write location.
 int x,y = 0;
@@ -46,7 +51,7 @@ uint8_t buffer[fieldSize];
 uint8_t currentState = 0; 	//keeps current state.
 uint8_t previousState = 0; 	//keeps previous field state.
 uint8_t changeCount = 0; 	//how many iterations. the field is the same.
-uint8_t holdingNumber = 10; //when to deside to change field.
+uint8_t holdingNumber = 15; //when to deside to change field.
 //(holding number). how many iterations it takes before desiding that there is no evolution happening anymore.
 //for holding how many iterations it took.
 int iterations = 0;
@@ -62,7 +67,7 @@ uint8_t lightweight_spaceship[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
-
+#define HOUSE
 uint8_t house[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,
@@ -70,7 +75,6 @@ uint8_t house[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
-uint8_t *stable = house;
 
 //for example copying a buffer into field.
 void copy_buffer(uint8_t *buffer, uint8_t *field)
@@ -79,6 +83,9 @@ void copy_buffer(uint8_t *buffer, uint8_t *field)
 	while(size--) field[size] = buffer[size];
 }
 //put a costume "pattern" onto the playing field.
+void insert_pattern(uint8_t *pattern, uint8_t *field, LifeForm lifeForm)
+{
+}
 void insert_pattern(uint8_t *pattern, uint8_t *field)
 {
 	copy_buffer(pattern, field);
@@ -113,7 +120,7 @@ void writeFormated(const char *aString)
 void writeFormated(uint8_t val, const char *aString)
 {
 	char str[21];
-	sprintf(str, "%s%d   ", aString, val);
+	sprintf(str, "%s%d", aString, val);
 	lcd.lcdChar(str);
 }
 void writeFormated(int val, int val2, const char *aString)
@@ -147,6 +154,7 @@ void clearArray(uint8_t *buffer)
 //used to draw a lifing cell with a box
 void writeCell(void)
 {
+	//made a box out of the top of my head :)
 	writePixelData(0xFF);
 	writePixelData(0x81);
 	writePixelData(0x81);
@@ -230,10 +238,15 @@ int main(void)
 	
 	//clear the buffer.
 	clearArray(buffer);
-	//randomly generate a playing field.
-	//createRandomField(field);
-	//put a pattern we created onto the field.
-	insert_pattern(stable, field);
+	
+	//if house define insert that.
+	#ifdef HOUSE
+		insert_pattern(house, field);
+	#endif
+	//else random field.
+	#ifdef RANDOM
+		createRandomField(field);
+	#endif
 	
 	//set contrast.
 	lcd.setContrast(17);
@@ -284,20 +297,11 @@ int main(void)
 		//screen.
 		if(position == 0)
 		{
-			//set lcd contrast by value of a potmeter
-			lcd.setContrast(adc_read(1)/32);
 			//insert changes into the field.
 			copy_buffer(buffer, field);
 			//reset position to 0
 			position = fieldSize;
-			//set delay with a potmeter aka frame rate :)
-			//could be done with a adc Interrupt ?
-			//and set value that way?
 			
-			//if(adc_read(1)>100)
-			//{
-			//	delay(adc_read(1)/2);
-			//}
 			delay(100);
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
@@ -314,9 +318,6 @@ int main(void)
 				//put a pattern we created onto the field.
 				//insert_field(stable, field);
 				
-				//is blocking button won't work because it blocks interrupts,
-				//and it will then also not be able to listen to button.
-				delay(2000);
 			}
 			//if the field states stay the same.
 			else if(currentState == previousState)
@@ -336,7 +337,7 @@ int main(void)
 			}
 		//set location and nicely print something.
 		lcd.setCursor(0,5);
-		writeFormated(iterations,changeCount,"GoL:");
+		writeFormated(iterations,changeCount,"Game of Life:");
 		}
 	}
 	return 0;
