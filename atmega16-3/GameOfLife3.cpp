@@ -33,10 +33,6 @@
 //contains life forms.
 #include "lifeForms.h"
 
-//display write location.
-int x,y = 0;
-//create a display instance
-DmDisplay lcd;
 //number it takes to survive and to reproduce/become alife.
 #define surviveAbility 2
 #define reproductiveNumber 3
@@ -49,6 +45,10 @@ uint8_t field[fieldSize];
 uint8_t buffer[fieldSize];
 //and include with functions that make the game of life go.
 #include "life.cpp"
+//display write location.
+int x,y = 0;
+//create a display instance
+DmDisplay lcd;
 //variables for determining wether we are is a steady state or still evolving.
 uint8_t currentState = 0; 	//keeps current state.
 uint8_t previousState = 0; 	//keeps previous field state.
@@ -74,7 +74,7 @@ uint8_t lightweight_spaceship[fieldSize] = {
 uint8_t form[fieldSize] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,
 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	};
@@ -181,7 +181,7 @@ void writeBlock(void)
 		lcd.write(0x00, lcd.DATA);
 	}
 }
-//display the field with position.
+//display the field with position. (ascii cells)
 void showField(uint8_t *field, int position)
 {
 	//calculate x and y location from position.
@@ -189,7 +189,7 @@ void showField(uint8_t *field, int position)
 	if(!(position%fieldWidth))
 	{
 		y++;
-		if(y>(fieldHeight-1))
+		if(y>=(fieldHeight))
 		{
 			y=0;
 		}
@@ -252,7 +252,7 @@ int main(void)
 	
 	//if house define insert that.
 	#ifdef HOUSE
-		insert_pattern(form, field);
+		insert_pattern(house, field);
 	#endif
 	//else random field.
 	#ifdef RANDOM
