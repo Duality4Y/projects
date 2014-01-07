@@ -158,7 +158,7 @@ void DmDisplay::lcdChar(const char *str)
 		uint8_t lcd_char = currentChar-32;
 		for(uint8_t byte = 0;byte<5;byte++)
 		{
-			write(Font[lcd_char][byte], DATA);
+			write(pgm_read_byte(&(Font[lcd_char][byte])), DATA);
 		}
 	}
 	//end of read-modify-write
@@ -207,7 +207,7 @@ void DmDisplay::setCursor(uint8_t x, uint8_t y)
 		{
 			//font width is 5
 			setWriteReadAddres(x*5, y);
-		}	
+		}
 	}
 }
 //sets print location to 0.0

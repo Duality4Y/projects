@@ -1,5 +1,5 @@
 /*
- * author: Robert van der Tuuk
+ * author: Duality / Robert van der Tuuk
  * Edited on: 27 Nov 2013
  * 
  * Edited on: 4 Jan 2014
@@ -13,7 +13,9 @@
  * - going to try and implement shapes that are stored in pagemem.
  *   Keep shapes in stucts so you don't need a whole field with a few
  *   cells in it. It wil also contain it's max width and max height. and size of the shape.
- *   Also thinking about keeping a position (start position) in that struct.
+ * 
+ * - I have added a few shapes. like the glider, and ligthweight spaceship.
+ * - able to set contrast with potmeter.
  * */
 
 //clock speed 8mhz
@@ -58,7 +60,8 @@ int iterations = 0;
 //keeps position in field.
 uint8_t position = 0;
 //-------------------
-
+//select mode, RANDOM, or HOUSE
+#define HOUSE
 // a pattern
 uint8_t lightweight_spaceship[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,
@@ -67,7 +70,15 @@ uint8_t lightweight_spaceship[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
-#define HOUSE
+
+uint8_t form[fieldSize] = {
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	};
+
 uint8_t house[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,
@@ -241,7 +252,7 @@ int main(void)
 	
 	//if house define insert that.
 	#ifdef HOUSE
-		insert_pattern(house, field);
+		insert_pattern(form, field);
 	#endif
 	//else random field.
 	#ifdef RANDOM
@@ -258,7 +269,7 @@ int main(void)
 	while(position--)
 	{
 		//display field with current position
-		showField(field, position);
+		showField(field, fieldSize-position);
 		//here the rules of the game of life are checked.
 		//if a position has a cell (1),
 		//then look how many around,
@@ -301,10 +312,12 @@ int main(void)
 			copy_buffer(buffer, field);
 			//reset position to 0
 			position = fieldSize;
-			
+			//set frame rate with a blocking delay..
 			delay(100);
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
+			//set contrast with pot meter on analog pin 1 (not 0)
+			lcd.setContrast(adc_read(1)/32);
 			//change field if field the same a while, or iterations goes above a certain number which meens it's probaly in a loop
 			//check if button is pressed and create a new field.
 			if(changeCount == holdingNumber || (iterations > 1000) || (PINB & (1<<PB2)))
