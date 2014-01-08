@@ -456,13 +456,20 @@ void DmDisplay::drawRoundRect(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, ui
 		errorY += 2;
 		error += errorY;
 		
-		//writePixel(x0 + x, y0 + y, color);
-		//writePixel(x0 - x, y0 + y, color);
-		//writePixel(x0 + x, y0 - y, color);
-		//writePixel(x0 - x, y0 - y, color);
+		//these cold draw the lower right corner.
+		writePixel(x0 + x, y0 + y, color);
 		writePixel(x0 + y, y0 + x, color);
-		//writePixel(x0 - y, y0 + x, color);
-		//writePixel(x0 + y, y0 - x, color);
+		
+		//these could dra the lower left corner.
+		writePixel(x0 - x, y0 + y, color);
+		writePixel(x0 - y, y0 + x, color);
+		
+		//these could draw the upper right corner.
+		writePixel(x0 + x, y0 - y, color);
+		writePixel(x0 + y, y0 - x, color);
+		
+		//these could draw the upper left corner.
+		writePixel(x0 - x, y0 - y, color);
 		writePixel(x0 - y, y0 - x, color);
 	}
 }
