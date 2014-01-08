@@ -1,5 +1,5 @@
-#ifndef __DMDISPLAY_H__
-#define __DMDISPLAY_H__
+#ifndef DMDISPLAY_H
+#define DMDISPLAY_H
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -7,6 +7,7 @@
 #include "font5x7.h"
 #include "pinDefs.h"
 
+#undef abs 
 #define abs(x, y) 		((x>y) ?  (x-y) : (y-x))
 #define swap(a, b) 		do{a = a+b;b = a - b;a = a-b;}while(0);
 
@@ -33,7 +34,7 @@ class DmDisplay
 		void home(void);
 		void clearMarkers(void);
 		void toggleEnable(void);
-		void writePixel(uint8_t, uint8_t);
+		void writePixel(uint8_t, uint8_t, uint8_t);
 		uint8_t read();
 		void drawArc(float, float, int, float, float);
 		void drawCircle(uint8_t, uint8_t, uint8_t);
@@ -47,6 +48,6 @@ class DmDisplay
 		};
 };
 
-//#include "DmDisplay.cpp"
+#include "DmDisplay.cpp"
 
 #endif

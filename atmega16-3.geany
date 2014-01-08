@@ -23,16 +23,16 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=4
-FILE_NAME_0=5353;C++;0;16;1;1;0;/home/robert/projects/atmega16-3/DmDisplay.cpp;0;4
-FILE_NAME_1=159;C;0;16;1;1;0;/home/robert/projects/atmega16-3/DmDisplay.h;0;4
-FILE_NAME_2=0;C;0;16;1;1;0;/home/robert/projects/atmega16-3/font5x7.h;0;4
-FILE_NAME_3=0;C++;0;16;1;1;0;/home/robert/projects/atmega16-3/life.cpp;0;4
-FILE_NAME_4=174;C++;0;16;1;1;0;/home/robert/projects/atmega16-3/main.cpp;0;4
-FILE_NAME_5=0;C;0;16;1;1;0;/home/robert/projects/atmega16-3/pinDefs.h;0;4
+current_page=0
+FILE_NAME_0=240;C++;0;16;1;1;0;/home/robert/projects/atmega16-3/life.cpp;0;4
+FILE_NAME_1=7680;C++;0;16;1;1;0;/home/robert/projects/atmega16-3/GameOfLife3.cpp;0;4
+FILE_NAME_2=891;C;0;16;1;1;0;/home/robert/projects/atmega16-3/lifeForms.h;0;4
+FILE_NAME_3=525;C;0;16;1;1;0;/home/robert/projects/atmega16-3/font5x7.h;0;4
+FILE_NAME_4=8579;C++;0;16;1;1;0;/home/robert/projects/atmega16-3/DmDisplay.cpp;0;4
+FILE_NAME_5=874;C;0;16;1;1;0;/home/robert/projects/atmega16-3/DmDisplay.h;0;4
 
 [VTE]
-last_dir=/home/robert/projects/atmega16-3
+last_dir=/home/robert/projects
 
 [build-menu]
 EX_00_LB=_Upload

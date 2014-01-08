@@ -1,5 +1,5 @@
 /*
- * author: Duality / Robert van der Tuuk
+ * author: Robert van der Tuuk
  * Edited on: 27 Nov 2013
  * 
  * Edited on: 4 Jan 2014
@@ -10,13 +10,7 @@
  * 
  * Edited on: 6 Jan 2014
  * - Created a way to reset the field by pushing a button.
- * - going to try and implement shapes that are stored in pagemem.
- *   Keep shapes in stucts so you don't need a whole field with a few
- *   cells in it. It wil also contain it's max width and max height. and size of the shape.
  * 
- * - I have added a few shapes. like the glider, and ligthweight spaceship.
- * - able to set contrast with potmeter.
- * - not yet implemented a way of putting the shapes into a field yet.
  * */
 
 //clock speed 8mhz
@@ -31,9 +25,11 @@
 
 //the code for working with the display. 
 #include "DmDisplay.h"
-//contains life forms.
-#include "lifeForms.h"
 
+//display write location.
+int x,y = 0;
+//create a display instance
+DmDisplay lcd;
 //number it takes to survive and to reproduce/become alife.
 #define surviveAbility 2
 #define reproductiveNumber 3
@@ -46,23 +42,18 @@ uint8_t field[fieldSize];
 uint8_t buffer[fieldSize];
 //and include with functions that make the game of life go.
 #include "life.cpp"
-//display write location.
-int x,y = 0;
-//create a display instance
-DmDisplay lcd;
 //variables for determining wether we are is a steady state or still evolving.
 uint8_t currentState = 0; 	//keeps current state.
 uint8_t previousState = 0; 	//keeps previous field state.
 uint8_t changeCount = 0; 	//how many iterations. the field is the same.
-uint8_t holdingNumber = 15; //when to deside to change field.
+uint8_t holdingNumber = 10; //when to deside to change field.
 //(holding number). how many iterations it takes before desiding that there is no evolution happening anymore.
 //for holding how many iterations it took.
 int iterations = 0;
 //keeps position in field.
 uint8_t position = 0;
 //-------------------
-//select mode, RANDOM, or HOUSE
-#define HOUSE
+
 // a pattern
 uint8_t lightweight_spaceship[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,
@@ -72,14 +63,6 @@ uint8_t lightweight_spaceship[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
 
-uint8_t form[fieldSize] = {
-	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-	};
-
 uint8_t house[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,
@@ -87,6 +70,7 @@ uint8_t house[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
+uint8_t *stable = house;
 
 //for example copying a buffer into field.
 void copy_buffer(uint8_t *buffer, uint8_t *field)
@@ -95,9 +79,6 @@ void copy_buffer(uint8_t *buffer, uint8_t *field)
 	while(size--) field[size] = buffer[size];
 }
 //put a costume "pattern" onto the playing field.
-void insert_pattern(uint8_t *pattern, uint8_t *field, LifeForm lifeForm)
-{
-}
 void insert_pattern(uint8_t *pattern, uint8_t *field)
 {
 	copy_buffer(pattern, field);
@@ -132,7 +113,7 @@ void writeFormated(const char *aString)
 void writeFormated(uint8_t val, const char *aString)
 {
 	char str[21];
-	sprintf(str, "%s%d", aString, val);
+	sprintf(str, "%s%d   ", aString, val);
 	lcd.lcdChar(str);
 }
 void writeFormated(int val, int val2, const char *aString)
@@ -166,7 +147,6 @@ void clearArray(uint8_t *buffer)
 //used to draw a lifing cell with a box
 void writeCell(void)
 {
-	//made a box out of the top of my head :)
 	writePixelData(0xFF);
 	writePixelData(0x81);
 	writePixelData(0x81);
@@ -182,7 +162,7 @@ void writeBlock(void)
 		lcd.write(0x00, lcd.DATA);
 	}
 }
-//display the field with position. (ascii cells)
+//display the field with position.
 void showField(uint8_t *field, int position)
 {
 	//calculate x and y location from position.
@@ -190,7 +170,7 @@ void showField(uint8_t *field, int position)
 	if(!(position%fieldWidth))
 	{
 		y++;
-		if(y>=(fieldHeight))
+		if(y>(fieldHeight-1))
 		{
 			y=0;
 		}
@@ -250,15 +230,10 @@ int main(void)
 	
 	//clear the buffer.
 	clearArray(buffer);
-	
-	//if house define insert that.
-	#ifdef HOUSE
-		insert_pattern(house, field);
-	#endif
-	//else random field.
-	#ifdef RANDOM
-		createRandomField(field);
-	#endif
+	//randomly generate a playing field.
+	//createRandomField(field);
+	//put a pattern we created onto the field.
+	insert_pattern(stable, field);
 	
 	//set contrast.
 	lcd.setContrast(17);
@@ -270,7 +245,7 @@ int main(void)
 	while(position--)
 	{
 		//display field with current position
-		showField(field, fieldSize-position);
+		showField(field, position);
 		//here the rules of the game of life are checked.
 		//if a position has a cell (1),
 		//then look how many around,
@@ -309,16 +284,23 @@ int main(void)
 		//screen.
 		if(position == 0)
 		{
+			//set lcd contrast by value of a potmeter
+			lcd.setContrast(adc_read(1)/32);
 			//insert changes into the field.
 			copy_buffer(buffer, field);
 			//reset position to 0
 			position = fieldSize;
-			//set frame rate with a blocking delay..
+			//set delay with a potmeter aka frame rate :)
+			//could be done with a adc Interrupt ?
+			//and set value that way?
+			
+			//if(adc_read(1)>100)
+			//{
+			//	delay(adc_read(1)/2);
+			//}
 			delay(100);
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
-			//set contrast with pot meter on analog pin 1 (not 0)
-			lcd.setContrast(adc_read(1)/32);
 			//change field if field the same a while, or iterations goes above a certain number which meens it's probaly in a loop
 			//check if button is pressed and create a new field.
 			if(changeCount == holdingNumber || (iterations > 1000) || (PINB & (1<<PB2)))
@@ -332,6 +314,9 @@ int main(void)
 				//put a pattern we created onto the field.
 				//insert_field(stable, field);
 				
+				//is blocking button won't work because it blocks interrupts,
+				//and it will then also not be able to listen to button.
+				delay(2000);
 			}
 			//if the field states stay the same.
 			else if(currentState == previousState)
@@ -351,7 +336,7 @@ int main(void)
 			}
 		//set location and nicely print something.
 		lcd.setCursor(0,5);
-		writeFormated(iterations,changeCount,"Game of Life:");
+		writeFormated(iterations,changeCount,"GoL:");
 		}
 	}
 	return 0;

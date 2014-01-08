@@ -35,13 +35,13 @@ void DmDisplay::init(void)
 //if INSTRUCT it's instruction data.
 void DmDisplay::write(uint8_t data, uint8_t type)
 {
-	DATA_PORT &= 0x00;
+	DATA_PORT_CLEAR;
 	if(type == DATA)
 	{
 		CLEAR_RW;
 		SET_A0;
 		
-		DATA_PORT = data;
+		DATA_PORT(data);
 		
 		SET_ENABLE;
 		_delay_us(10);
@@ -54,7 +54,7 @@ void DmDisplay::write(uint8_t data, uint8_t type)
 		CLEAR_RW;
 		CLEAR_A0;
 		
-		DATA_PORT = data;
+		DATA_PORT(data);
 		
 		SET_ENABLE;
 		_delay_us(10);
@@ -158,7 +158,7 @@ void DmDisplay::lcdChar(const char *str)
 		uint8_t lcd_char = currentChar-32;
 		for(uint8_t byte = 0;byte<5;byte++)
 		{
-			write(Font[lcd_char][byte], DATA);
+			write(pgm_read_byte(&(Font[lcd_char][byte])), DATA);
 		}
 	}
 	//end of read-modify-write
@@ -207,7 +207,7 @@ void DmDisplay::setCursor(uint8_t x, uint8_t y)
 		{
 			//font width is 5
 			setWriteReadAddres(x*5, y);
-		}	
+		}
 	}
 }
 //sets print location to 0.0
@@ -274,7 +274,7 @@ void DmDisplay::drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 
 	for(x = x1; x <= x2; x++)
 	{
-		if (steep) writePixel(y,x); else writePixel(x,y);
+		if (steep) writePixel(y,x,1); else writePixel(x,y,1);
    		error = error - deltay;
 		if (error < 0)
 		{
@@ -303,10 +303,10 @@ void DmDisplay::drawCircle(uint8_t x0, uint8_t y0, uint8_t radius)
 	int errorX = -2 * radius;
 	int x = radius, y = 0;
 	
-	writePixel(x0, y0 + radius);
-	writePixel(x0, y0 - radius);
-	writePixel(x0 + radius, y0);
-	writePixel(x0 - radius, y0);
+	writePixel(x0, y0 + radius, 1);
+	writePixel(x0, y0 - radius, 1);
+	writePixel(x0 + radius, y0, 1);
+	writePixel(x0 - radius, y0, 1);
 	
 	while(y< x)
 	{
@@ -320,14 +320,14 @@ void DmDisplay::drawCircle(uint8_t x0, uint8_t y0, uint8_t radius)
 		errorY += 2;
 		error += errorY;
 		
-		writePixel(x0 + x, y0 + y);
-		writePixel(x0 - x, y0 + y);
-		writePixel(x0 + x, y0 - y);
-		writePixel(x0 - x, y0 - y);
-		writePixel(x0 + y, y0 + x);
-		writePixel(x0 - y, y0 + x);
-		writePixel(x0 + y, y0 - x);
-		writePixel(x0 - y, y0 - x);
+		writePixel(x0 + x, y0 + y, 1);
+		writePixel(x0 - x, y0 + y, 1);
+		writePixel(x0 + x, y0 - y, 1);
+		writePixel(x0 - x, y0 - y, 1);
+		writePixel(x0 + y, y0 + x, 1);
+		writePixel(x0 - y, y0 + x, 1);
+		writePixel(x0 + y, y0 - x, 1);
+		writePixel(x0 - y, y0 - x, 1);
 	}
 }
 //this thing fails big time.
@@ -385,7 +385,7 @@ uint8_t DmDisplay::read()
 }
 
 //write a pixel.
-void DmDisplay::writePixel(uint8_t x, uint8_t y)
+void DmDisplay::writePixel(uint8_t x, uint8_t y, uint8_t color)
 {
 	//for holding existing pixel data.
 	uint8_t pixelData = 0;
@@ -403,7 +403,14 @@ void DmDisplay::writePixel(uint8_t x, uint8_t y)
 	//determine what pixel in the pixel column to set.
 	uint8_t pixelByteCol = (1<<(y%8));
 	//write data and or it with that was already there.
-	write(pixelByteCol|pixelData, DATA);
+	if(color)
+	{
+		write(pixelByteCol|pixelData, DATA);
+	}
+	else
+	{
+		write(~pixelByteCol&(pixelData), DATA);
+	}
 }
 
 //toggles Enable

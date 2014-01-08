@@ -16,7 +16,6 @@
  * 
  * - I have added a few shapes. like the glider, and ligthweight spaceship.
  * - able to set contrast with potmeter.
- * - not yet implemented a way of putting the shapes into a field yet.
  * */
 
 //clock speed 8mhz
