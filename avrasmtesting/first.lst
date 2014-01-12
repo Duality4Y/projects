@@ -1,0 +1,60 @@
+gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
+----------------------------------------------------------
+Source file: first.asm
+Hex file:    first.hex
+Eeprom file: first.eep
+Compiled:    12.01.2014, 00:02:16
+Pass:        2
+     1: .include "tn84def.inc" 
+ -> Warning 009: Include defs not necessary, using internal values!
+   File: first.asm, Line: 1
+   Source line: .include "tn84def.inc" 
+     2: 
+     3: .dseg 
+     4: .def temp = r16 
+     5: .def delay1 = r17 
+     6: .def delay2 = r18 
+     7: .def delayv = r19 
+     8: .equ led = 4 ; PORTD bit number to blink LED on 
+     9: 
+    10: .cseg 
+    11: .org $000 
+    12: 000000   C00A  rjmp main 
+    13: 
+    14: delay: 
+    15: 000001   2711  clr delay1 
+    16: 000002   2722  clr delay2 
+    17: 000003   E634  ldi delayv, 100 
+    18: 
+    19: delay_loop: 
+    20: 000004   952A  dec delay2 
+    21: 000005   F7F1  brne delay_loop 
+    22: 000006   951A  dec delay1 
+    23: 000007   F7E1  brne delay_loop 
+    24: 000008   953A  dec delayv 
+    25: 000009   F7D1  brne delay_loop 
+    26: 00000A   9508  ret ; go back to where we came from 
+    27: 
+    28: 
+    29: main: 
+    30: 00000B   E50F  ldi temp,low(RAMEND) 
+    31: 00000C   BF0D  out SPL,temp 
+    32: 00000D   E002  ldi temp,high(RAMEND) 
+    33: 00000E   BF0E  out SPH,temp 
+    34: 
+    35: 00000F   9AD4  sbi DDRA, led ; connect PORTD pin 4 to LED 
+    36: 
+    37: loop: 
+    38: 000010   98DC  cbi PORTA, led ; turn PD4 high 
+    39: 000011   DFEF  rcall delay ; delay for an short bit 
+    40: 000012   9ADC  sbi PORTA, led ; turn PD4 low 
+    41: 000013   DFED  rcall delay ; delay again for a short bit 
+    42: 000014   CFFB  rjmp loop ; recurse back to the head of loop 
+
+Program             :       21 words.
+Constants           :        0 words.
+Total program memory:       21 words.
+Eeprom space        :        0 bytes.
+Data segment        :        0 bytes.
+Compilation completed, no errors.
+Compilation endet 12.01.2014, 00:02:16

@@ -1,0 +1,24 @@
+gavrasm on DOS
+--------------
+
+If you get the error message "No DPMI" when trying to
+start gavrasm.exe on a DOS machine, please download
+the DOS package "Base files (program and units,
+basego32.zip" (or the full package, if you like),
+of Free Pascal from the website
+
+   http://www.freepascal.org
+
+Unpack the files and move the file "cwsdpmi.exe" to
+a directory, which is in the path of your DOS.
+
+This should resolve the problem. Unfortunately I
+cannot verify this, because I don't have a DOS machine
+here.
+
+Remember: Using the DOS-version in a Win-Environment
+requires that all filenames (e.g. of include files)
+have to be compatible with the 8.3 format.
+
+
+Gerhard Schmidt, info (at) avr-asm-tutorial.net
