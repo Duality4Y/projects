@@ -1,0 +1,33 @@
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=avr-attiny84-dice-asm
+base_path=/home/robert/projects/avr-attiny84-dice-asm/
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=0
+FILE_NAME_0=370;ASM;0;16;1;1;0;/home/robert/projects/avr-attiny84-dice-asm/dice.asm;0;4
+
+[VTE]
+last_dir=/home/robert/projects/avr-attiny84-dice-asm
+
+[build-menu]
+EX_00_LB=_Upload
+EX_00_CM=avrdude -c usbasp -p attiny84 -U flash:w:%e.hex
+EX_00_WD=
+ASMFT_00_LB=_Compile
+ASMFT_00_CM=./gavrasm "%f"
+ASMFT_00_WD=
+filetypes=ASM;

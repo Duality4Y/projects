@@ -1,0 +1,42 @@
+gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
+----------------------------------------------------------
+Source file: dice.asm
+Hex file:    dice.hex
+Eeprom file: dice.eep
+Compiled:    12.01.2014, 22:25:42
+Pass:        2
+     1: 
+     2: .device attiny84
+     3: 
+     4: ;holds the pin to symbol values.
+     5: .equ one 				= (1<<PA3);
+     6: .equ two 				= (1<<PA0)|(1<<PA4);
+     7: .equ two_two 			= (1<<PA2)|(1<<PA6);
+     8: .equ three				= one|two;
+     9: .equ three_two			= one|two_two;
+    10: .equ four				= two|two_two;
+    11: .equ five 				= four|one;
+    12: .equ size 				= four|(1<<PA1)|(1<<PA5);
+    13: .equ number_of_symbols 	= 8;
+    14: 
+    15: .def i = r17
+    16: 
+    17: .dseg ;everything after here is in ram right ?
+    18: 	numbers: .byte number_of_symbols+1 ; reserves space for throwing numbers.
+    19: .cseg
+    20: 
+    21: ;macro that loads the numbers/symbols into the reserved byte space.
+    22: load_symbols:
+    23: 000000   2711  clr i
+    24: 
+    25: test:
+    26: 000001   CFFF  rjmp test;
+ -> Warning 001: 6 symbol(s) defined, but not used!
+
+Program             :        2 words.
+Constants           :        0 words.
+Total program memory:        2 words.
+Eeprom space        :        0 bytes.
+Data segment        :        9 bytes.
+Compilation completed, no errors.
+Compilation endet 12.01.2014, 22:25:42

@@ -3,58 +3,60 @@ gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 Source file: first.asm
 Hex file:    first.hex
 Eeprom file: first.eep
-Compiled:    12.01.2014, 00:02:16
+Compiled:    12.01.2014, 18:24:19
 Pass:        2
-     1: .include "tn84def.inc" 
- -> Warning 009: Include defs not necessary, using internal values!
-   File: first.asm, Line: 1
-   Source line: .include "tn84def.inc" 
-     2: 
-     3: .dseg 
-     4: .def temp = r16 
-     5: .def delay1 = r17 
-     6: .def delay2 = r18 
-     7: .def delayv = r19 
-     8: .equ led = 4 ; PORTD bit number to blink LED on 
-     9: 
-    10: .cseg 
-    11: .org $000 
-    12: 000000   C00A  rjmp main 
+     1: ;example from the interwebs,
+     2: ;edited by: Duality / Robert
+     3: 
+     4: .list
+     5: .device ATtiny84 ;a .device for selecting your chip with avrgasm 
+     6: ;which is pretty cool!! 
+     7: 
+     8: .dseg ;data segment
+     9: .def temp = r16 
+    10: .def delay1 = r17 
+    11: .def delay2 = r18 
+    12: .def delayv = r19
     13: 
-    14: delay: 
-    15: 000001   2711  clr delay1 
-    16: 000002   2722  clr delay2 
-    17: 000003   E634  ldi delayv, 100 
-    18: 
-    19: delay_loop: 
-    20: 000004   952A  dec delay2 
-    21: 000005   F7F1  brne delay_loop 
-    22: 000006   951A  dec delay1 
-    23: 000007   F7E1  brne delay_loop 
-    24: 000008   953A  dec delayv 
-    25: 000009   F7D1  brne delay_loop 
-    26: 00000A   9508  ret ; go back to where we came from 
-    27: 
-    28: 
-    29: main: 
-    30: 00000B   E50F  ldi temp,low(RAMEND) 
-    31: 00000C   BF0D  out SPL,temp 
-    32: 00000D   E002  ldi temp,high(RAMEND) 
-    33: 00000E   BF0E  out SPH,temp 
-    34: 
-    35: 00000F   9AD4  sbi DDRA, led ; connect PORTD pin 4 to LED 
-    36: 
-    37: loop: 
-    38: 000010   98DC  cbi PORTA, led ; turn PD4 high 
-    39: 000011   DFEF  rcall delay ; delay for an short bit 
-    40: 000012   9ADC  sbi PORTA, led ; turn PD4 low 
-    41: 000013   DFED  rcall delay ; delay again for a short bit 
-    42: 000014   CFFB  rjmp loop ; recurse back to the head of loop 
+    14: .cseg ;code segment
+    15: .org $000 
+    16: 000000   C00A  rjmp main 
+    17: 
+    18: ;subroutines
+    19: delay: 
+    20: 000001   2711  clr delay1 
+    21: 000002   2722  clr delay2 
+    22: 000003   E634  ldi delayv, 100 
+    23: 
+    24: delay_loop: 
+    25: 000004   952A  dec delay2 
+    26: 000005   F7F1  brne delay_loop 
+    27: 000006   951A  dec delay1 
+    28: 000007   F7E1  brne delay_loop 
+    29: 000008   953A  dec delayv 
+    30: 000009   F7D1  brne delay_loop 
+    31: 00000A   9508  ret ; go back to where we came from 
+    32: 
+    33: 
+    34: main: 
+    35: 	;apperently the first thing that happens is that the stack pointer is set.
+    36: 00000B   E50F  ldi temp,low(RAMEND) 
+    37: 00000C   BF0D  out SPL,temp 
+    38: 00000D   E002  ldi temp,high(RAMEND) 
+    39: 00000E   BF0E  out SPH,temp 
+    40: 	
+    41: 00000F   EF0F  ldi temp, 0xFF;load 0xFF in to r16
+    42: 000010   BB0A  out DDRA, temp;load r16 into DDRA all ports to output.
+    43: 	;sbi DDRA, 0xFF ; connect PORTD pin 4 to LED 
+    44: 	loop:
+    45: 000011   DFEF  rcall delay ; delay again for a short bit 
+    46: 000012   BB09  out PINA, temp;
+    47: 000013   CFFD  rjmp loop ; recurse back to the head of loop 
 
-Program             :       21 words.
+Program             :       20 words.
 Constants           :        0 words.
-Total program memory:       21 words.
+Total program memory:       20 words.
 Eeprom space        :        0 bytes.
 Data segment        :        0 bytes.
 Compilation completed, no errors.
-Compilation endet 12.01.2014, 00:02:16
+Compilation endet 12.01.2014, 18:24:19
