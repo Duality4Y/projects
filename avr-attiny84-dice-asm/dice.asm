@@ -1,47 +1,75 @@
-;example from the interwebs,
-;edited by: Duality / Robert
 
-.list
-.device ATtiny84 ;a .device for selecting your chip with avrgasm 
-;which is pretty cool!! 
+.device attiny84
 
-.dseg ;data segment
-.def temp = r16 
-.def delay1 = r17 
-.def delay2 = r18 
-.def delayv = r19
+;holds the pin to symbol values.
+.equ one 				= (1<<PA3);
+.equ two 				= (1<<PA0)|(1<<PA4);
+.equ two_two 			= (1<<PA2)|(1<<PA6);
+.equ three				= one|two;
+.equ three_two			= one|two_two;
+.equ four				= two|two_two;
+.equ five 				= four|one;
+.equ six 				= four|(1<<PA1)|(1<<PA5);
+.equ number_of_symbols 	= 8;
 
-.cseg ;code segment
-.org $000 
-	rjmp main 
+.equ button				= (1<<PB2)
 
-;subroutines
-delay: 
-	clr delay1 
-	clr delay2 
-	ldi delayv, 100 
+.def temp 	= r16
+.def count  = r17
 
-delay_loop: 
-	dec delay2 
-	brne delay_loop 
-	dec delay1 
-	brne delay_loop 
-	dec delayv 
-	brne delay_loop 
-	ret ; go back to where we came from 
+.dseg ;everything after here is in ram right ?
+	numbers: .byte number_of_symbols+1 ; reserves space for throwing numbers.
+.cseg
 
+.org 0x00
+	;start count at 0
+	ldi count, 0x00
+	ldi temp, 0xFF
+	out DDRA, temp
+	out DDRB, temp
 
-main: 
-	;apperently the first thing that happens is that the stack pointer is set.
+	;Init stack
 	ldi temp,low(RAMEND) 
 	out SPL,temp 
 	ldi temp,high(RAMEND) 
-	out SPH,temp 
-	
-	ldi temp, 0xFF;load 0xFF in to r16
-	out DDRA, temp;load r16 into DDRA all ports to output.
-	;sbi DDRA, 0xFF ; connect PORTD pin 4 to LED 
-	loop:
-		rcall delay ; delay again for a short bit 
-		out PINA, temp;
-		rjmp loop ; recurse back to the head of loop 
+	out SPH,temp
+	;==========
+	rjmp main
+
+main:
+	;check for a button press.
+	rcall checkButton
+	;always clear led.
+	;else if you press once it will stay lit
+	rcall clearLed 
+	rjmp main
+
+
+;this checks if the button was pressed.
+;if so call button pressed.
+checkButton: 
+	in temp, PINB
+	andi temp, button
+	brne buttonPressed
+	ret
+
+;this turns on the led if button is pressed.
+buttonPressed:
+	inc count
+	rjmp setLed
+
+;set the leds to patern of count.
+setLed:
+	out PORTA, count
+	ret
+
+;sets all leds on.
+setAllLed:
+	ldi temp, 0xFF
+	out PORTA, temp
+	rjmp main
+
+clearLed:
+	ldi temp, 0x00
+	out PORTA, temp
+	rjmp main

@@ -3,60 +3,89 @@ gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 Source file: /home/robert/projects/avr-attiny84-dice-asm/dice.asm
 Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice.hex
 Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice.eep
-Compiled:    13.01.2014, 16:01:32
+Compiled:    15.01.2014, 00:56:02
 Pass:        2
-     1: ;example from the interwebs,
-     2: ;edited by: Duality / Robert
+     1: 
+     2: .device attiny84
      3: 
-     4: .list
-     5: .device ATtiny84 ;a .device for selecting your chip with avrgasm 
-     6: ;which is pretty cool!! 
-     7: 
-     8: .dseg ;data segment
-     9: .def temp = r16 
-    10: .def delay1 = r17 
-    11: .def delay2 = r18 
-    12: .def delayv = r19
-    13: 
-    14: .cseg ;code segment
-    15: .org $000 
-    16: 000000   C00A  rjmp main 
-    17: 
-    18: ;subroutines
-    19: delay: 
-    20: 000001   2711  clr delay1 
-    21: 000002   2722  clr delay2 
-    22: 000003   E634  ldi delayv, 100 
+     4: ;holds the pin to symbol values.
+     5: .equ one 				= (1<<PA3);
+     6: .equ two 				= (1<<PA0)|(1<<PA4);
+     7: .equ two_two 			= (1<<PA2)|(1<<PA6);
+     8: .equ three				= one|two;
+     9: .equ three_two			= one|two_two;
+    10: .equ four				= two|two_two;
+    11: .equ five 				= four|one;
+    12: .equ six 				= four|(1<<PA1)|(1<<PA5);
+    13: .equ number_of_symbols 	= 8;
+    14: 
+    15: .equ button				= (1<<PB2)
+    16: 
+    17: .def temp 	= r16
+    18: .def count  = r17
+    19: 
+    20: .dseg ;everything after here is in ram right ?
+    21: 	numbers: .byte number_of_symbols+1 ; reserves space for throwing numbers.
+    22: .cseg
     23: 
-    24: delay_loop: 
-    25: 000004   952A  dec delay2 
-    26: 000005   F7F1  brne delay_loop 
-    27: 000006   951A  dec delay1 
-    28: 000007   F7E1  brne delay_loop 
-    29: 000008   953A  dec delayv 
-    30: 000009   F7D1  brne delay_loop 
-    31: 00000A   9508  ret ; go back to where we came from 
-    32: 
-    33: 
-    34: main: 
-    35: 	;apperently the first thing that happens is that the stack pointer is set.
-    36: 00000B   E50F  ldi temp,low(RAMEND) 
-    37: 00000C   BF0D  out SPL,temp 
-    38: 00000D   E002  ldi temp,high(RAMEND) 
-    39: 00000E   BF0E  out SPH,temp 
-    40: 	
-    41: 00000F   EF0F  ldi temp, 0xFF;load 0xFF in to r16
-    42: 000010   BB0A  out DDRA, temp;load r16 into DDRA all ports to output.
-    43: 	;sbi DDRA, 0xFF ; connect PORTD pin 4 to LED 
-    44: 	loop:
-    45: 000011   DFEF  rcall delay ; delay again for a short bit 
-    46: 000012   BB09  out PINA, temp;
-    47: 000013   CFFD  rjmp loop ; recurse back to the head of loop 
+    24: .org 0x00
+    25: 	;start count at 0
+    26: 000000   E010  ldi count, 0x00
+    27: 000001   EF0F  ldi temp, 0xFF
+    28: 000002   BB0A  out DDRA, temp
+    29: 000003   BB07  out DDRB, temp
+    30: 
+    31: 	;Init stack
+    32: 000004   E50F  ldi temp,low(RAMEND) 
+    33: 000005   BF0D  out SPL,temp 
+    34: 000006   E002  ldi temp,high(RAMEND) 
+    35: 000007   BF0E  out SPH,temp
+    36: 	;==========
+    37: 000008   C000  rjmp main
+    38: 
+    39: main:
+    40: 	;check for a button press.
+    41: 000009   D002  rcall checkButton
+    42: 	;always clear led.
+    43: 	;else if you press once it will stay lit
+    44: 00000A   D00C  rcall clearLed 
+    45: 00000B   CFFD  rjmp main
+    46: 
+    47: 
+    48: ;this checks if the button was pressed.
+    49: ;if so call button pressed.
+    50: checkButton: 
+    51: 00000C   B306  in temp, PINB
+    52: 00000D   7004  andi temp, button
+    53: 00000E   F409  brne buttonPressed
+    54: 00000F   9508  ret
+    55: 
+    56: ;this turns on the led if button is pressed.
+    57: buttonPressed:
+    58: 000010   9513  inc count
+    59: 000011   C000  rjmp setLed
+    60: 
+    61: ;set the leds to patern of count.
+    62: setLed:
+    63: 000012   BB1B  out PORTA, count
+    64: 000013   9508  ret
+    65: 
+    66: ;sets all leds on.
+    67: setAllLed:
+    68: 000014   EF0F  ldi temp, 0xFF
+    69: 000015   BB0B  out PORTA, temp
+    70: 000016   CFF2  rjmp main
+    71: 
+    72: clearLed:
+    73: 000017   E000  ldi temp, 0x00
+    74: 000018   BB0B  out PORTA, temp
+    75: 000019   CFEF  rjmp main
+ -> Warning 001: 6 symbol(s) defined, but not used!
 
-Program             :       20 words.
+Program             :       26 words.
 Constants           :        0 words.
-Total program memory:       20 words.
+Total program memory:       26 words.
 Eeprom space        :        0 bytes.
-Data segment        :        0 bytes.
+Data segment        :        9 bytes.
 Compilation completed, no errors.
-Compilation endet 13.01.2014, 16:01:32
+Compilation endet 15.01.2014, 00:56:02

@@ -17,8 +17,9 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=2403;C;0;16;1;1;0;/home/robert/projects/avr-dobbelsteen/main.c;0;4
+current_page=1
+FILE_NAME_0=2129;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-dobbelsteen%2Fmain.c;0;4
+FILE_NAME_1=209;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FDesktop%2FSublime;0;4
 
 [VTE]
 last_dir=/home/robert/projects/avr-dobbelsteen
@@ -37,3 +38,9 @@ NF_00_WD=
 CFT_01_LB=_Build
 CFT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
 CFT_01_WD=
+
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false
