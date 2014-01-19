@@ -3,89 +3,159 @@ gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 Source file: /home/robert/projects/avr-attiny84-dice-asm/dice.asm
 Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice.hex
 Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice.eep
-Compiled:    15.01.2014, 00:56:02
+Compiled:    19.01.2014, 18:41:31
 Pass:        2
-     1: 
-     2: .device attiny84
-     3: 
-     4: ;holds the pin to symbol values.
-     5: .equ one 				= (1<<PA3);
-     6: .equ two 				= (1<<PA0)|(1<<PA4);
-     7: .equ two_two 			= (1<<PA2)|(1<<PA6);
-     8: .equ three				= one|two;
-     9: .equ three_two			= one|two_two;
-    10: .equ four				= two|two_two;
-    11: .equ five 				= four|one;
-    12: .equ six 				= four|(1<<PA1)|(1<<PA5);
-    13: .equ number_of_symbols 	= 8;
-    14: 
-    15: .equ button				= (1<<PB2)
-    16: 
-    17: .def temp 	= r16
-    18: .def count  = r17
-    19: 
-    20: .dseg ;everything after here is in ram right ?
-    21: 	numbers: .byte number_of_symbols+1 ; reserves space for throwing numbers.
-    22: .cseg
-    23: 
-    24: .org 0x00
-    25: 	;start count at 0
-    26: 000000   E010  ldi count, 0x00
-    27: 000001   EF0F  ldi temp, 0xFF
-    28: 000002   BB0A  out DDRA, temp
-    29: 000003   BB07  out DDRB, temp
-    30: 
-    31: 	;Init stack
-    32: 000004   E50F  ldi temp,low(RAMEND) 
-    33: 000005   BF0D  out SPL,temp 
-    34: 000006   E002  ldi temp,high(RAMEND) 
-    35: 000007   BF0E  out SPH,temp
-    36: 	;==========
-    37: 000008   C000  rjmp main
-    38: 
-    39: main:
-    40: 	;check for a button press.
-    41: 000009   D002  rcall checkButton
-    42: 	;always clear led.
-    43: 	;else if you press once it will stay lit
-    44: 00000A   D00C  rcall clearLed 
-    45: 00000B   CFFD  rjmp main
-    46: 
-    47: 
-    48: ;this checks if the button was pressed.
-    49: ;if so call button pressed.
-    50: checkButton: 
-    51: 00000C   B306  in temp, PINB
-    52: 00000D   7004  andi temp, button
-    53: 00000E   F409  brne buttonPressed
-    54: 00000F   9508  ret
-    55: 
-    56: ;this turns on the led if button is pressed.
-    57: buttonPressed:
-    58: 000010   9513  inc count
-    59: 000011   C000  rjmp setLed
-    60: 
-    61: ;set the leds to patern of count.
-    62: setLed:
-    63: 000012   BB1B  out PORTA, count
-    64: 000013   9508  ret
-    65: 
-    66: ;sets all leds on.
-    67: setAllLed:
-    68: 000014   EF0F  ldi temp, 0xFF
-    69: 000015   BB0B  out PORTA, temp
-    70: 000016   CFF2  rjmp main
-    71: 
-    72: clearLed:
-    73: 000017   E000  ldi temp, 0x00
-    74: 000018   BB0B  out PORTA, temp
-    75: 000019   CFEF  rjmp main
- -> Warning 001: 6 symbol(s) defined, but not used!
+     1: ;source by: Dualit / Robert
+     2: ;Edited 18 - 1 - 2014
+     3: ;Edited 19 - 1 - 2014
+     4: ;working to get symbols stored in ram, and used to be displayed.
+     5: 
+     6: .include "tn84def.inc"
+ -> Warning 009: Include defs not necessary, using internal values!
+   File: /home/robert/projects/avr-attiny84-dice-asm/dice.asm, Line: 6
+   Source line: .include "tn84def.inc"
+     7: 
+     8: ;holds the pin to symbol values.
+     9: .equ one 				= (1<<PA3);
+    10: .equ two 				= (1<<PA0)|(1<<PA4);
+    11: .equ two_two 			= (1<<PA2)|(1<<PA6);
+    12: .equ three				= one|two;
+    13: .equ three_two			= one|two_two;
+    14: .equ four				= two|two_two;
+    15: .equ five 				= four|one;
+    16: .equ six				= (four|(1<<PA1)|(1<<PA5));
+    17: .equ number_of_symbols 	= 8;
+    18: 
+    19: .equ button				= (1<<PB2)
+    20: 
+    21: .def temp 			= r16
+    22: .def count  		= r20
+    23: .def thrown_number	= r2
+    24: .dseg
+    25: .org 0x0060
+    26: 	;everything after here is in ram
+    27: 	;numbers: .byte number_of_symbols+1 ; reserves space for throwing numbers.
+    28: 	numbers: .byte number_of_symbols
+    29: .cseg
+    30: .org 0x00
+    31: 	;start count at 7
+    32: 000000   E048  ldi count, number_of_symbols
+    33: 000001   EF0F  ldi temp, 0xFF
+    34: 000002   BB0A  out DDRA, temp
+    35: 000003   E000  ldi temp, 0x00
+    36: 000004   BB07  out DDRB, temp
+    37: 
+    38: 	;Init stack
+    39: 000005   E50F  ldi temp,low(RAMEND) 
+    40: 000006   BF0D  out SPL,temp 
+    41: 000007   E002  ldi temp,high(RAMEND) 
+    42: 000008   BF0E  out SPH,temp
+    43: 	;==========
+    44: 	;rcall loadSymbols;load symbols into memory
+    45: 000009   E0F0  ldi ZH,HIGH(numbers) ; Set the MSB
+    46: 00000A   E6E0  ldi ZL,LOW(numbers) ; Set the LSB
+    47:     ;load symbols one for one into ram.
+    48: 00000B   E008  ldi temp, one
+    49: 00000C   9301  st Z+, temp
+    50: 00000D   E101  ldi temp, two
+    51: 00000E   9301  st Z+, temp
+    52: 00000F   E404  ldi temp, two_two
+    53: 000010   9301  st Z+, temp
+    54: 000011   E109  ldi temp, three
+    55: 000012   9301  st Z+, temp
+    56: 000013   E40C  ldi temp, three_two
+    57: 000014   9301  st Z+, temp
+    58: 000015   E505  ldi temp, four
+    59: 000016   9301  st Z+, temp
+    60: 000017   E50D  ldi temp, five
+    61: 000018   9301  st Z+, temp
+    62: 000019   E707  ldi temp, six
+    63: 00001A   8300  st Z,  temp
+    64: 	;==========
+    65: 00001B   C013  rjmp main
+    66: 
+    67: loadSymbols:
+    68: 	;load symbols into memory
+    69: 00001C   E0F0  ldi ZH,HIGH(numbers) ; Set the MSB
+    70: 00001D   E6E0  ldi ZL,LOW(numbers) ; Set the LSB
+    71:     ;load symbols one for one into ram.
+    72: 00001E   E008  ldi temp, one
+    73: 00001F   9301  st Z+, temp
+    74: 000020   E101  ldi temp, two
+    75: 000021   9301  st Z+, temp
+    76: 000022   E404  ldi temp, two_two
+    77: 000023   9301  st Z+, temp
+    78: 000024   E109  ldi temp, three
+    79: 000025   9301  st Z+, temp
+    80: 000026   E40C  ldi temp, three_two
+    81: 000027   9301  st Z+, temp
+    82: 000028   E505  ldi temp, four
+    83: 000029   9301  st Z+, temp
+    84: 00002A   E50D  ldi temp, five
+    85: 00002B   9301  st Z+, temp
+    86: 00002C   E707  ldi temp, six
+    87: 00002D   8300  st Z,  temp
+    88: 
+    89: 00002E   9508  ret
+    90: 
+    91: main:
+    92: 	;check for a button press.
+    93: 00002F   C002  rjmp checkButton
+    94: 	;always clear led.
+    95: 	;else if you press once it will stay lit
+    96: 000030   BA2B  out PORTA, thrown_number
+    97: 	;rcall clearLed 
+    98: 000031   CFFD  rjmp main
+    99: 
+   100: ;this checks if the button was pressed.
+   101: ;if so call button pressed.
+   102: checkButton:
+   103: 000032   B306  in temp, PINB ;read pin in register.
+   104: 000033   7004  andi temp, button ;check if the pin is set.
+   105: 000034   F401  brne buttonPressed ;if pin is set branch to setAllLed.
+   106: 
+   107: buttonPressed:
+   108: 	buttonloop: ;this loop holds while the button is down.
+   109: 000035   9543  inc count
+   110: 000036   B306  in temp, PINB ;do the same as when we checked button.
+   111: 000037   7004  andi temp, button
+   112: 000038   C001  rjmp setAllLed
+   113: 000039   F7D9  brne buttonloop
+   114: 
+   115: ;sets all leds on.
+   116: setAllLed:
+   117: 	;load temp with a number that represent the symbol we want to display.
+   118: 	;load a value out of ram and display
+   119: 00003A   E0F0  ldi ZH, high(numbers)
+   120: 00003B   E6E0  ldi ZL, low(numbers)
+   121: 00003C   7047  andi count, number_of_symbols-1
+   122: 	loadLoop:
+   123: 00003D   9101  ld temp, Z+
+   124: 00003E   954A  dec count
+   125: 		;out PORTA, temp
+   126: 00003F   F7E9  brne loadLoop
+   127: 000040   2E20  mov thrown_number, temp
+   128: 	;ldi temp, 0xFF
+   129: 	;out PORTA, temp	
+   130: 	
+   131: 000041   CFED  rjmp main
+   132: 
+   133: clearLed:
+   134: 000042   E000  ldi temp, 0x00
+   135: 000043   BB0B  out PORTA, temp
+   136: 000044   CFEA  rjmp main
+   137: 
+   138: ;set the leds to patern of count.
+   139: setLed:
+   140: 000045   EF0F  ldi temp, 0xFF
+   141: 000046   BB0B  out PORTA, temp
+   142: 000047   CFE7  rjmp main
+ -> Warning 001: 3 symbol(s) defined, but not used!
 
-Program             :       26 words.
+Program             :       72 words.
 Constants           :        0 words.
-Total program memory:       26 words.
+Total program memory:       72 words.
 Eeprom space        :        0 bytes.
-Data segment        :        9 bytes.
+Data segment        :        8 bytes.
 Compilation completed, no errors.
-Compilation endet 15.01.2014, 00:56:02
+Compilation endet 19.01.2014, 18:41:31

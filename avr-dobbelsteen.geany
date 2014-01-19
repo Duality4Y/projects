@@ -17,9 +17,8 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=2129;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-dobbelsteen%2Fmain.c;0;4
-FILE_NAME_1=209;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FDesktop%2FSublime;0;4
+current_page=0
+FILE_NAME_0=2028;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-dobbelsteen%2Fmain.c;0;4
 
 [VTE]
 last_dir=/home/robert/projects/avr-dobbelsteen

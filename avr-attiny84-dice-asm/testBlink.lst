@@ -3,7 +3,7 @@ gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 Source file: /home/robert/projects/avr-attiny84-dice-asm/testBlink.asm
 Hex file:    /home/robert/projects/avr-attiny84-dice-asm/testBlink.hex
 Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/testBlink.eep
-Compiled:    14.01.2014, 21:35:45
+Compiled:    19.01.2014, 18:11:56
 Pass:        2
      1: .device attiny84
      2: ;-----------------------------------------;
@@ -65,4 +65,4 @@ Total program memory:       23 words.
 Eeprom space        :        0 bytes.
 Data segment        :        0 bytes.
 Compilation completed, no errors.
-Compilation endet 14.01.2014, 21:35:45
+Compilation endet 19.01.2014, 18:11:56

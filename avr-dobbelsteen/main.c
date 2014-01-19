@@ -92,7 +92,7 @@ int main(void)
 					_delay_ms(20);
 					throw_dice();
 			}
-			else if(!(sw1 ^ sw2) || (sw1 & sw2))
+			else if((sw1 | sw2) && !(sw1 & sw2))
 			{
 				throw_dice();
 			}
