@@ -3,7 +3,7 @@ gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 Source file: /home/robert/projects/avr-attiny84-dice-asm/dice.asm
 Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice.hex
 Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice.eep
-Compiled:    19.01.2014, 18:41:31
+Compiled:    19.01.2014, 23:31:22
 Pass:        2
      1: ;source by: Dualit / Robert
      2: ;Edited 18 - 1 - 2014
@@ -30,7 +30,7 @@ Pass:        2
     20: 
     21: .def temp 			= r16
     22: .def count  		= r20
-    23: .def thrown_number	= r2
+    23: .def thrown_number	= r17
     24: .dseg
     25: .org 0x0060
     26: 	;everything after here is in ram
@@ -40,72 +40,72 @@ Pass:        2
     30: .org 0x00
     31: 	;start count at 7
     32: 000000   E048  ldi count, number_of_symbols
-    33: 000001   EF0F  ldi temp, 0xFF
-    34: 000002   BB0A  out DDRA, temp
-    35: 000003   E000  ldi temp, 0x00
-    36: 000004   BB07  out DDRB, temp
-    37: 
-    38: 	;Init stack
-    39: 000005   E50F  ldi temp,low(RAMEND) 
-    40: 000006   BF0D  out SPL,temp 
-    41: 000007   E002  ldi temp,high(RAMEND) 
-    42: 000008   BF0E  out SPH,temp
-    43: 	;==========
-    44: 	;rcall loadSymbols;load symbols into memory
-    45: 000009   E0F0  ldi ZH,HIGH(numbers) ; Set the MSB
-    46: 00000A   E6E0  ldi ZL,LOW(numbers) ; Set the LSB
-    47:     ;load symbols one for one into ram.
-    48: 00000B   E008  ldi temp, one
-    49: 00000C   9301  st Z+, temp
-    50: 00000D   E101  ldi temp, two
-    51: 00000E   9301  st Z+, temp
-    52: 00000F   E404  ldi temp, two_two
-    53: 000010   9301  st Z+, temp
-    54: 000011   E109  ldi temp, three
-    55: 000012   9301  st Z+, temp
-    56: 000013   E40C  ldi temp, three_two
-    57: 000014   9301  st Z+, temp
-    58: 000015   E505  ldi temp, four
-    59: 000016   9301  st Z+, temp
-    60: 000017   E50D  ldi temp, five
-    61: 000018   9301  st Z+, temp
-    62: 000019   E707  ldi temp, six
-    63: 00001A   8300  st Z,  temp
-    64: 	;==========
-    65: 00001B   C013  rjmp main
-    66: 
-    67: loadSymbols:
-    68: 	;load symbols into memory
-    69: 00001C   E0F0  ldi ZH,HIGH(numbers) ; Set the MSB
-    70: 00001D   E6E0  ldi ZL,LOW(numbers) ; Set the LSB
-    71:     ;load symbols one for one into ram.
-    72: 00001E   E008  ldi temp, one
-    73: 00001F   9301  st Z+, temp
-    74: 000020   E101  ldi temp, two
-    75: 000021   9301  st Z+, temp
-    76: 000022   E404  ldi temp, two_two
-    77: 000023   9301  st Z+, temp
-    78: 000024   E109  ldi temp, three
-    79: 000025   9301  st Z+, temp
-    80: 000026   E40C  ldi temp, three_two
-    81: 000027   9301  st Z+, temp
-    82: 000028   E505  ldi temp, four
-    83: 000029   9301  st Z+, temp
-    84: 00002A   E50D  ldi temp, five
-    85: 00002B   9301  st Z+, temp
-    86: 00002C   E707  ldi temp, six
-    87: 00002D   8300  st Z,  temp
-    88: 
-    89: 00002E   9508  ret
-    90: 
-    91: main:
-    92: 	;check for a button press.
-    93: 00002F   C002  rjmp checkButton
-    94: 	;always clear led.
-    95: 	;else if you press once it will stay lit
-    96: 000030   BA2B  out PORTA, thrown_number
+    33: 000001   EF1F  ldi thrown_number, 0xFF
+    34: 000002   EF0F  ldi temp, 0xFF
+    35: 000003   BB0A  out DDRA, temp
+    36: 000004   E000  ldi temp, 0x00
+    37: 000005   BB07  out DDRB, temp
+    38: 
+    39: 	;Init stack
+    40: 000006   E50F  ldi temp,low(RAMEND) 
+    41: 000007   BF0D  out SPL,temp 
+    42: 000008   E002  ldi temp,high(RAMEND) 
+    43: 000009   BF0E  out SPH,temp
+    44: 	;==========
+    45: 	;rcall loadSymbols;load symbols into memory
+    46: 00000A   E0F0  ldi ZH,HIGH(numbers) ; Set the MSB
+    47: 00000B   E6E0  ldi ZL,LOW(numbers) ; Set the LSB
+    48:     ;load symbols one for one into ram.
+    49: 00000C   E008  ldi temp, one
+    50: 00000D   9301  st Z+, temp
+    51: 00000E   E101  ldi temp, two
+    52: 00000F   9301  st Z+, temp
+    53: 000010   E404  ldi temp, two_two
+    54: 000011   9301  st Z+, temp
+    55: 000012   E109  ldi temp, three
+    56: 000013   9301  st Z+, temp
+    57: 000014   E40C  ldi temp, three_two
+    58: 000015   9301  st Z+, temp
+    59: 000016   E505  ldi temp, four
+    60: 000017   9301  st Z+, temp
+    61: 000018   E50D  ldi temp, five
+    62: 000019   9301  st Z+, temp
+    63: 00001A   E707  ldi temp, six
+    64: 00001B   8300  st Z,  temp
+    65: 	;==========
+    66: 00001C   C013  rjmp main
+    67: 
+    68: loadSymbols:
+    69: 	;load symbols into memory
+    70: 00001D   E0F0  ldi ZH,HIGH(numbers) ; Set the MSB
+    71: 00001E   E6E0  ldi ZL,LOW(numbers) ; Set the LSB
+    72:     ;load symbols one for one into ram.
+    73: 00001F   E008  ldi temp, one
+    74: 000020   9301  st Z+, temp
+    75: 000021   E101  ldi temp, two
+    76: 000022   9301  st Z+, temp
+    77: 000023   E404  ldi temp, two_two
+    78: 000024   9301  st Z+, temp
+    79: 000025   E109  ldi temp, three
+    80: 000026   9301  st Z+, temp
+    81: 000027   E40C  ldi temp, three_two
+    82: 000028   9301  st Z+, temp
+    83: 000029   E505  ldi temp, four
+    84: 00002A   9301  st Z+, temp
+    85: 00002B   E50D  ldi temp, five
+    86: 00002C   9301  st Z+, temp
+    87: 00002D   E707  ldi temp, six
+    88: 00002E   8300  st Z,  temp
+    89: 
+    90: 00002F   9508  ret
+    91: 
+    92: main:
+    93: 	;check for a button press.
+    94: 000030   C001  rjmp checkButton
+    95: 	;always clear led.
+    96: 	;else if you press once it will stay lit
     97: 	;rcall clearLed 
-    98: 000031   CFFD  rjmp main
+    98: 000031   CFFE  rjmp main
     99: 
    100: ;this checks if the button was pressed.
    101: ;if so call button pressed.
@@ -115,47 +115,49 @@ Pass:        2
    105: 000034   F401  brne buttonPressed ;if pin is set branch to setAllLed.
    106: 
    107: buttonPressed:
-   108: 	buttonloop: ;this loop holds while the button is down.
-   109: 000035   9543  inc count
-   110: 000036   B306  in temp, PINB ;do the same as when we checked button.
-   111: 000037   7004  andi temp, button
-   112: 000038   C001  rjmp setAllLed
-   113: 000039   F7D9  brne buttonloop
-   114: 
-   115: ;sets all leds on.
-   116: setAllLed:
-   117: 	;load temp with a number that represent the symbol we want to display.
-   118: 	;load a value out of ram and display
-   119: 00003A   E0F0  ldi ZH, high(numbers)
-   120: 00003B   E6E0  ldi ZL, low(numbers)
-   121: 00003C   7047  andi count, number_of_symbols-1
-   122: 	loadLoop:
-   123: 00003D   9101  ld temp, Z+
-   124: 00003E   954A  dec count
-   125: 		;out PORTA, temp
-   126: 00003F   F7E9  brne loadLoop
-   127: 000040   2E20  mov thrown_number, temp
-   128: 	;ldi temp, 0xFF
-   129: 	;out PORTA, temp	
-   130: 	
-   131: 000041   CFED  rjmp main
-   132: 
-   133: clearLed:
-   134: 000042   E000  ldi temp, 0x00
-   135: 000043   BB0B  out PORTA, temp
-   136: 000044   CFEA  rjmp main
-   137: 
-   138: ;set the leds to patern of count.
-   139: setLed:
-   140: 000045   EF0F  ldi temp, 0xFF
-   141: 000046   BB0B  out PORTA, temp
-   142: 000047   CFE7  rjmp main
+   108: 000035   E040  ldi count, 0x00
+   109: 	buttonloop: ;this loop holds while the button is down.
+   110: 000036   9543  inc count
+   111: 000037   2F14  mov thrown_number, count
+   112: 000038   B306  in temp, PINB ;do the same as when we checked button.
+   113: 000039   7004  andi temp, button
+   114: 00003A   F7D9  brne buttonloop
+   115: 00003B   C001  rjmp SetAllLed
+   116: 00003C   CFF3  rjmp main
+   117: 
+   118: ;sets all leds on.
+   119: setAllLed:
+   120: 	;load temp with a number that represent the symbol we want to display.
+   121: 	;load a value out of ram and display
+   122: 00003D   E0F0  ldi ZH, high(numbers)
+   123: 00003E   E6E0  ldi ZL, low(numbers)
+   124: 00003F   714E  andi count, (1<<1)|(1<<2)|(1<<3)|(1<<4)
+   125: 000040   BB1B  out PORTA, thrown_number
+   126: 	loadLoop:
+   127: 000041   9101  ld temp, Z+
+   128: 000042   954A  dec count
+   129: 000043   F7E9  brne loadLoop
+   130: 	;ldi temp, 0xFF
+   131: 	;out PORTA, temp	
+   132: 	
+   133: 000044   9508  ret
+   134: 
+   135: clearLed:
+   136: 000045   E000  ldi temp, 0x00
+   137: 000046   BB0B  out PORTA, temp
+   138: 000047   CFE8  rjmp main
+   139: 
+   140: ;set the leds to patern of count.
+   141: setLed:
+   142: 000048   EF0F  ldi temp, 0xFF
+   143: 000049   BB0B  out PORTA, temp
+   144: 00004A   CFE5  rjmp main
  -> Warning 001: 3 symbol(s) defined, but not used!
 
-Program             :       72 words.
+Program             :       75 words.
 Constants           :        0 words.
-Total program memory:       72 words.
+Total program memory:       75 words.
 Eeprom space        :        0 bytes.
 Data segment        :        8 bytes.
 Compilation completed, no errors.
-Compilation endet 19.01.2014, 18:41:31
+Compilation endet 19.01.2014, 23:31:22

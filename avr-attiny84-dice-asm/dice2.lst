@@ -1,0 +1,116 @@
+gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
+----------------------------------------------------------
+Source file: /home/robert/projects/avr-attiny84-dice-asm/dice2.asm
+Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice2.hex
+Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice2.eep
+Compiled:    20.01.2014, 00:54:59
+Pass:        2
+     1: ;source by: Dualit / Robert
+     2: ;Edited 18 - 1 - 2014
+     3: ;Edited 19 - 1 - 2014
+     4: ;working to get symbols stored in ram, and used to be displayed.
+     5: 
+     6: .include "tn84def.inc"
+ -> Warning 009: Include defs not necessary, using internal values!
+   File: /home/robert/projects/avr-attiny84-dice-asm/dice2.asm, Line: 6
+   Source line: .include "tn84def.inc"
+     7: 
+     8: ;holds the pin to symbol values.
+     9: .equ one 				= (1<<PA3);
+    10: .equ two 				= (1<<PA0)|(1<<PA4);
+    11: .equ two_two 			= (1<<PA2)|(1<<PA6);
+    12: .equ three				= one|two;
+    13: .equ three_two			= one|two_two;
+    14: .equ four				= two|two_two;
+    15: .equ five 				= four|one;
+    16: .equ six				= (four|(1<<PA1)|(1<<PA5));
+    17: .equ number_of_symbols 	= 8;
+    18: 
+    19: .equ button				= (1<<PB2)
+    20: 
+    21: .def temp 			= r16
+    22: .def count  		= r18
+    23: .def thrown_number	= r17
+    24: .dseg
+    25: .org 0x0060
+    26: 	;everything after here is in ram
+    27: 	;numbers: .byte number_of_symbols+1 ; reserves space for throwing numbers.
+    28: 	numbers: .byte number_of_symbols
+    29: .cseg
+    30: .org 0x00
+    31: 000000   E020  ldi count, 0x00
+    32: 000001   E010  ldi thrown_number, 0x00
+    33: 000002   EF0F  ldi temp, 0xFF
+    34: 000003   BB0A  out DDRA, temp
+    35: 000004   E000  ldi temp, 0x00
+    36: 000005   BB07  out DDRB, temp
+    37: 
+    38: 	;Init stack
+    39: 000006   E50F  ldi temp,low(RAMEND) 
+    40: 000007   BF0D  out SPL,temp 
+    41: 000008   E002  ldi temp,high(RAMEND) 
+    42: 000009   BF0E  out SPH,temp
+    43: 	;==========
+    44:     ;load symbols into memory
+    45: 00000A   D001  rcall loadSymbols
+    46:     ;-----
+    47: 00000B   C013  rjmp main
+    48: 
+    49: loadSymbols:
+    50: 00000C   E0F0  ldi ZH,HIGH(numbers) ; Set the MSB
+    51: 00000D   E6E0  ldi ZL,LOW(numbers) ; Set the LSB
+    52:     ;load symbols one for one into ram.
+    53: 00000E   E008  ldi temp, one
+    54: 00000F   9301  st Z+, temp
+    55: 000010   E101  ldi temp, two
+    56: 000011   9301  st Z+, temp
+    57: 000012   E404  ldi temp, two_two
+    58: 000013   9301  st Z+, temp
+    59: 000014   E109  ldi temp, three
+    60: 000015   9301  st Z+, temp
+    61: 000016   E40C  ldi temp, three_two
+    62: 000017   9301  st Z+, temp
+    63: 000018   E505  ldi temp, four
+    64: 000019   9301  st Z+, temp
+    65: 00001A   E50D  ldi temp, five
+    66: 00001B   9301  st Z+, temp
+    67: 00001C   E707  ldi temp, six
+    68: 00001D   8300  st Z,  temp
+    69: 00001E   9508  ret
+    70: 
+    71: main:
+    72:     ;since it includes 8.  (the number of dice sides.)
+    73: 00001F   BB1B  out PORTA, thrown_number
+    74: 000020   B306  in temp, PINB
+    75: 000021   7004  andi temp, button
+    76: 000022   F3E1  breq main ;if button is not pressed jump to main else run button loop
+    77:     buttonloop:;loop runs while button down.
+    78: 000023   9523  inc count ;how long was the button pressed
+    79: 000024   E007  ldi temp, 0x07
+    80: 000025   2320  and count, temp ;only the first 8 symbols we want.
+    81:         ;(not actually measure of time but yea.)
+    82: 000026   B306  in temp, PINB;
+    83: 000027   7004  andi temp, button;check if button was pressed
+    84: 000028   F7D1  brne buttonloop
+    85:     ;load the symbol into thrown number and display.
+    86:     ;we want to display the number all the time, but only retrieve the symbol once.
+    87:     ;so we do this after the button code has run.
+    88:     ;and will not happen till button is pressed again.
+    89: 000029   E0F0  ldi ZH, high(numbers)
+    90: 00002A   E6E0  ldi ZL, low(numbers)
+    91:     ;add 1 to count or we won't get zero ?
+    92: 00002B   E001  ldi temp, 0x01
+    93: 00002C   0F20  add count, temp
+    94:     loadLoop:
+    95: 00002D   9111  ld thrown_number, Z+
+    96: 00002E   952A  dec count
+    97: 00002F   F7E9  brne loadLoop
+    98: 000030   CFEE  rjmp main
+
+Program             :       49 words.
+Constants           :        0 words.
+Total program memory:       49 words.
+Eeprom space        :        0 bytes.
+Data segment        :        8 bytes.
+Compilation completed, no errors.
+Compilation endet 20.01.2014, 00:54:59

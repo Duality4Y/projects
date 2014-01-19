@@ -20,7 +20,7 @@
 
 .def temp 			= r16
 .def count  		= r20
-.def thrown_number	= r2
+.def thrown_number	= r17
 .dseg
 .org 0x0060
 	;everything after here is in ram
@@ -30,6 +30,7 @@
 .org 0x00
 	;start count at 7
 	ldi count, number_of_symbols
+	ldi thrown_number, 0xFF
 	ldi temp, 0xFF
 	out DDRA, temp
 	ldi temp, 0x00
@@ -93,7 +94,6 @@ main:
 	rjmp checkButton
 	;always clear led.
 	;else if you press once it will stay lit
-	out PORTA, thrown_number
 	;rcall clearLed 
 	rjmp main
 
@@ -105,12 +105,15 @@ checkButton:
 	brne buttonPressed ;if pin is set branch to setAllLed.
 
 buttonPressed:
+	ldi count, 0x00
 	buttonloop: ;this loop holds while the button is down.
 		inc count
+		mov thrown_number, count
 		in temp, PINB ;do the same as when we checked button.
 		andi temp, button
-		rjmp setAllLed
 		brne buttonloop
+		rjmp SetAllLed
+		rjmp main
 
 ;sets all leds on.
 setAllLed:
@@ -118,17 +121,16 @@ setAllLed:
 	;load a value out of ram and display
 	ldi ZH, high(numbers)
 	ldi ZL, low(numbers)
-	andi count, number_of_symbols-1
+	andi count, (1<<1)|(1<<2)|(1<<3)|(1<<4)
+	out PORTA, thrown_number
 	loadLoop:
 		ld temp, Z+
 		dec count
-		;out PORTA, temp
 		brne loadLoop
-	mov thrown_number, temp
 	;ldi temp, 0xFF
 	;out PORTA, temp	
 	
-	rjmp main
+	ret
 
 clearLed:
 	ldi temp, 0x00
