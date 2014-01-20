@@ -105,10 +105,8 @@ checkButton:
 	brne buttonPressed ;if pin is set branch to setAllLed.
 
 buttonPressed:
-	ldi count, 0x00
 	buttonloop: ;this loop holds while the button is down.
 		inc count
-		mov thrown_number, count
 		in temp, PINB ;do the same as when we checked button.
 		andi temp, button
 		brne buttonloop

@@ -3,6 +3,8 @@
 ;Edited 19 - 1 - 2014
 ;working to get symbols stored in ram, and used to be displayed.
 ;this version works! a random throw with the push of a button.
+;.db
+;lpm
 
 .include "tn84def.inc"
 
@@ -30,7 +32,7 @@
 .cseg
 .org 0x00
     ldi count, 0x00
-    ldi thrown_number, 0x00
+    ldi thrown_number, six
     ldi temp, 0xFF
 	out DDRA, temp
 	ldi temp, 0x00

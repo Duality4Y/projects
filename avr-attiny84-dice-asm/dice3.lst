@@ -1,0 +1,89 @@
+gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
+----------------------------------------------------------
+Source file: /home/robert/projects/avr-attiny84-dice-asm/dice3.asm
+Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice3.hex
+Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice3.eep
+Compiled:    20.01.2014, 13:58:39
+Pass:        2
+     1: ;source by: Dualit / Robert
+     2: ;Edited 18 - 1 - 2014
+     3: ;Edited 19 - 1 - 2014
+     4: ;working to get symbols stored in ram, and used to be displayed.
+     5: ;this version works! a random throw with the push of a button.
+     6: ;Edited 20 - 1 - 2014
+     7: ;this version will store the symbols in flash.
+     8: ;and wil use the .db directive to store.
+     9: ;and lpm to read them from program memory.
+    10: ;.db
+    11: ;lpm
+    12: 
+    13: .include "tn84def.inc"
+ -> Warning 009: Include defs not necessary, using internal values!
+   File: /home/robert/projects/avr-attiny84-dice-asm/dice3.asm, Line: 13
+   Source line: .include "tn84def.inc"
+    14: 
+    15: ;holds the pin to symbol values.
+    16: .equ one 				= (1<<PA3);
+    17: .equ two 				= (1<<PA0)|(1<<PA4);
+    18: .equ two_two 			= (1<<PA2)|(1<<PA6);
+    19: .equ three				= one|two;
+    20: .equ three_two			= one|two_two;
+    21: .equ four				= two|two_two;
+    22: .equ five 				= four|one;
+    23: .equ six				= (four|(1<<PA1)|(1<<PA5));
+    24: .equ number_of_symbols 	= 8;
+    25: 
+    26: .equ button			= (1<<PB2)
+    27: 
+    28: .def temp 			= r16
+    29: .def count 			= r18
+    30: .def thrown_number 	= r17
+    31: 	
+    32: .cseg
+    33: .org 0x00
+    34: 	;keep symbols in memory.
+    35: 	numbers: .db one,two,two_two,three,three_two,four,five,six
+        000000 1108 1944 554C 775D
+    36: 	;setup the pins.
+    37: 000004   EF0F  ldi temp, 0xFF
+    38: 000005   BB0A  out DDRA, temp
+    39: 000006   E000  ldi temp, 0x00
+    40: 000007   BB07  out DDRB, temp
+    41: 
+    42: 	;init stack
+    43: 000008   E50F  ldi temp, low(RAMEND)
+    44: 000009   BF0D  out SPL, temp
+    45: 00000A   E002  ldi temp, high(RAMEND)
+    46: 00000B   BF0E  out SPH, temp
+    47: 	;set count to 0
+    48: 00000C   E020  ldi count, 0x00
+    49: 	;start by displaying a six
+    50: 00000D   E717  ldi thrown_number, six
+    51: 	;jump to the main loop
+    52: 00000E   C000  rjmp main
+    53: 
+    54: main:
+    55: 00000F   BB2B  out PORTA, count
+    56: 000010   B306  in temp, PINB
+    57: 000011   7004  andi temp, button
+    58: 000012   F3E1  breq main
+    59: 	buttonloop:
+    60: 000013   9523  inc count
+    61: 000014   E007  ldi temp, 0x07
+    62: 000015   2320  and count, temp
+    63: 000016   B306  in temp, PINB
+    64: 000017   7004  andi temp, button
+    65: 000018   F7D1  brne buttonloop
+    66: 
+    67: 000019   E0F0  ldi ZH, high(numbers)
+    68: 00001A   E0E0  ldi ZL, low(numbers)
+    69: 00001B   CFF3  rjmp main
+ -> Warning 001: 1 symbol(s) defined, but not used!
+
+Program             :       24 words.
+Constants           :        4 words.
+Total program memory:       28 words.
+Eeprom space        :        0 bytes.
+Data segment        :        0 bytes.
+Compilation completed, no errors.
+Compilation endet 20.01.2014, 13:58:39
