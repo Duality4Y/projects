@@ -19,7 +19,7 @@
 #include <util/delay.h>
 #include <stdlib.h>
 //for debugging.
-//#define debug 
+#define debug 
 //maps pins to numbers (dice numbers)
 #define ONE 			(1<<PA3)
 #define TWO_ONE 		(1<<PA0)|(1<<PA4)

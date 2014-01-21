@@ -12,6 +12,10 @@
 ; this version works. in reads the symbols from memory. with .db en lpm
 ; I will try to get the next version to work with the tilt switch so that if you 
 ; shake the dice, it'll throw a number.
+; edited: 21 - 1 - 2014
+; it now works!
+; shake it ! throw it! 
+; if you shake it it throws a random number :)
 
 .include "tn84def.inc"
 
@@ -27,6 +31,7 @@
 .equ number_of_symbols 	= 8;
 
 .equ button			= (1<<PB2)
+.equ tiltswitch		= (1<<PB0)|(1<<PB1)
 
 .def temp 			= r16
 .def thrown_number 	= r17
@@ -38,12 +43,16 @@
 .org 0x00
 	;keep symbols in memory.
 	numbers: .db one,two,two_two,three,three_two,four,five,six
-	;setup the pins.
-	ldi temp, 0xFF
+	;set led pins to output.
+	ldi temp, one|six
 	out DDRA, temp
-	ldi temp, 0x00
+	;set button and tilt switch to input
+	in temp, DDRB
+	andi temp, ~(button|(1<<PB0)|(1<<PB1))
 	out DDRB, temp
-
+	;turn on internal pullup for the tilt switch.
+	ldi temp, (1<<PB0)|(1<<PB1)
+	out PORTB, temp
 	;init stack
 	ldi temp, low(RAMEND)
 	out SPL, temp
@@ -56,15 +65,20 @@
 	;jump to the main loop
 	rjmp main
 
-main:
-	out PORTA, thrown_number;out put the symbol
-	
-	in temp, PINB ;read button pin
-	andi temp, button ;check if button pin was pressed
-	brne displayRandomNumber ;if not pressed, jump to main.
-	rjmp main
 
-	displayRandomNumber:
+tiltRoutine:
+	clr temp ;clear temp just in case.
+	tiltLoop:
+		inc count ;keep how long the tilt switch is in one position.
+		ldi temp, 0x07 
+		and count, temp ;together with 0x07 we get the range we want. 0 to 7.
+		in temp, PINB ;read the tilt pins.
+		andi temp, tiltswitch ;if tilt in different position then we want
+		breq tiltLoop ;keep looping till tilt is in desired position.
+	ret
+
+buttonPressedRoutine:
+	clr temp ;clear temp just in case.
 	buttonloop: ;this loop runs while button down
 		inc count ;keep how long it was down.
 		ldi temp, 0x07 
@@ -72,7 +86,9 @@ main:
 		in temp, PINB ;read the button pin
 		andi temp, button ;check if button was pressed.
 		brne buttonloop ;while pressed keep looping to buttonloop.
+	ret
 
+loadsymbol:
 	ldi ZH, high(numbers) ;load pointer to symbol table.
 	ldi ZL, low(numbers)
 	ldi temp, 0x01 
@@ -81,4 +97,28 @@ main:
 		lpm thrown_number, Z+ ;load the symbol from memory
 		dec count ;and advance to the next for as long as we pressed down.
 		brne loadLoop
+	ret
+
+main:
+	out PORTA, thrown_number;out put the symbol
+
+	;in temp, PINB
+	;andi temp, (1<<PB0)|(1<<PB1)
+	;mov thrown_number, temp
+	;rjmp main
+
+	in temp, PINB ;read tilt switch
+	andi temp, tiltswitch
+	breq tilt
+
+	in temp, PINB ;read button pin
+	andi temp, button ;check if button pin was pressed
+	brne buttonPressed ;if pressed, jump to displayRandomNumber.
+	rjmp main
+
+	buttonpressed:
+		rcall buttonPressedRoutine
+	tilt:
+		rcall tiltRoutine
+	rcall loadsymbol
 	rjmp main ;finally run back to main.

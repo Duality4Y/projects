@@ -3,7 +3,7 @@ gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 Source file: /home/robert/projects/avr-attiny84-dice-asm/dice3.asm
 Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice3.hex
 Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice3.eep
-Compiled:    20.01.2014, 13:58:39
+Compiled:    20.01.2014, 23:43:23
 Pass:        2
      1: ;source by: Dualit / Robert
      2: ;Edited 18 - 1 - 2014
@@ -16,74 +16,89 @@ Pass:        2
      9: ;and lpm to read them from program memory.
     10: ;.db
     11: ;lpm
-    12: 
-    13: .include "tn84def.inc"
+    12: ; this version works. in reads the symbols from memory. with .db en lpm
+    13: ; I will try to get the next version to work with the tilt switch so that if you 
+    14: ; shake the dice, it'll throw a number.
+    15: 
+    16: .include "tn84def.inc"
  -> Warning 009: Include defs not necessary, using internal values!
-   File: /home/robert/projects/avr-attiny84-dice-asm/dice3.asm, Line: 13
+   File: /home/robert/projects/avr-attiny84-dice-asm/dice3.asm, Line: 16
    Source line: .include "tn84def.inc"
-    14: 
-    15: ;holds the pin to symbol values.
-    16: .equ one 				= (1<<PA3);
-    17: .equ two 				= (1<<PA0)|(1<<PA4);
-    18: .equ two_two 			= (1<<PA2)|(1<<PA6);
-    19: .equ three				= one|two;
-    20: .equ three_two			= one|two_two;
-    21: .equ four				= two|two_two;
-    22: .equ five 				= four|one;
-    23: .equ six				= (four|(1<<PA1)|(1<<PA5));
-    24: .equ number_of_symbols 	= 8;
-    25: 
-    26: .equ button			= (1<<PB2)
-    27: 
-    28: .def temp 			= r16
-    29: .def count 			= r18
-    30: .def thrown_number 	= r17
-    31: 	
-    32: .cseg
-    33: .org 0x00
-    34: 	;keep symbols in memory.
-    35: 	numbers: .db one,two,two_two,three,three_two,four,five,six
+    17: 
+    18: ;holds the pin to symbol values.
+    19: .equ one 				= (1<<PA3);
+    20: .equ two 				= (1<<PA0)|(1<<PA4);
+    21: .equ two_two 			= (1<<PA2)|(1<<PA6);
+    22: .equ three				= one|two;
+    23: .equ three_two			= one|two_two;
+    24: .equ four				= two|two_two;
+    25: .equ five 				= four|one;
+    26: .equ six				= (four|(1<<PA1)|(1<<PA5));
+    27: .equ number_of_symbols 	= 8;
+    28: 
+    29: .equ button			= (1<<PB2)
+    30: 
+    31: .def temp 			= r16
+    32: .def thrown_number 	= r17
+    33: .def count 			= r18
+    34: .def switch1		= r19
+    35: .def switch2 		= r20
+    36: 	
+    37: .cseg
+    38: .org 0x00
+    39: 	;keep symbols in memory.
+    40: 	numbers: .db one,two,two_two,three,three_two,four,five,six
         000000 1108 1944 554C 775D
-    36: 	;setup the pins.
-    37: 000004   EF0F  ldi temp, 0xFF
-    38: 000005   BB0A  out DDRA, temp
-    39: 000006   E000  ldi temp, 0x00
-    40: 000007   BB07  out DDRB, temp
-    41: 
-    42: 	;init stack
-    43: 000008   E50F  ldi temp, low(RAMEND)
-    44: 000009   BF0D  out SPL, temp
-    45: 00000A   E002  ldi temp, high(RAMEND)
-    46: 00000B   BF0E  out SPH, temp
-    47: 	;set count to 0
-    48: 00000C   E020  ldi count, 0x00
-    49: 	;start by displaying a six
-    50: 00000D   E717  ldi thrown_number, six
-    51: 	;jump to the main loop
-    52: 00000E   C000  rjmp main
-    53: 
-    54: main:
-    55: 00000F   BB2B  out PORTA, count
-    56: 000010   B306  in temp, PINB
-    57: 000011   7004  andi temp, button
-    58: 000012   F3E1  breq main
-    59: 	buttonloop:
-    60: 000013   9523  inc count
-    61: 000014   E007  ldi temp, 0x07
-    62: 000015   2320  and count, temp
-    63: 000016   B306  in temp, PINB
-    64: 000017   7004  andi temp, button
-    65: 000018   F7D1  brne buttonloop
+    41: 	;setup the pins.
+    42: 000004   EF0F  ldi temp, 0xFF
+    43: 000005   BB0A  out DDRA, temp
+    44: 000006   E000  ldi temp, 0x00
+    45: 000007   BB07  out DDRB, temp
+    46: 
+    47: 	;init stack
+    48: 000008   E50F  ldi temp, low(RAMEND)
+    49: 000009   BF0D  out SPL, temp
+    50: 00000A   E002  ldi temp, high(RAMEND)
+    51: 00000B   BF0E  out SPH, temp
+    52: 	;set count to 0
+    53: 00000C   E020  ldi count, 0x00
+    54: 	;start by displaying a six
+    55: 00000D   E717  ldi thrown_number, six
+    56: 	;jump to the main loop
+    57: 00000E   C000  rjmp main
+    58: 
+    59: main:
+    60: 00000F   BB1B  out PORTA, thrown_number;out put the symbol
+    61: 	
+    62: 000010   B306  in temp, PINB ;read button pin
+    63: 000011   7004  andi temp, button ;check if button pin was pressed
+    64: 000012   F409  brne displayRandomNumber ;if not pressed, jump to main.
+    65: 000013   CFFB  rjmp main
     66: 
-    67: 000019   E0F0  ldi ZH, high(numbers)
-    68: 00001A   E0E0  ldi ZL, low(numbers)
-    69: 00001B   CFF3  rjmp main
- -> Warning 001: 1 symbol(s) defined, but not used!
+    67: 	displayRandomNumber:
+    68: 	buttonloop: ;this loop runs while button down
+    69: 000014   9523  inc count ;keep how long it was down.
+    70: 000015   E007  ldi temp, 0x07 
+    71: 000016   2320  and count, temp ;together with 0x07 we get the range we want.
+    72: 000017   B306  in temp, PINB ;read the button pin
+    73: 000018   7004  andi temp, button ;check if button was pressed.
+    74: 000019   F7D1  brne buttonloop ;while pressed keep looping to buttonloop.
+    75: 
+    76: 00001A   E0F0  ldi ZH, high(numbers) ;load pointer to symbol table.
+    77: 00001B   E0E0  ldi ZL, low(numbers)
+    78: 00001C   E001  ldi temp, 0x01 
+    79: 00001D   0F20  add count, temp ;add one so we have a range from 1 to 8 and not 0 to 7.
+    80: 	loadLoop: ;loop to load the symbol
+    81: 00001E   9115  lpm thrown_number, Z+ ;load the symbol from memory
+    82: 00001F   952A  dec count ;and advance to the next for as long as we pressed down.
+    83: 000020   F7E9  brne loadLoop
+    84: 000021   CFED  rjmp main ;finally run back to main.
+ -> Warning 001: 3 symbol(s) defined, but not used!
 
-Program             :       24 words.
+Program             :       30 words.
 Constants           :        4 words.
-Total program memory:       28 words.
+Total program memory:       34 words.
 Eeprom space        :        0 bytes.
 Data segment        :        0 bytes.
 Compilation completed, no errors.
-Compilation endet 20.01.2014, 13:58:39
+Compilation endet 20.01.2014, 23:43:23
