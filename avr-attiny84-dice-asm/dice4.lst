@@ -1,0 +1,144 @@
+gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
+----------------------------------------------------------
+Source file: /home/robert/projects/avr-attiny84-dice-asm/dice4.asm
+Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice4.hex
+Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice4.eep
+Compiled:    21.01.2014, 01:33:41
+Pass:        2
+     1: ;source by: Dualit / Robert
+     2: ;Edited 18 - 1 - 2014
+     3: ;Edited 19 - 1 - 2014
+     4: ;working to get symbols stored in ram, and used to be displayed.
+     5: ;this version works! a random throw with the push of a button.
+     6: ;Edited 20 - 1 - 2014
+     7: ;this version will store the symbols in flash.
+     8: ;and wil use the .db directive to store.
+     9: ;and lpm to read them from program memory.
+    10: ;.db
+    11: ;lpm
+    12: ; this version works. in reads the symbols from memory. with .db en lpm
+    13: ; I will try to get the next version to work with the tilt switch so that if you 
+    14: ; shake the dice, it'll throw a number.
+    15: ; edited: 21 - 1 - 2014
+    16: ; it now works!
+    17: ; shake it ! throw it! 
+    18: ; if you shake it it throws a random number :)
+    19: 
+    20: .include "tn84def.inc"
+ -> Warning 009: Include defs not necessary, using internal values!
+   File: /home/robert/projects/avr-attiny84-dice-asm/dice4.asm, Line: 20
+   Source line: .include "tn84def.inc"
+    21: 
+    22: ;holds the pin to symbol values.
+    23: .equ one 				= (1<<PA3);
+    24: .equ two 				= (1<<PA0)|(1<<PA4);
+    25: .equ two_two 			= (1<<PA2)|(1<<PA6);
+    26: .equ three				= one|two;
+    27: .equ three_two			= one|two_two;
+    28: .equ four				= two|two_two;
+    29: .equ five 				= four|one;
+    30: .equ six				= (four|(1<<PA1)|(1<<PA5));
+    31: .equ number_of_symbols 	= 8;
+    32: 
+    33: .equ button			= (1<<PB2)
+    34: .equ tiltswitch		= (1<<PB0)|(1<<PB1)
+    35: 
+    36: .def temp 			= r16
+    37: .def thrown_number 	= r17
+    38: .def count 			= r18
+    39: .def switch1		= r19
+    40: .def switch2 		= r20
+    41: 	
+    42: .cseg
+    43: .org 0x00
+    44: 	;keep symbols in memory.
+    45: 	numbers: .db one,two,two_two,three,three_two,four,five,six
+        000000 1108 1944 554C 775D
+    46: 	;set led pins to output.
+    47: 000004   E70F  ldi temp, one|six
+    48: 000005   BB0A  out DDRA, temp
+    49: 	;set button and tilt switch to input
+    50: 000006   B307  in temp, DDRB
+    51: 000007   7F08  andi temp, ~(button|(1<<PB0)|(1<<PB1))
+    52: 000008   BB07  out DDRB, temp
+    53: 	;turn on internal pullup for the tilt switch.
+    54: 000009   E003  ldi temp, (1<<PB0)|(1<<PB1)
+    55: 00000A   BB08  out PORTB, temp
+    56: 	;init stack
+    57: 00000B   E50F  ldi temp, low(RAMEND)
+    58: 00000C   BF0D  out SPL, temp
+    59: 00000D   E002  ldi temp, high(RAMEND)
+    60: 00000E   BF0E  out SPH, temp
+    61: 	;set count to 0
+    62: 00000F   E020  ldi count, 0x00
+    63: 	;start by displaying a six
+    64: 000010   E717  ldi thrown_number, six
+    65: 	;jump to the main loop
+    66: 000011   C018  rjmp main
+    67: 
+    68: 
+    69: tiltRoutine:
+    70: 000012   2700  clr temp ;clear temp just in case.
+    71: 	tiltLoop:
+    72: 000013   9523  inc count ;keep how long the tilt switch is in one position.
+    73: 000014   E007  ldi temp, 0x07 
+    74: 000015   2320  and count, temp ;together with 0x07 we get the range we want. 0 to 7.
+    75: 000016   B306  in temp, PINB ;read the tilt pins.
+    76: 000017   7003  andi temp, tiltswitch ;if tilt in different position then we want
+    77: 000018   F3D1  breq tiltLoop ;keep looping till tilt is in desired position.
+    78: 000019   9508  ret
+    79: 
+    80: buttonPressedRoutine:
+    81: 00001A   2700  clr temp ;clear temp just in case.
+    82: 	buttonloop: ;this loop runs while button down
+    83: 00001B   9523  inc count ;keep how long it was down.
+    84: 00001C   E007  ldi temp, 0x07 
+    85: 00001D   2320  and count, temp ;together with 0x07 we get the range we want.
+    86: 00001E   B306  in temp, PINB ;read the button pin
+    87: 00001F   7004  andi temp, button ;check if button was pressed.
+    88: 000020   F7D1  brne buttonloop ;while pressed keep looping to buttonloop.
+    89: 000021   9508  ret
+    90: 
+    91: loadsymbol:
+    92: 000022   E0F0  ldi ZH, high(numbers) ;load pointer to symbol table.
+    93: 000023   E0E0  ldi ZL, low(numbers)
+    94: 000024   E001  ldi temp, 0x01 
+    95: 000025   0F20  add count, temp ;add one so we have a range from 1 to 8 and not 0 to 7.
+    96: 	loadLoop: ;loop to load the symbol
+    97: 000026   9115  lpm thrown_number, Z+ ;load the symbol from memory
+    98: 000027   952A  dec count ;and advance to the next for as long as we pressed down.
+    99: 000028   F7E9  brne loadLoop
+   100: 000029   9508  ret
+   101: 
+   102: main:
+   103: 00002A   BB1B  out PORTA, thrown_number;out put the symbol
+   104: 
+   105: 	;in temp, PINB
+   106: 	;andi temp, (1<<PB0)|(1<<PB1)
+   107: 	;mov thrown_number, temp
+   108: 	;rjmp main
+   109: 
+   110: 00002B   B306  in temp, PINB ;read tilt switch
+   111: 00002C   7003  andi temp, tiltswitch
+   112: 00002D   F029  breq tilt
+   113: 
+   114: 00002E   B306  in temp, PINB ;read button pin
+   115: 00002F   7004  andi temp, button ;check if button pin was pressed
+   116: 000030   F409  brne buttonPressed ;if pressed, jump to displayRandomNumber.
+   117: 000031   CFF8  rjmp main
+   118: 
+   119: 	buttonpressed:
+   120: 000032   DFE7  rcall buttonPressedRoutine
+   121: 	tilt:
+   122: 000033   DFDE  rcall tiltRoutine
+   123: 000034   DFED  rcall loadsymbol
+   124: 000035   CFF4  rjmp main ;finally run back to main.
+ -> Warning 001: 3 symbol(s) defined, but not used!
+
+Program             :       50 words.
+Constants           :        4 words.
+Total program memory:       54 words.
+Eeprom space        :        0 bytes.
+Data segment        :        0 bytes.
+Compilation completed, no errors.
+Compilation endet 21.01.2014, 01:33:41

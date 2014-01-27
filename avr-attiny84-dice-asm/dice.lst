@@ -1,5 +1,6 @@
 gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 ----------------------------------------------------------
+<<<<<<< HEAD
 Source file: /media/robert/ce0c3b3f-023c-43c7-8f7f-bafcab90f07b/home/robert/projects/avr-attiny84-dice-asm/dice.asm
 Hex file:    /media/robert/ce0c3b3f-023c-43c7-8f7f-bafcab90f07b/home/robert/projects/avr-attiny84-dice-asm/dice.hex
 Eeprom file: /media/robert/ce0c3b3f-023c-43c7-8f7f-bafcab90f07b/home/robert/projects/avr-attiny84-dice-asm/dice.eep
@@ -41,7 +42,170 @@ Pass:        2
 Program             :        6 words.
 Constants           :        0 words.
 Total program memory:        6 words.
+=======
+Source file: /home/robert/projects/avr-attiny84-dice-asm/dice.asm
+Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice.hex
+Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice.eep
+Compiled:    19.01.2014, 23:31:22
+Pass:        2
+     1: ;source by: Dualit / Robert
+     2: ;Edited 18 - 1 - 2014
+     3: ;Edited 19 - 1 - 2014
+     4: ;working to get symbols stored in ram, and used to be displayed.
+     5: 
+     6: .include "tn84def.inc"
+ -> Warning 009: Include defs not necessary, using internal values!
+   File: /home/robert/projects/avr-attiny84-dice-asm/dice.asm, Line: 6
+   Source line: .include "tn84def.inc"
+     7: 
+     8: ;holds the pin to symbol values.
+     9: .equ one 				= (1<<PA3);
+    10: .equ two 				= (1<<PA0)|(1<<PA4);
+    11: .equ two_two 			= (1<<PA2)|(1<<PA6);
+    12: .equ three				= one|two;
+    13: .equ three_two			= one|two_two;
+    14: .equ four				= two|two_two;
+    15: .equ five 				= four|one;
+    16: .equ six				= (four|(1<<PA1)|(1<<PA5));
+    17: .equ number_of_symbols 	= 8;
+    18: 
+    19: .equ button				= (1<<PB2)
+    20: 
+    21: .def temp 			= r16
+    22: .def count  		= r20
+    23: .def thrown_number	= r17
+    24: .dseg
+    25: .org 0x0060
+    26: 	;everything after here is in ram
+    27: 	;numbers: .byte number_of_symbols+1 ; reserves space for throwing numbers.
+    28: 	numbers: .byte number_of_symbols
+    29: .cseg
+    30: .org 0x00
+    31: 	;start count at 7
+    32: 000000   E048  ldi count, number_of_symbols
+    33: 000001   EF1F  ldi thrown_number, 0xFF
+    34: 000002   EF0F  ldi temp, 0xFF
+    35: 000003   BB0A  out DDRA, temp
+    36: 000004   E000  ldi temp, 0x00
+    37: 000005   BB07  out DDRB, temp
+    38: 
+    39: 	;Init stack
+    40: 000006   E50F  ldi temp,low(RAMEND) 
+    41: 000007   BF0D  out SPL,temp 
+    42: 000008   E002  ldi temp,high(RAMEND) 
+    43: 000009   BF0E  out SPH,temp
+    44: 	;==========
+    45: 	;rcall loadSymbols;load symbols into memory
+    46: 00000A   E0F0  ldi ZH,HIGH(numbers) ; Set the MSB
+    47: 00000B   E6E0  ldi ZL,LOW(numbers) ; Set the LSB
+    48:     ;load symbols one for one into ram.
+    49: 00000C   E008  ldi temp, one
+    50: 00000D   9301  st Z+, temp
+    51: 00000E   E101  ldi temp, two
+    52: 00000F   9301  st Z+, temp
+    53: 000010   E404  ldi temp, two_two
+    54: 000011   9301  st Z+, temp
+    55: 000012   E109  ldi temp, three
+    56: 000013   9301  st Z+, temp
+    57: 000014   E40C  ldi temp, three_two
+    58: 000015   9301  st Z+, temp
+    59: 000016   E505  ldi temp, four
+    60: 000017   9301  st Z+, temp
+    61: 000018   E50D  ldi temp, five
+    62: 000019   9301  st Z+, temp
+    63: 00001A   E707  ldi temp, six
+    64: 00001B   8300  st Z,  temp
+    65: 	;==========
+    66: 00001C   C013  rjmp main
+    67: 
+    68: loadSymbols:
+    69: 	;load symbols into memory
+    70: 00001D   E0F0  ldi ZH,HIGH(numbers) ; Set the MSB
+    71: 00001E   E6E0  ldi ZL,LOW(numbers) ; Set the LSB
+    72:     ;load symbols one for one into ram.
+    73: 00001F   E008  ldi temp, one
+    74: 000020   9301  st Z+, temp
+    75: 000021   E101  ldi temp, two
+    76: 000022   9301  st Z+, temp
+    77: 000023   E404  ldi temp, two_two
+    78: 000024   9301  st Z+, temp
+    79: 000025   E109  ldi temp, three
+    80: 000026   9301  st Z+, temp
+    81: 000027   E40C  ldi temp, three_two
+    82: 000028   9301  st Z+, temp
+    83: 000029   E505  ldi temp, four
+    84: 00002A   9301  st Z+, temp
+    85: 00002B   E50D  ldi temp, five
+    86: 00002C   9301  st Z+, temp
+    87: 00002D   E707  ldi temp, six
+    88: 00002E   8300  st Z,  temp
+    89: 
+    90: 00002F   9508  ret
+    91: 
+    92: main:
+    93: 	;check for a button press.
+    94: 000030   C001  rjmp checkButton
+    95: 	;always clear led.
+    96: 	;else if you press once it will stay lit
+    97: 	;rcall clearLed 
+    98: 000031   CFFE  rjmp main
+    99: 
+   100: ;this checks if the button was pressed.
+   101: ;if so call button pressed.
+   102: checkButton:
+   103: 000032   B306  in temp, PINB ;read pin in register.
+   104: 000033   7004  andi temp, button ;check if the pin is set.
+   105: 000034   F401  brne buttonPressed ;if pin is set branch to setAllLed.
+   106: 
+   107: buttonPressed:
+   108: 000035   E040  ldi count, 0x00
+   109: 	buttonloop: ;this loop holds while the button is down.
+   110: 000036   9543  inc count
+   111: 000037   2F14  mov thrown_number, count
+   112: 000038   B306  in temp, PINB ;do the same as when we checked button.
+   113: 000039   7004  andi temp, button
+   114: 00003A   F7D9  brne buttonloop
+   115: 00003B   C001  rjmp SetAllLed
+   116: 00003C   CFF3  rjmp main
+   117: 
+   118: ;sets all leds on.
+   119: setAllLed:
+   120: 	;load temp with a number that represent the symbol we want to display.
+   121: 	;load a value out of ram and display
+   122: 00003D   E0F0  ldi ZH, high(numbers)
+   123: 00003E   E6E0  ldi ZL, low(numbers)
+   124: 00003F   714E  andi count, (1<<1)|(1<<2)|(1<<3)|(1<<4)
+   125: 000040   BB1B  out PORTA, thrown_number
+   126: 	loadLoop:
+   127: 000041   9101  ld temp, Z+
+   128: 000042   954A  dec count
+   129: 000043   F7E9  brne loadLoop
+   130: 	;ldi temp, 0xFF
+   131: 	;out PORTA, temp	
+   132: 	
+   133: 000044   9508  ret
+   134: 
+   135: clearLed:
+   136: 000045   E000  ldi temp, 0x00
+   137: 000046   BB0B  out PORTA, temp
+   138: 000047   CFE8  rjmp main
+   139: 
+   140: ;set the leds to patern of count.
+   141: setLed:
+   142: 000048   EF0F  ldi temp, 0xFF
+   143: 000049   BB0B  out PORTA, temp
+   144: 00004A   CFE5  rjmp main
+ -> Warning 001: 3 symbol(s) defined, but not used!
+
+Program             :       75 words.
+Constants           :        0 words.
+Total program memory:       75 words.
+>>>>>>> 0802d11035598198c55ef7083f0138df5ef2ba2e
 Eeprom space        :        0 bytes.
-Data segment        :        9 bytes.
+Data segment        :        8 bytes.
 Compilation completed, no errors.
+<<<<<<< HEAD
 Compilation endet 13.01.2014, 15:54:06
+=======
+Compilation endet 19.01.2014, 23:31:22
+>>>>>>> 0802d11035598198c55ef7083f0138df5ef2ba2e
