@@ -1,4 +1,3 @@
-
 .device attiny84
 
 ;holds the pin to symbol values.
@@ -13,13 +12,20 @@
 .equ number_of_symbols 	= 8;
 
 .def i = r17
+.def temp = r16
 
 .dseg ;everything after here is in ram right ?
 	numbers: .byte number_of_symbols+1 ; reserves space for throwing numbers.
 .cseg
+.org 0x00
+;whole port as output.
+ldi temp, 0xFF
+out DDRA, temp
+reset:
+	rjmp main
 
-;macro that loads the numbers/symbols into the reserved byte space.
-setup_symbol_array:
-	ldi xl, low(number_of_symbols);
-test:
-	rjmp test;
+main:
+	;set a number to the output.
+	ldi temp, four
+	out PORTA, temp
+	rjmp main
