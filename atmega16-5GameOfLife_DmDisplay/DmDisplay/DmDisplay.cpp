@@ -431,18 +431,21 @@ void DmDisplay::drawArc(float x, float y, int r, float start_angle, float end_an
 		drawLine(x0, y0, x1, y1);
 	}
 }
-
-void DmDisplay::drawRoundRect(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t radius, uint8_t color)
+/*work in progress drawRoundRect.*/
+void DmDisplay::drawRoundRect(uint8_t x0, uint8_t y0, uint8_t width, uint8_t height, uint8_t radius, uint8_t color)
 {
 	int error = 1 - radius;
 	int errorY = 1;
 	int errorX = -2 * radius;
 	int x = radius, y = 0;
 	
-	writePixel(x0, y0 + radius, color);
-	writePixel(x0, y0 - radius, color);
-	writePixel(x0 + radius, y0, color);
-	writePixel(x0 - radius, y0, color);
+	drawLine(x0+radius,y0,x0+width-(2*radius),y0);//top line.
+	//drawLine(x0,height, width, height); //botom line.
+	
+	//writePixel(x0, y0 + radius, color);
+	//writePixel(x0, y0 - radius, color);
+	//writePixel(x0 + radius, y0, color);
+	//writePixel(x0 - radius, y0, color);
 	
 	while(y< x)
 	{

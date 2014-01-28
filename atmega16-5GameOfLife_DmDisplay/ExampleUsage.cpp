@@ -76,18 +76,15 @@ uint8_t randSize(uint8_t max, uint8_t min)
 //creates/draws a buble
 void show_buble(uint8_t x, uint8_t y, uint8_t i)
 {
-	for(int wall = 0;wall<3;wall++)
-	{
-		lcd.drawCircle(x,y,i+wall);
-	}
+	lcd.drawCircle(x,y,i);
 }
 
 void create_bubbles(uint8_t bubles[][2], uint8_t number_of_bubles)
 {
 	for(uint8_t num = 0;num<number_of_bubles;num++)
 	{
-		bubles[num][0] = rand()%100;
-		bubles[num][1] = rand()%48;
+		bubles[num][0] = num*20;
+		bubles[num][1] = 24;
 	}
 }
 
@@ -101,15 +98,15 @@ void delay(int delay_val)
 void collapseExplosion(uint8_t type)
 {
 	//max size and min sizes for bubles.
-	static const uint8_t max_size = 22;
+	static const uint8_t max_size = 200;
 	static const uint8_t min_size = 2;
 	uint8_t size = randSize(max_size, min_size);
 	//number of bubbles.
-	static const uint8_t numBubles = 4;
+	static const uint8_t numBubles = 5;
 	uint8_t bubles[numBubles][2] = {};
 	create_bubbles(bubles, numBubles);
 	//for delaying the refresh.
-	uint8_t delay_val = 10;
+	uint8_t delay_val = 200;
 	if(type)
 	{
 		for(int i = 0;i<size;i++)
@@ -135,7 +132,7 @@ void collapseExplosion(uint8_t type)
 int main(void)
 {
 	lcd.clear();
-	lcd.invertDisplay(true);
+	lcd.invertDisplay(false);
 	lcd.clearMarkers();
 	lcd.setContrast(16);
 	//init analog if needed
@@ -143,13 +140,13 @@ int main(void)
 	srand(adc_read(0));
 	while(1)
 	{
-		//collapseExplosion(1);
-		//collapseExplosion(0);
+		collapseExplosion(1);
+		collapseExplosion(0);
 		//lcd.drawRect(10,10,10,10);
 		//lcd.drawLine(0,0,100,48);
 		//lcd.drawCircle(20,20,5);
 		//for(int i = 0;i<10;i++){lcd.writePixel(i,i*i,1);}
-		lcd.drawRoundRect(20,20,10,10,10,1);
+		//x,y,width,height,radius,color
 	}
 	return 0;
 }
