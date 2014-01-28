@@ -29,7 +29,7 @@
 #include <stdlib.h>
 
 //the code for working with the display. 
-#include "DmDisplay.h"
+#include "DmDisplay/DmDisplay.h"
 //contains life forms.
 #include "lifeForms.h"
 
