@@ -13,7 +13,7 @@ x,y = 0,0
 
 fpsClock = pygame.time.Clock()
 
-RED = (255,0,0)
+RED = (255,0,0) #(red, green, blue)
 GREEN = (0,255,0)
 BLUE = (0,0,255)
 WHITE = (255,255,255)
