@@ -4,18 +4,15 @@ from pygame.locals import *
 
 pygame.init()
 
-running = True
-screenSize = (screenWidth,screenHeight) = 800,600
-screen = pygame.display.set_mode(screenSize)
 surviveAbility = 2
 reproductiveNumber = 3
-buffer = [0]*fieldSize
-
 cellSize = 2
 
-x,y = 0,0
+running = True
+screenSize = (screenWidth,screenHeight) = 100*(cellSize**2),100*(cellSize**2)
+screen = pygame.display.set_mode(screenSize)
 
-print field
+x,y = 0,0
 
 def copy_buffer(buffer,field):
 	size = fieldSize
@@ -64,7 +61,5 @@ while running:
 		cellX, cellY = (x*cellSize*cellSize)+cellSize, (y*cellSize*cellSize)+cellSize
 		if cell:
 			pygame.draw.circle(screen,(0,0,0),(cellX,cellY),cellSize,cellSize)
-	
 	copy_buffer(buffer,field)
 	pygame.display.update()
-	time.sleep(0.05);

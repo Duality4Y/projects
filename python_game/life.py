@@ -1,10 +1,10 @@
 
 
-fieldWidth = 10
-fieldHeight = 10
+fieldWidth = 100
+fieldHeight = 100
 fieldSize = fieldWidth*fieldHeight
-
 field = [1]*fieldSize
+buffer = [0]*fieldSize
 
 def checkUpper(field, position):
 	if position-fieldWidth > 0:
