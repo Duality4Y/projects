@@ -4,12 +4,9 @@ from pygame.locals import *
 
 pygame.init()
 
-surviveAbility = 2
-reproductiveNumber = 3
-cellSize = 2
-
 running = True
-screenSize = (screenWidth,screenHeight) = 100*(cellSize**2),100*(cellSize**2)
+	
+screenSize = (screenWidth,screenHeight) = (cellSize*2)*fieldWidth,(cellSize*2)*fieldHeight
 screen = pygame.display.set_mode(screenSize)
 
 x,y = 0,0
@@ -58,8 +55,8 @@ while running:
 			else:
 				buffer[position] = 0
 		x,y = calc_xy(x,y,i)
-		cellX, cellY = (x*cellSize*cellSize)+cellSize, (y*cellSize*cellSize)+cellSize
+		cellX, cellY = (x*cellSize*2)+cellSize, (y*cellSize**2)+cellSize
 		if cell:
-			pygame.draw.circle(screen,(0,0,0),(cellX,cellY),cellSize,cellSize)
+			pygame.draw.circle(screen,(0,0,0),(cellX,cellY),cellSize,1)
 	copy_buffer(buffer,field)
 	pygame.display.update()

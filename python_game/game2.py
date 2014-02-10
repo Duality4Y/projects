@@ -5,13 +5,8 @@ from pygame.locals import *
 pygame.init()
 
 running = True
-screenSize = (screenWidth,screenHeight) = 800,600
+screenSize = (screenWidth,screenHeight) = 400,400
 screen = pygame.display.set_mode(screenSize)
-surviveAbility = 2
-reproductiveNumber = 3
-buffer = [0]*fieldSize
-
-cellSize = 2
 
 x,y = 0,0
 

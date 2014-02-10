@@ -1,4 +1,6 @@
-
+"""
+	this file contains that describe the cells and the field.
+"""
 
 fieldWidth = 100
 fieldHeight = 100
@@ -6,6 +8,9 @@ fieldSize = fieldWidth*fieldHeight
 field = [1]*fieldSize
 buffer = [0]*fieldSize
 
+surviveAbility = 2
+reproductiveNumber = 3
+cellSize = 3
 def checkUpper(field, position):
 	if position-fieldWidth > 0:
 		if field[position-fieldWidth]:
