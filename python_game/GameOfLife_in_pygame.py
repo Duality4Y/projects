@@ -11,6 +11,8 @@ screen = pygame.display.set_mode(screenSize)
 
 x,y = 0,0
 
+fpsClock = pygame.time.Clock()
+
 def copy_buffer(buffer,field):
 	size = fieldSize
 	while(size):
@@ -30,7 +32,7 @@ def createRandomField(field):
 		field[i] = random.randint(0,1);
 createRandomField(field)
 while running:
-	screen.fill((255,255,255))
+	screen.fill((200,200,200))
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
@@ -55,8 +57,11 @@ while running:
 			else:
 				buffer[position] = 0
 		x,y = calc_xy(x,y,i)
-		cellX, cellY = (x*cellSize*2)+cellSize, (y*cellSize**2)+cellSize
+		cellX, cellY = (x*cellSize*2)+cellSize, (y*cellSize*2)+cellSize
 		if cell:
 			pygame.draw.circle(screen,(0,0,0),(cellX,cellY),cellSize,1)
+		else:
+			pygame.draw.circle(screen,(255,255,255), (cellX,cellY),cellSize,1)
 	copy_buffer(buffer,field)
 	pygame.display.update()
+	fpsClock.tick(30)

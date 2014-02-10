@@ -2,8 +2,8 @@
 	this file contains that describe the cells and the field.
 """
 
-fieldWidth = 100
-fieldHeight = 100
+fieldWidth = 80
+fieldHeight = 80
 fieldSize = fieldWidth*fieldHeight
 field = [1]*fieldSize
 buffer = [0]*fieldSize
