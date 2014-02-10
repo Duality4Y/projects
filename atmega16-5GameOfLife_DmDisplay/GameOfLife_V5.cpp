@@ -42,8 +42,8 @@
 #define surviveAbility 2
 #define reproductiveNumber 3
 //parameters that define how big the field is. and how big a buffer to use.
-#define fieldWidth 16
-#define fieldHeight 16
+#define fieldWidth 16 //16
+#define fieldHeight 16 //16
 #define fieldSize (fieldWidth*fieldHeight)
 uint8_t field[fieldSize];
 //also create a buffer for holding all the changes.
@@ -68,6 +68,7 @@ unsigned int position = 0;
 //select mode, RANDOM, or HOUSE
 #define HOUSE
 // a pattern
+/*
 uint8_t lightweight_spaceship[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
@@ -91,7 +92,7 @@ uint8_t house[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
-
+*/
 //for example copying a buffer into field.
 void copy_buffer(uint8_t *buffer, uint8_t *field)
 {
@@ -219,18 +220,21 @@ void showField(uint8_t *field, int position)
 {
 	//calculate x and y location from position.
 	calcXY(position,x, y);
+	uint8_t cellSize = 1;
 	//set this location.
-	lcd.setCursor(x,y);
+	//lcd.(x+cellSize,y+cellSize);
 	//draw a cell if there is a 1 at this position.
 	//else draw a empty block.
 	if(field[position])
 	{
 		//writeCell();
-		lcd.writePixel(x,y,1);
+		//lcd.writePixel(x,y,1);
+		lcd.drawCircle(x+cellSize,y+cellSize,1,1);
 	}
 	else
 	{
-		lcd.writePixel(x,y,0);
+		lcd.drawCircle(x+cellSize,y+cellSize,1,0);
+		//lcd.writePixel(x,y,0);
 	}
 }
 //my implementation of delay, it's blocking.
@@ -278,7 +282,7 @@ int main(void)
 	
 	//if house define insert that.
 	#ifdef HOUSE
-		insert_pattern(field, house);
+		//insert_pattern(field, house);
 	#endif
 	//else random field.
 	#ifdef RANDOM
@@ -353,7 +357,7 @@ int main(void)
 				//reset iteration count.
 				iterations = 0;
 				//create a random playing field.
-				createRandomField(field);
+				//createRandomField(field);
 				//put a pattern we created onto the field.
 				//insert_field(stable, field);
 				
@@ -373,6 +377,10 @@ int main(void)
 				iterations++;
 				//changeCount shouldn't change if the inbetween states happen te be the same.
 				changeCount = 0;
+			}
+			if((PINB & (1<<PB2)))
+			{
+				createRandomField(field);
 			}
 		//set location and nicely print something.
 		lcd.setCursor(0,5);
