@@ -15,6 +15,8 @@ indent_mode=2
 [project]
 name=Java-Calculator
 base_path=/home/robert/projects/Java-Calculator/
+description=
+file_patterns=
 
 [long line marker]
 long_line_behaviour=1
@@ -23,7 +25,16 @@ long_line_column=72
 [files]
 current_page=1
 FILE_NAME_0=82;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCalculator1.java;0;4
-FILE_NAME_1=218;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCalculator2.java;0;4
+FILE_NAME_1=35;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCalculator2.java;0;4
 
 [VTE]
 last_dir=/home/robert/projects/Java-Calculator
+
+[build-menu]
+JavaFT_00_LB=_Compile
+JavaFT_00_CM=rm *.class; javac "%f"
+JavaFT_00_WD=
+filetypes=Java;
+NF_03_LB=Git
+NF_03_CM=cd .. ; git add . ; git commit -a -m "just a save" ; git push
+NF_03_WD=
