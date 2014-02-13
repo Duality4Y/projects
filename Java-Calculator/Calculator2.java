@@ -104,11 +104,15 @@ class Calculator2 extends JFrame
 			switch(action)
 			{
 				case "+":
-					operator = "+";
-					result = Integer.parseInt(inputString);
+					result = Double.parseDouble(inputString);
+					operator = action;
 					inputString = "";
+					printAll();
 					break;
 				case "-":
+					result = Double.parseDouble(inputString);
+					operator = "-";
+					inputString = "";
 					break;
 				case "/":
 					break;
@@ -116,19 +120,29 @@ class Calculator2 extends JFrame
 					break;
 				case "C":
 					result = 0.0;
+					inputString = "";
+					operator = "";
 					break;
 				case "=":
-					result = cal.calculate(operator, result, Integer.parseInt(inputString));
-					System.out.println("result: "+result);
+					result = cal.calculate(operator, result, Double.parseDouble(inputString));
 					operator = "";
 					inputString = "";
+					printAll();
 					break;
 				default:
 					inputString+=action;
+					printAll();
 					break;
 					
 			}
 			System.out.println(inputString);
+		}
+		public void printAll()
+		{
+			if(result != 0)
+			{
+				output.setText(result+" "+operator+" "+inputString);
+			}
 		}
 		public void printPressed(String action)
 		{
@@ -144,32 +158,33 @@ class Calculator2 extends JFrame
 			switch(operator)
 			{
 				case "+":
-					break;
+					return add(Lvalue,Rvalue);
 				case "-":
-					break;
+					return subtract(Lvalue, Rvalue);
 				case "/":
-					break;
+					return divide(Lvalue, Rvalue);
 				case "*":
-					break;
+					return multiply(Lvalue, Rvalue);
 				default:
 					System.out.println("Unknow");
-			};
+					return 0.0;
+			}
 		}
 		public double add(double value1, double value2)
 		{
-			return 0.0;
+			return value1+value2;
 		}
 		public double subtract(double value1, double value2)
 		{
-			return 0.0;
+			return value1-value2;
 		}
 		public double divide(double value1, double value2)
 		{
-			return 0.0;
+			return value1/value2;
 		}
 		public double multiply(double value1, double value2)
 		{
-			return 0.0;
+			return value1*value2;
 		}
 	}
 }
