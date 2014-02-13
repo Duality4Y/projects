@@ -5,7 +5,10 @@ import java.util.*;
 
 class Calculator2 extends JFrame
 {
-	private JPanel panel;
+	private int window_width = 210;
+	private int window_height = 220;
+	private JPanel buttonPanel,outputPanel,mainPanel;
+	private JTextArea output = new JTextArea(1,15);
 	
 	char[] buttonContent = 
 	{
@@ -15,24 +18,30 @@ class Calculator2 extends JFrame
 		'C','0','.','+',
 		' ',' ',' ','=',
 	};
-	private JTextArea output = new JTextArea(1,15);
 	ArrayList<JButton> buttons = new ArrayList();
 	
 	private String inputString = "";
-	private int result = 0;
 	private String operator = "";
+	private int result = 0;
 	
 	public Calculator2()
 	{
-		GridLayout mainWindow = new GridLayout(2,1);
 		
-		panel = new JPanel(new GridLayout(5,4));
+		buttonPanel = new JPanel(new GridLayout(5,4));
+		outputPanel = new JPanel(new GridLayout(1,1));
+		mainPanel = new JPanel(new GridLayout(2,1));
+		
 		//create handlers.
 		buttonhandler handler = new buttonhandler();
 		TextFieldListener tfListener = new TextFieldListener();
 		
-		//add textoutput to panel.
-		//panel.add(output);
+		//add buttonpanel and outputpanel to panels.
+		mainPanel.add(outputPanel);
+		mainPanel.add(buttonPanel);
+		outputPanel.add(output);
+		//set the button panel to a certain size.
+		buttonPanel.setPreferredSize(new Dimension(window_width, window_height*0.7));
+		
 		//create buttons.
 		for(int i = 0;i<buttonContent.length;i++)
 		{
@@ -44,13 +53,14 @@ class Calculator2 extends JFrame
 		for(JButton button: buttons)
 		{
 			//add button to panel.
-			panel.add(button);
+			buttonPanel.add(button);
 			//apply size to all buttons.
 			button.setSize(5,5);
-			//if the button has no text, make it invisible.
-			//and don't add it to action listener.
+			
 			if(button.getText().equals(" "))
 			{
+				//if the button has no text, make it invisible.
+				//and don't add it to action listener.
 				button.setBorderPainted(false);
 				button.setOpaque(false);
 				button.setContentAreaFilled(false);
@@ -62,7 +72,7 @@ class Calculator2 extends JFrame
 			}
 		}
 		//shows content on panel?
-		setContentPane(panel);
+		setContentPane(mainPanel);
 		
 	}
 	
@@ -88,6 +98,7 @@ class Calculator2 extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			String action = event.getActionCommand();
+			printPressed(action);
 		}
 		public void printPressed(String action)
 		{
