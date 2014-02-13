@@ -23,7 +23,7 @@ class Calculator2 extends JFrame
 	
 	private String inputString = "";
 	private String operator = "";
-	private int result = 0;
+	private double result = 0;
 	private Calculate cal = new Calculate();
 	
 	public Calculator2()
@@ -104,14 +104,24 @@ class Calculator2 extends JFrame
 			switch(action)
 			{
 				case "+":
-					operator = action;
+					operator = "+";
 					result = Integer.parseInt(inputString);
+					inputString = "";
+					break;
+				case "-":
+					break;
+				case "/":
+					break;
+				case "*":
 					break;
 				case "C":
+					result = 0.0;
 					break;
 				case "=":
 					result = cal.calculate(operator, result, Integer.parseInt(inputString));
+					System.out.println("result: "+result);
 					operator = "";
+					inputString = "";
 					break;
 				default:
 					inputString+=action;
@@ -131,7 +141,19 @@ class Calculator2 extends JFrame
 	{
 		public double calculate(String operator, double Lvalue, double Rvalue)
 		{
-			return 0.0;
+			switch(operator)
+			{
+				case "+":
+					break;
+				case "-":
+					break;
+				case "/":
+					break;
+				case "*":
+					break;
+				default:
+					System.out.println("Unknow");
+			};
 		}
 		public double add(double value1, double value2)
 		{
