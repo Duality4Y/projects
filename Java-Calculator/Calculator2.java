@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.Dimension.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
@@ -23,6 +24,7 @@ class Calculator2 extends JFrame
 	private String inputString = "";
 	private String operator = "";
 	private int result = 0;
+	private Calculate cal = new Calculate();
 	
 	public Calculator2()
 	{
@@ -40,8 +42,8 @@ class Calculator2 extends JFrame
 		mainPanel.add(buttonPanel);
 		outputPanel.add(output);
 		//set the button panel to a certain size.
-		buttonPanel.setPreferredSize(new Dimension(window_width, window_height*0.7));
-		
+		buttonPanel.setPreferredSize(new Dimension(window_width, 200));
+		outputPanel.setPreferredSize(new Dimension(window_width, 20));
 		//create buttons.
 		for(int i = 0;i<buttonContent.length;i++)
 		{
@@ -81,6 +83,7 @@ class Calculator2 extends JFrame
 		JFrame frame = new Calculator2();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Calc" );
+		frame.pack();
 		frame.setSize(210,230);
 		//frame.setResizable(false);
 		frame.setVisible(true);
@@ -98,7 +101,24 @@ class Calculator2 extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			String action = event.getActionCommand();
-			printPressed(action);
+			switch(action)
+			{
+				case "+":
+					operator = action;
+					result = Integer.parseInt(inputString);
+					break;
+				case "C":
+					break;
+				case "=":
+					result = cal.calculate(operator, result, Integer.parseInt(inputString));
+					operator = "";
+					break;
+				default:
+					inputString+=action;
+					break;
+					
+			}
+			System.out.println(inputString);
 		}
 		public void printPressed(String action)
 		{
@@ -106,28 +126,28 @@ class Calculator2 extends JFrame
 			output.setText(output.getText()+" "+action);
 		}
 	}
-	/*
+	
 	class Calculate
 	{
-		public double calculate(String operator, double value)
+		public double calculate(String operator, double Lvalue, double Rvalue)
 		{
-			case 
+			return 0.0;
 		}
 		public double add(double value1, double value2)
 		{
-			
+			return 0.0;
 		}
 		public double subtract(double value1, double value2)
 		{
-			
+			return 0.0;
 		}
 		public double divide(double value1, double value2)
 		{
-			
+			return 0.0;
 		}
 		public double multiply(double value1, double value2)
 		{
-			
+			return 0.0;
 		}
-	}*/
+	}
 }
