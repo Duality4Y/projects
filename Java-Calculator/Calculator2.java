@@ -28,7 +28,7 @@ class Calculator2 extends JFrame
 	{
 		panel = new JPanel();
 		
-		//create hanlers.
+		//create handlers.
 		buttonhandler handler = new buttonhandler();
 		TextFieldListener tfListener = new TextFieldListener();
 		
