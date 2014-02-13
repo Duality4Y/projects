@@ -24,8 +24,9 @@ class Calculator2 extends JFrame
 	
 	public Calculator2()
 	{
-		panel = new JPanel(new GridLayout(5,4));
+		GridLayout mainWindow = new GridLayout(2,1);
 		
+		panel = new JPanel(new GridLayout(5,4));
 		//create handlers.
 		buttonhandler handler = new buttonhandler();
 		TextFieldListener tfListener = new TextFieldListener();
