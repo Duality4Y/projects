@@ -25,7 +25,7 @@ long_line_column=72
 [files]
 current_page=1
 FILE_NAME_0=82;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCalculator1.java;0;4
-FILE_NAME_1=2407;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCalculator2.java;0;4
+FILE_NAME_1=405;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCalculator2.java;0;4
 
 [VTE]
 last_dir=/home/robert/projects/Java-Calculator
@@ -36,5 +36,11 @@ JavaFT_00_CM=rm *.class; javac "%f"
 JavaFT_00_WD=
 filetypes=Java;
 NF_03_LB=Git
-NF_03_CM=rm *.class ; cd .. ; git add . ; git commit -a -m "worked on %f " ; git push
+NF_03_CM=
 NF_03_WD=
+NF_00_LB=_Make
+NF_00_CM=rm *.class ; cd .. ; git add . ; git commit -a -m "worked on %f " ; git push
+NF_00_WD=
+JavaFT_01_LB=Git
+JavaFT_01_CM=rm *.class ; cd .. ; git add . ; git commit -a -m "worked on %f " ; git push
+JavaFT_01_WD=
