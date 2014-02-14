@@ -22,8 +22,10 @@ class Calculator2 extends JFrame
 	ArrayList<JButton> buttons = new ArrayList();
 	
 	private String inputString = "";
+	private String allInput = "";
 	private String operator = "";
 	private double result = 0;
+	private boolean deciamalPointUsed = false;
 	private Calculate cal = new Calculate();
 	
 	public Calculator2()
@@ -101,6 +103,7 @@ class Calculator2 extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			String action = event.getActionCommand();
+			allInput+=action;
 			switch(action)
 			{
 				case "+":
@@ -111,23 +114,43 @@ class Calculator2 extends JFrame
 					break;
 				case "-":
 					result = Double.parseDouble(inputString);
-					operator = "-";
+					operator = action;
 					inputString = "";
+					printAll();
 					break;
 				case "/":
+					result = Double.parseDouble(inputString);
+					operator = action;
+					inputString = "";
+					printAll();
 					break;
 				case "*":
+					result = Double.parseDouble(inputString);
+					operator = action;
+					inputString = "";
+					printAll();
 					break;
 				case "C":
 					result = 0.0;
 					inputString = "";
 					operator = "";
+					allInput = "";
+					output.setText("");
 					break;
 				case "=":
 					result = cal.calculate(operator, result, Double.parseDouble(inputString));
+					if( (1000%result) != 0)
+					{
+						allInput += result;
+					}
+					else
+					{
+						allInput += (int)result;
+					}
 					operator = "";
 					inputString = "";
 					printAll();
+					allInput = "";
 					break;
 				default:
 					inputString+=action;
@@ -139,10 +162,7 @@ class Calculator2 extends JFrame
 		}
 		public void printAll()
 		{
-			if(result != 0)
-			{
-				output.setText(result+" "+operator+" "+inputString);
-			}
+			output.setText(allInput);
 		}
 		public void printPressed(String action)
 		{
