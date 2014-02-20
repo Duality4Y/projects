@@ -38,14 +38,12 @@ class Calculator2 extends JFrame
 		//create handlers.
 		buttonhandler handler = new buttonhandler();
 		TextFieldListener tfListener = new TextFieldListener();
-		
+		//set the button panel to a certain size.
+		outputPanel.setSize(window_width, window_height-20);
 		//add buttonpanel and outputpanel to panels.
 		mainPanel.add(outputPanel);
 		mainPanel.add(buttonPanel);
 		outputPanel.add(output);
-		//set the button panel to a certain size.
-		buttonPanel.setPreferredSize(new Dimension(window_width, 200));
-		outputPanel.setPreferredSize(new Dimension(window_width, 20));
 		//create buttons.
 		for(int i = 0;i<buttonContent.length;i++)
 		{
@@ -97,7 +95,11 @@ class Calculator2 extends JFrame
 		{
 		}
 	}
-	
+	/*
+	 * apparte handler maken voor buttons met nummers en 
+	 * voor buttons met operators.
+	 * de operators doen steeds het zelfde kan in 1 functie
+	 * */
 	class buttonhandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -139,13 +141,23 @@ class Calculator2 extends JFrame
 					break;
 				case "=":
 					result = cal.calculate(operator, result, Double.parseDouble(inputString));
-					if( (1000%result) != 0)
+					//int length = String.valueOf(result).length();
+					/*
+					if( ((10)%result) != 0)
 					{
 						allInput += result;
 					}
 					else
 					{
 						allInput += (int)result;
+					}*/
+					if((int)result == result)
+					{
+						allInput += (int)result;
+					}
+					else
+					{
+						allInput += result;
 					}
 					operator = "";
 					inputString = "";
@@ -159,6 +171,7 @@ class Calculator2 extends JFrame
 					
 			}
 			System.out.println(inputString);
+			System.out.println(event);
 		}
 		public void printAll()
 		{

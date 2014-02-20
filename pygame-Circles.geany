@@ -15,14 +15,15 @@ indent_mode=2
 [project]
 name=pygame-Circles
 base_path=/home/robert/projects/pygame-Circles/
+description=
 
 [long line marker]
 long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=775;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-Circles%2Fpygame-circles1.py;0;4
+current_page=1
+FILE_NAME_0=909;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-Circles%2Fpygame-circles1.py;0;4
 FILE_NAME_1=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FPythonOpenGL%2Ftest2.py;0;4
 
 [VTE]
