@@ -23,18 +23,18 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=517;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython-Boolean-logic%2Fmain.py;0;4
-FILE_NAME_1=649;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython-Boolean-logic%2FLogic.py;0;4
+current_page=1
+FILE_NAME_0=431;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython-Boolean-logic%2Fmain.py;0;4
+FILE_NAME_1=440;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython-Boolean-logic%2FLogic.py;0;4
 
 [VTE]
 last_dir=/home/robert/projects/python-Boolean-logic
 
 [build-menu]
 EX_00_LB=_Execute
-EX_00_CM=rm *.pyc; python "%f"
+EX_00_CM=rm *.pyc; python "main.py"
 EX_00_WD=
 PythonFT_00_LB=_Compile
-PythonFT_00_CM=rm *.pyc; python -m py_compile "%f"
+PythonFT_00_CM=rm *.pyc; python -m py_compile "main.py"
 PythonFT_00_WD=
 filetypes=Python;
