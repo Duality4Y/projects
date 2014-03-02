@@ -1,0 +1,16 @@
+Partlist exported from /home/robert/eagle/ArduinoBluetooth/BT_atmega_v_1_1.sch at 2/5/14 9:34 PM
+
+Part Value   Device  Package Description               
+BT_H H1      FE07-1  FE07    FEMALE HEADER             
+C1   100nf   C2.5/2  C2.5-2  CAPACITOR                 
+C2   100nf   C2.5/2  C2.5-2  CAPACITOR                 
+C3   100nf   C2.5/2  C2.5-2  CAPACITOR                 
+C4   100nf   C2.5/2  C2.5-2  CAPACITOR                 
+IC1  MEGA8-P MEGA8-P DIL28-3 MICROCONTROLLER           
+JP1  BT_KEY  JP1E    JP1     JUMPER                    
+Q1   16Mhz   XTAL/S  QS      CRYSTAL                   
+R3   1K      R0204/7 0204/7  RESISTOR, European symbol 
+SV2  H2      FE06-1  FE06    FEMALE HEADER             
+SV3  H3      MA03-1  MA03-1  PIN HEADER                
+SV4  H4      FE06-1  FE06    FEMALE HEADER             
+SV5  H5      MA03-1  MA03-1  PIN HEADER                
