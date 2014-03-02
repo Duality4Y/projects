@@ -16,6 +16,11 @@
  * 
  * - I have added a few shapes. like the glider, and ligthweight spaceship.
  * - able to set contrast with potmeter.
+ * 
+ * Edited on: 28 Jan 2014
+ * 	- been working on a system for calculating x and y form a position (position in array)
+ *    ok just got it working! :)
+ *    this wil help lots.
  * */
 
 //clock speed 8mhz
@@ -37,8 +42,8 @@
 #define surviveAbility 2
 #define reproductiveNumber 3
 //parameters that define how big the field is. and how big a buffer to use.
-#define fieldWidth 20
-#define fieldHeight 5
+#define fieldWidth 16 //16
+#define fieldHeight 16 //16
 #define fieldSize (fieldWidth*fieldHeight)
 uint8_t field[fieldSize];
 //also create a buffer for holding all the changes.
@@ -58,11 +63,12 @@ uint8_t holdingNumber = 15; //when to deside to change field.
 //for holding how many iterations it took.
 int iterations = 0;
 //keeps position in field.
-uint8_t position = 0;
+unsigned int position = 0;
 //-------------------
 //select mode, RANDOM, or HOUSE
 #define HOUSE
 // a pattern
+/*
 uint8_t lightweight_spaceship[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
@@ -86,7 +92,7 @@ uint8_t house[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	};
-
+*/
 //for example copying a buffer into field.
 void copy_buffer(uint8_t *buffer, uint8_t *field)
 {
@@ -94,10 +100,24 @@ void copy_buffer(uint8_t *buffer, uint8_t *field)
 	while(size--) field[size] = buffer[size];
 }
 //put a costume "pattern" onto the playing field.
-void insert_pattern(uint8_t *pattern, uint8_t *field, LifeForm lifeForm)
+void insert_pattern(uint8_t *pattern, uint8_t *field, LifeForm lifeForm, int position)
 {
+	int patternX = 0;
+	int patternY = 0;
+	if(fieldHeight-(position*fieldWidth) <= 0)
+	{
+		return;
+	}
+	else
+	{
+		if(position < fieldWidth){}
+		for(int i = 0;i<lifeForm.size;i++)
+		{
+			
+		}
+	}
 }
-void insert_pattern(uint8_t *pattern, uint8_t *field)
+void insert_pattern(uint8_t *field, uint8_t *pattern)
 {
 	copy_buffer(pattern, field);
 }
@@ -181,12 +201,11 @@ void writeBlock(void)
 		lcd.write(0x00, lcd.DATA);
 	}
 }
-//display the field with position. (ascii cells)
-void showField(uint8_t *field, int position)
+
+void calcXY(int position, volatile int &x, volatile int &y)
 {
-	//calculate x and y location from position.
 	x = position%fieldWidth;
-	if(!(position%fieldWidth))
+	if(!(x))
 	{
 		y++;
 		if(y>=(fieldHeight))
@@ -194,17 +213,28 @@ void showField(uint8_t *field, int position)
 			y=0;
 		}
 	}
+}
+
+//display the field with position. (ascii cells)
+void showField(uint8_t *field, int position)
+{
+	//calculate x and y location from position.
+	calcXY(position,x, y);
+	uint8_t cellSize = 1;
 	//set this location.
-	lcd.setCursor(x,y);
+	//lcd.(x+cellSize,y+cellSize);
 	//draw a cell if there is a 1 at this position.
 	//else draw a empty block.
 	if(field[position])
 	{
-		writeCell();
+		//writeCell();
+		//lcd.writePixel(x,y,1);
+		lcd.drawCircle(x+cellSize,y+cellSize,1,1);
 	}
 	else
 	{
-		writeBlock();
+		lcd.drawCircle(x+cellSize,y+cellSize,1,0);
+		//lcd.writePixel(x,y,0);
 	}
 }
 //my implementation of delay, it's blocking.
@@ -252,7 +282,7 @@ int main(void)
 	
 	//if house define insert that.
 	#ifdef HOUSE
-		insert_pattern(house, field);
+		//insert_pattern(field, house);
 	#endif
 	//else random field.
 	#ifdef RANDOM
@@ -313,7 +343,7 @@ int main(void)
 			//reset position to 0
 			position = fieldSize;
 			//set frame rate with a blocking delay..
-			delay(100);
+			delay(0); //worst way to do things
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
 			//set contrast with pot meter on analog pin 1 (not 0)
@@ -327,7 +357,7 @@ int main(void)
 				//reset iteration count.
 				iterations = 0;
 				//create a random playing field.
-				createRandomField(field);
+				//createRandomField(field);
 				//put a pattern we created onto the field.
 				//insert_field(stable, field);
 				
@@ -347,6 +377,10 @@ int main(void)
 				iterations++;
 				//changeCount shouldn't change if the inbetween states happen te be the same.
 				changeCount = 0;
+			}
+			if((PINB & (1<<PB2)))
+			{
+				createRandomField(field);
 			}
 		//set location and nicely print something.
 		lcd.setCursor(0,5);

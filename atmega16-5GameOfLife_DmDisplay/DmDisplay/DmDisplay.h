@@ -52,7 +52,6 @@ class DmDisplay
 			INSTRUCT,DATA
 		};
 		
-	private:
 		void init(void);
 		void toggleDisplayOnOff(bool);
 		void blinkControlLines(void);

@@ -16,7 +16,11 @@
  * 
  * - I have added a few shapes. like the glider, and ligthweight spaceship.
  * - able to set contrast with potmeter.
- * - not yet implemented a way of putting the shapes into a field yet.
+ * 
+ * Edited on: 28 Jan 2014
+ * 	- been working on a system for calculating x and y form a position (position in array)
+ *    ok just got it working! :)
+ *    this wil help lots.
  * */
 
 //clock speed 8mhz
@@ -38,15 +42,16 @@
 #define surviveAbility 2
 #define reproductiveNumber 3
 //parameters that define how big the field is. and how big a buffer to use.
-#define fieldWidth 20
-#define fieldHeight 5
+#define fieldWidth 16
+#define fieldHeight 16
 #define fieldSize (fieldWidth*fieldHeight)
 uint8_t field[fieldSize];
-#define cellSize 2
 //also create a buffer for holding all the changes.
 uint8_t buffer[fieldSize];
 //and include with functions that make the game of life go.
 #include "life.cpp"
+//display write location.
+int x,y = 0;
 //create a display instance
 DmDisplay lcd;
 //variables for determining wether we are is a steady state or still evolving.
@@ -58,7 +63,7 @@ uint8_t holdingNumber = 15; //when to deside to change field.
 //for holding how many iterations it took.
 int iterations = 0;
 //keeps position in field.
-uint8_t position = 0;
+unsigned int position = 0;
 //-------------------
 //select mode, RANDOM, or HOUSE
 #define HOUSE
@@ -94,10 +99,24 @@ void copy_buffer(uint8_t *buffer, uint8_t *field)
 	while(size--) field[size] = buffer[size];
 }
 //put a costume "pattern" onto the playing field.
-void insert_pattern(uint8_t *pattern, uint8_t *field, LifeForm lifeForm)
+void insert_pattern(uint8_t *pattern, uint8_t *field, LifeForm lifeForm, int position)
 {
+	int patternX = 0;
+	int patternY = 0;
+	if(fieldHeight-(position*fieldWidth) <= 0)
+	{
+		return;
+	}
+	else
+	{
+		if(position < fieldWidth){}
+		for(int i = 0;i<lifeForm.size;i++)
+		{
+			
+		}
+	}
 }
-void insert_pattern(uint8_t *pattern, uint8_t *field)
+void insert_pattern(uint8_t *field, uint8_t *pattern)
 {
 	copy_buffer(pattern, field);
 }
@@ -140,6 +159,11 @@ void writeFormated(int val, int val2, const char *aString)
 	sprintf(str, "%s%d, %d  ", aString, val, val2);
 	lcd.lcdChar(str);
 }
+//write pixel data not instructions.
+void writePixelData(uint8_t data)
+{
+	lcd.write(data, lcd.DATA);
+}
 //randomly create cells at position in field.
 void random_fillField(uint8_t *field, int position)
 {
@@ -158,7 +182,6 @@ void clearArray(uint8_t *buffer)
 	while(size--)buffer[size] = 0;
 }
 //used to draw a lifing cell with a box
-/*
 void writeCell(void)
 {
 	//made a box out of the top of my head :)
@@ -168,68 +191,48 @@ void writeCell(void)
 	writePixelData(0x81);
 	writePixelData(0xFF);
 }
-* */
 //this actually is the same as lcd.lcdChar(" ");
 //cause it just writes 5 empty bytes.
-
-/*void writeBlock(void)
+void writeBlock(void)
 {
 	for(int i = 0;i<5;i++)
 	{
 		lcd.write(0x00, lcd.DATA);
 	}
 }
-*/
-void calcXY(int *x, int *y)
+
+void calcXY(int position, volatile int &x, volatile int &y)
 {
-	(*x) = position % fieldWidth;
-	if( !(position % fieldWidth))
+	x = position%fieldWidth;
+	if(!(x))
 	{
-		(*y)++;
-		if((*y) >= (fieldHeight))
+		y++;
+		if(y>=(fieldHeight))
 		{
-			(*y) = 0;
+			y=0;
 		}
 	}
 }
-void showBitField(uint8_t *field, int position)
-{
-	static int x;
-	static int y;
-	//calculate x and y location from position.
-	calcXY(&x, &y);
-	//first draw empty cells, then draw the cells that are allive, or else I get missing borders.
-	if(!(field[position]))
-	{
-		//lcd.drawRoundRect(x*cellSize, y*cellSize, cellSize, cellSize,cellSize, 0);
-	}
-	else
-	{
-		//lcd.drawRoundRect(x*cellSize, y*cellSize, cellSize, cellSize,cellSize, 1);
-	}
-}
+
 //display the field with position. (ascii cells)
-/*
 void showField(uint8_t *field, int position)
 {
-	static int x;
-	static int y;
 	//calculate x and y location from position.
-	calcXY(&x, &y);
+	calcXY(position,x, y);
 	//set this location.
 	lcd.setCursor(x,y);
 	//draw a cell if there is a 1 at this position.
 	//else draw a empty block.
 	if(field[position])
 	{
-		writeCell();
+		//writeCell();
+		lcd.writePixel(x,y,1);
 	}
 	else
 	{
-		writeBlock();
+		lcd.writePixel(x,y,0);
 	}
 }
-* */
 //my implementation of delay, it's blocking.
 //_delay_ms(); requires a constant for an argument.
 void delay(int n)
@@ -275,7 +278,7 @@ int main(void)
 	
 	//if house define insert that.
 	#ifdef HOUSE
-		insert_pattern(house, field);
+		insert_pattern(field, house);
 	#endif
 	//else random field.
 	#ifdef RANDOM
@@ -286,17 +289,13 @@ int main(void)
 	lcd.setContrast(17);
 	//make sure to start at location 0,0
 	lcd.setCursor(0,0);
-	//clear the field once.
-	lcd.clear();
+	
 	//position is field size, I refresh the screen Backwards.
 	position = fieldSize;
-	//this loop works because position is set to fieldsize before the loop condition tests position to be 0.
 	while(position--)
 	{
 		//display field with current position
-		//showField(field, fieldSize-position);
-		//display a bit field.
-		showBitField(field, fieldSize-position);
+		showField(field, fieldSize-position);
 		//here the rules of the game of life are checked.
 		//if a position has a cell (1),
 		//then look how many around,
@@ -340,7 +339,7 @@ int main(void)
 			//reset position to 0
 			position = fieldSize;
 			//set frame rate with a blocking delay..
-			delay(200);
+			delay(0); //worst way to do things
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
 			//set contrast with pot meter on analog pin 1 (not 0)

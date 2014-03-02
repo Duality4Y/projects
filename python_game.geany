@@ -9,15 +9,22 @@ indent_mode=2
 [project]
 name=python_game
 base_path=/home/robert/projects/python_game/
+description=
 
 [long line marker]
 long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=2976;Python;0;16;1;1;0;/home/robert/projects/python_game/game1.py;0;4
-FILE_NAME_1=6;Python;0;16;1;1;0;/home/robert/projects/python_game/game2.py;0;4
+current_page=0
+FILE_NAME_0=1126;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython_game%2FGameOfLife_in_pygame.py;0;4
+FILE_NAME_1=125;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython_game%2Flife.py;0;4
 
 [VTE]
 last_dir=/home/robert/projects/python_game
+
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false

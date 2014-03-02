@@ -1,5 +1,48 @@
 gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 ----------------------------------------------------------
+<<<<<<< HEAD
+Source file: /media/robert/ce0c3b3f-023c-43c7-8f7f-bafcab90f07b/home/robert/projects/avr-attiny84-dice-asm/dice.asm
+Hex file:    /media/robert/ce0c3b3f-023c-43c7-8f7f-bafcab90f07b/home/robert/projects/avr-attiny84-dice-asm/dice.hex
+Eeprom file: /media/robert/ce0c3b3f-023c-43c7-8f7f-bafcab90f07b/home/robert/projects/avr-attiny84-dice-asm/dice.eep
+Compiled:    13.01.2014, 15:54:06
+Pass:        2
+     1: .device attiny84
+     2: 
+     3: ;holds the pin to symbol values.
+     4: .equ one 				= (1<<PA3);
+     5: .equ two 				= (1<<PA0)|(1<<PA4);
+     6: .equ two_two 			= (1<<PA2)|(1<<PA6);
+     7: .equ three				= one|two;
+     8: .equ three_two			= one|two_two;
+     9: .equ four				= two|two_two;
+    10: .equ five 				= four|one;
+    11: .equ size 				= four|(1<<PA1)|(1<<PA5);
+    12: .equ number_of_symbols 	= 8;
+    13: 
+    14: .def i = r17
+    15: .def temp = r16
+    16: 
+    17: .dseg ;everything after here is in ram right ?
+    18: 	numbers: .byte number_of_symbols+1 ; reserves space for throwing numbers.
+    19: .cseg
+    20: .org 0x00
+    21: ;whole port as output.
+    22: 000000   EF0F  ldi temp, 0xFF
+    23: 000001   BB0A  out DDRA, temp
+    24: reset:
+    25: 000002   C000  rjmp main
+    26: 
+    27: main:
+    28: 	;set a number to the output.
+    29: 000003   E505  ldi temp, four
+    30: 000004   BB0B  out PORTA, temp
+    31: 000005   CFFD  rjmp main
+ -> Warning 001: 7 symbol(s) defined, but not used!
+
+Program             :        6 words.
+Constants           :        0 words.
+Total program memory:        6 words.
+=======
 Source file: /home/robert/projects/avr-attiny84-dice-asm/dice.asm
 Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice.hex
 Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice.eep
@@ -157,7 +200,12 @@ Pass:        2
 Program             :       75 words.
 Constants           :        0 words.
 Total program memory:       75 words.
+>>>>>>> 0802d11035598198c55ef7083f0138df5ef2ba2e
 Eeprom space        :        0 bytes.
 Data segment        :        8 bytes.
 Compilation completed, no errors.
+<<<<<<< HEAD
+Compilation endet 13.01.2014, 15:54:06
+=======
 Compilation endet 19.01.2014, 23:31:22
+>>>>>>> 0802d11035598198c55ef7083f0138df5ef2ba2e

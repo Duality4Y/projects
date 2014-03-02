@@ -1,0 +1,26 @@
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=python assembler
+base_path=/home/robert/projects/python assembler/
+description=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=1
+FILE_NAME_0=518;Python;0;16;1;1;0;/home/robert/projects/python_assembler/python_assembler_1.py;0;4
+FILE_NAME_1=2055;None;0;16;1;1;0;/home/robert/projects/python_assembler/ASM_INSTRUCTIONS;0;4
+FILE_NAME_2=0;None;0;16;1;1;0;/home/robert/projects/python_assembler/asm_instruct.pars;0;4
+FILE_NAME_3=976;Python;0;16;1;1;0;/home/robert/projects/python_tool.py;0;4
+
+[VTE]
+last_dir=/home/robert/projects/python_assembler

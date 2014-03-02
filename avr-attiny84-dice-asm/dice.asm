@@ -1,9 +1,13 @@
+<<<<<<< HEAD
+.device attiny84
+=======
 ;source by: Dualit / Robert
 ;Edited 18 - 1 - 2014
 ;Edited 19 - 1 - 2014
 ;working to get symbols stored in ram, and used to be displayed.
 
 .include "tn84def.inc"
+>>>>>>> 0802d11035598198c55ef7083f0138df5ef2ba2e
 
 ;holds the pin to symbol values.
 .equ one 				= (1<<PA3);
@@ -16,7 +20,12 @@
 .equ six				= (four|(1<<PA1)|(1<<PA5));
 .equ number_of_symbols 	= 8;
 
+<<<<<<< HEAD
+.def i = r17
+.def temp = r16
+=======
 .equ button				= (1<<PB2)
+>>>>>>> 0802d11035598198c55ef7083f0138df5ef2ba2e
 
 .def temp 			= r16
 .def count  		= r20
@@ -28,6 +37,17 @@
 	numbers: .byte number_of_symbols
 .cseg
 .org 0x00
+<<<<<<< HEAD
+;whole port as output.
+ldi temp, 0xFF
+out DDRA, temp
+reset:
+	rjmp main
+
+main:
+	;set a number to the output.
+	ldi temp, four
+=======
 	;start count at 7
 	ldi count, number_of_symbols
 	ldi thrown_number, 0xFF
@@ -138,5 +158,6 @@ clearLed:
 ;set the leds to patern of count.
 setLed:
 	ldi temp, 0xFF
+>>>>>>> 0802d11035598198c55ef7083f0138df5ef2ba2e
 	out PORTA, temp
 	rjmp main
