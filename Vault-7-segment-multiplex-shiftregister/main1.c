@@ -7,19 +7,21 @@
 #define ser_in	  (1<<PB3)
 
 
-
 //shifts a byte out.
 void shiftOut(unsigned long data){
 	PORTB &= ~(1<<reg_clock);
 	int i = 7;
 	while(i--)
 	{
-		PORTB &= ;
+		PORTB &= ~(1<<ser_clock);
+		PORTB |= ((data >> i) & 1) << PB3;
+		PORTB |= (1<< ser_clock);
 	}
 	PORTB |= (1<< reg_clock);
 }
+
 int main(void)
-	{
+{
 	/*
 	 * PB1 = serial clock
 	 * PB2 = register clock
