@@ -7,8 +7,15 @@ class Parking extends JFrame
 	private ParkeerAutomaat parkeerAutomaat = new ParkeerAutomaat();
 	
 	//window information
-	private JPanel mainPanel;
-	
+	private JPanel mainPanel,buttonPanel;
+	/*
+	 * twee tekst velden,
+	 * een invoer veld
+	 * en een prijs veld
+	 * */
+	private JPanel invoerPanel,outputPanel;
+	private JTextArea output;
+	private JTextArea input;
 	/*
 	 * 5 knoppen
 	 * 
@@ -24,9 +31,31 @@ class Parking extends JFrame
 		"0.20€", "1€", "Back", "Give", "Chart"
 	};
 	
+	//contains all the buttons.
+	ArrayList<JButton> buttons = new ArrayList();
+	
 	public Parking()
 	{
+		JTextArea output = new JTextArea(1,15);
+		JTextArea input = new JTextArea(1,15);
+		mainPanel = new JPanel(new GridLayout(1,4));
+		invoerPanel = new JPanel();
+		outputPanel = new JPanel();
+		buttonPanel = new JPanel();
 		
+		mainPanel.add(outputPanel);
+		mainPanel.add(invoerPanel);
+		mainPanel.add(buttonPanel);
+		
+		invoerPanel.add(input);
+		invoerPanel.add(output);
+		
+		//create buttons
+		for(int i = 0;i<buttonContent.length;i++)
+		{
+			buttons.add(i, new JButton(buttonContent[i]));
+		}
+		//add all the buttons to the button panel
 	}
 	public static void main(String args[])
 	{
