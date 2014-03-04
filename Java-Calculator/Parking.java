@@ -56,11 +56,14 @@ class Parking extends JFrame
 			buttons.add(i, new JButton(buttonContent[i]));
 		}
 		//add all the buttons to the button panel
+		
+		setContentPane(mainPanel);
 	}
 	public static void main(String args[])
 	{
 		int window_height = 220;
 		int window_width = 210;
+		
 		JFrame frame = new Parking();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Parking ");
