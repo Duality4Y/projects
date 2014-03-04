@@ -43,6 +43,9 @@ class Parking extends JFrame
 		outputPanel = new JPanel();
 		buttonPanel = new JPanel();
 		
+		//create handlers.
+		buttonhandler handler = new buttonhandler();
+		
 		mainPanel.add(outputPanel);
 		mainPanel.add(invoerPanel);
 		mainPanel.add(buttonPanel);
@@ -56,7 +59,12 @@ class Parking extends JFrame
 			buttons.add(i, new JButton(buttonContent[i]));
 		}
 		//add all the buttons to the button panel
-		
+		for(JButton button: buttons)
+		{
+			//add button to panel
+			buttonPanel.add(button)
+			button.addActionListener(handler);
+		}
 		setContentPane(mainPanel);
 	}
 	public static void main(String args[])

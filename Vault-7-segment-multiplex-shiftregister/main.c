@@ -28,7 +28,12 @@ int main(){
 	char counter = 0;
 
 	while(1){
-		shift(PB1, PB2, PB3, 0xf0);		// PB1 = SERCLK  PB2 = RCLK  PB3 = SER
+		int i = 0;
+		for(i;i<8;i++)
+		{
+			shift(PB1, PB2, PB3, 1<<i);		// PB1 = SERCLK  PB2 = RCLK  PB3 = SER
+			_delay_ms(500);
+		}
 	}
 	return 0;
 }

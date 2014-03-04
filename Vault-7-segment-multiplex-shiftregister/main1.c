@@ -8,16 +8,16 @@
 
 
 //shifts a byte out.
-void shiftOut(unsigned long data){
-	PORTB &= ~(1<<reg_clock);
-	int i = 7;
-	while(i--)
-	{
-		PORTB &= ~(1<<ser_clock);
-		PORTB |= ((data >> i) & 1) << PB3;
-		PORTB |= (1<< ser_clock);
+void shiftOut(uint8_t data){
+	PORTB &= ~(1 << reg_clock); 				// Set the register-clock pin low
+	int i;
+	for (i = 0; i < (8); i++){	// Now we are entering the loop to shift out 8+ bits
+		PORTB |= (1 << ser_clock); 			// Set the serial-clock pin high
+		PORTB |= (((data&(0x01<<i))>>i) << ser_in ); 	// Go through each bit of data and output it
+		PORTB &= ~(1 << ser_clock); 			// Set the serial-clock pin low
+		PORTB &= ~(((data&(0x01<<i))>>i) << ser_in );	// Set the datapin low again	
 	}
-	PORTB |= (1<< reg_clock);
+	PORTB |= (1 << reg_clock);
 }
 
 int main(void)
@@ -35,10 +35,10 @@ int main(void)
 	//set shift pins to output
 	DDRB = 0xFF;
 	//clear port
-	PORTB = 0xFF;
+	PORTB = 0x00;
 	while(1)
 	{
-		shiftOut(0xF0);
+		shiftOut(0x0F);
 	}
 	return 1;
 }
