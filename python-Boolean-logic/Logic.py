@@ -54,10 +54,30 @@ class Xnor(Xor):
 		self.state = bool( self.nott(self.xor(a,b)))
 		return self.state
 
-class Latch(Not, Or):
-	def SRlatch(self, a, b):
-		Set = a
-		Reset = b
-		Q = self.orr(self.nott(Reset), Set)
-		Qn = self.orr(Reset, self.nott(Set))
-		return (bool(Q), bool(Qn))
+class Latch(Nor):
+	def __init__(self, Set=0,Reset=0,Q=0,Qn=0):
+		self.Q = Q
+		self.Qn = Qn
+		self.Set = Set
+		self.Reset = Reset
+
+class NorLatch(Latch):
+	def __init__(self, Set=0, Reset=0, Q=0, Qn=0):
+		Latch.__init__(self, Set, Reset, Q, Qn)
+	def latch(self, Set, Reset):
+		if(Set and Reset):
+			self.Q = not self.Q
+			self.Qn = not self.Qn
+		elif(Set):
+			self.Q = True
+			self.Qn = False
+		elif(Reset):
+			self.Qn = True
+			self.Q = False
+		return (self.Q, self.Qn,)
+
+class NandLatch(NorLatch, Not):
+	def __init__(self, Set=0, Reset=0, Q=0, Qn=0):
+		self.norLatch = NorLatch(Set, Reset, Q, Qn);
+	def latch(self, Set, Reset):
+		return not self.norLatch.latch(Set,Reset)

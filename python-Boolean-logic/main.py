@@ -7,7 +7,8 @@ nor1 = Logic.Nor()
 not1 = Logic.Not()
 xor1 = Logic.Xor()
 xnor1 = Logic.Xnor()
-latch1 = Logic.Latch()
+latch1 = Logic.NorLatch()
+latch2 = Logic.NandLatch()
 
 truthTable = 	[[0,0],
 				[0,1],
@@ -44,5 +45,13 @@ for test in truthTable:
 
 print "latch: "
 for test in truthTable:
-	print latch1.SRlatch(test[0], test[1])
+	print "Q: %d, Qn: %d" %(latch1.latch(test[0], test[1]))
 
+print "instable test"
+for i in range(0, 10):
+	print "Q: %d, Qn: %d" %(latch1.latch(1, 1))
+	print "Q: %d, Qn: %d" %(latch1.latch(1, 1))
+
+print "nand latch"
+for test in truthTable:
+	print "Q: %d, Qn: %d" %(latch2.latch(Set,Reset))
