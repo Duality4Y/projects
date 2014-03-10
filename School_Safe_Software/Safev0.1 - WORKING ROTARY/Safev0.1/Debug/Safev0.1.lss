@@ -1,0 +1,654 @@
+
+Safev0.1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000002  00800100  000003a2  00000436  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         000003a2  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          0000000f  00800102  00800102  00000438  2**0
+                  ALLOC
+  3 .stab         000006cc  00000000  00000000  00000438  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000097  00000000  00000000  00000b04  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .comment      0000002f  00000000  00000000  00000b9b  2**0
+                  CONTENTS, READONLY
+  6 .debug_aranges 00000050  00000000  00000000  00000bca  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_info   000002b2  00000000  00000000  00000c1a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_abbrev 00000127  00000000  00000000  00000ecc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_line   000001a5  00000000  00000000  00000ff3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_frame  00000114  00000000  00000000  00001198  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_str    00000144  00000000  00000000  000012ac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_loc    00000252  00000000  00000000  000013f0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_ranges 00000058  00000000  00000000  00001642  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 34 00 	jmp	0x68	; 0x68 <__ctors_end>
+   4:	0c 94 a9 01 	jmp	0x352	; 0x352 <__vector_1>
+   8:	0c 94 83 01 	jmp	0x306	; 0x306 <__vector_2>
+   c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  10:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  14:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  18:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  1c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  20:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  24:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  28:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  2c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  30:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  34:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  38:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  3c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  40:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  44:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  48:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  4c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  50:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  54:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  58:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  5c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  60:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+  64:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
+
+00000068 <__ctors_end>:
+  68:	11 24       	eor	r1, r1
+  6a:	1f be       	out	0x3f, r1	; 63
+  6c:	cf ef       	ldi	r28, 0xFF	; 255
+  6e:	d4 e0       	ldi	r29, 0x04	; 4
+  70:	de bf       	out	0x3e, r29	; 62
+  72:	cd bf       	out	0x3d, r28	; 61
+
+00000074 <__do_copy_data>:
+  74:	11 e0       	ldi	r17, 0x01	; 1
+  76:	a0 e0       	ldi	r26, 0x00	; 0
+  78:	b1 e0       	ldi	r27, 0x01	; 1
+  7a:	e2 ea       	ldi	r30, 0xA2	; 162
+  7c:	f3 e0       	ldi	r31, 0x03	; 3
+  7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
+  80:	05 90       	lpm	r0, Z+
+  82:	0d 92       	st	X+, r0
+  84:	a2 30       	cpi	r26, 0x02	; 2
+  86:	b1 07       	cpc	r27, r17
+  88:	d9 f7       	brne	.-10     	; 0x80 <__do_copy_data+0xc>
+
+0000008a <__do_clear_bss>:
+  8a:	21 e0       	ldi	r18, 0x01	; 1
+  8c:	a2 e0       	ldi	r26, 0x02	; 2
+  8e:	b1 e0       	ldi	r27, 0x01	; 1
+  90:	01 c0       	rjmp	.+2      	; 0x94 <.do_clear_bss_start>
+
+00000092 <.do_clear_bss_loop>:
+  92:	1d 92       	st	X+, r1
+
+00000094 <.do_clear_bss_start>:
+  94:	a1 31       	cpi	r26, 0x11	; 17
+  96:	b2 07       	cpc	r27, r18
+  98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
+  9a:	0e 94 8a 00 	call	0x114	; 0x114 <main>
+  9e:	0c 94 cf 01 	jmp	0x39e	; 0x39e <_exit>
+
+000000a2 <__bad_interrupt>:
+  a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000a6 <groundAll>:
+		
+		
+    }
+}
+void groundAll() {
+	PORTD |= 1<<pin5v;
+  a6:	5e 9a       	sbi	0x0b, 6	; 11
+	PORTB &= ~(1<<pinLatch);
+  a8:	28 98       	cbi	0x05, 0	; 5
+	PORTB &= ~(1<<pinClock);
+  aa:	29 98       	cbi	0x05, 1	; 5
+	PORTB &= ~(1<<pinData);	
+  ac:	2a 98       	cbi	0x05, 2	; 5
+  ae:	08 95       	ret
+
+000000b0 <resetPins>:
+}
+void resetPins() {
+	PORTD &= ~(1<<pin5v);	
+  b0:	5e 98       	cbi	0x0b, 6	; 11
+  b2:	08 95       	ret
+
+000000b4 <refreshDisplay>:
+}
+void refreshDisplay() {
+  b4:	e6 e0       	ldi	r30, 0x06	; 6
+  b6:	f1 e0       	ldi	r31, 0x01	; 1
+	for (int i=0;i<4;i++) {
+  b8:	40 e0       	ldi	r20, 0x00	; 0
+  ba:	50 e0       	ldi	r21, 0x00	; 0
+		PORTB &= ~(1<<pinLatch); //turn latch pin LOW
+		
+		for (int j=0;j<4;j++) {
+  bc:	60 e0       	ldi	r22, 0x00	; 0
+  be:	70 e0       	ldi	r23, 0x00	; 0
+  c0:	a3 e0       	ldi	r26, 0x03	; 3
+  c2:	b0 e0       	ldi	r27, 0x00	; 0
+void resetPins() {
+	PORTD &= ~(1<<pin5v);	
+}
+void refreshDisplay() {
+	for (int i=0;i<4;i++) {
+		PORTB &= ~(1<<pinLatch); //turn latch pin LOW
+  c4:	28 98       	cbi	0x05, 0	; 5
+		
+		for (int j=0;j<4;j++) {
+  c6:	cb 01       	movw	r24, r22
+			if (i==j) {
+  c8:	48 17       	cp	r20, r24
+  ca:	59 07       	cpc	r21, r25
+  cc:	11 f4       	brne	.+4      	; 0xd2 <refreshDisplay+0x1e>
+				PORTB &= ~(1<<pinData);
+  ce:	2a 98       	cbi	0x05, 2	; 5
+  d0:	01 c0       	rjmp	.+2      	; 0xd4 <refreshDisplay+0x20>
+				} else {
+				PORTB |= 1<<pinData;
+  d2:	2a 9a       	sbi	0x05, 2	; 5
+			}
+			PORTB |= 1<<pinClock; //turn clock pin HIGH
+  d4:	29 9a       	sbi	0x05, 1	; 5
+			PORTB &= ~(1<<pinClock); //turn clock pin LOW
+  d6:	29 98       	cbi	0x05, 1	; 5
+}
+void refreshDisplay() {
+	for (int i=0;i<4;i++) {
+		PORTB &= ~(1<<pinLatch); //turn latch pin LOW
+		
+		for (int j=0;j<4;j++) {
+  d8:	01 96       	adiw	r24, 0x01	; 1
+  da:	84 30       	cpi	r24, 0x04	; 4
+  dc:	91 05       	cpc	r25, r1
+  de:	a1 f7       	brne	.-24     	; 0xc8 <refreshDisplay+0x14>
+  e0:	cd 01       	movw	r24, r26
+			}
+			PORTB |= 1<<pinClock; //turn clock pin HIGH
+			PORTB &= ~(1<<pinClock); //turn clock pin LOW
+		}
+		for (int j=0;j<4;j++) {
+			if ((num[i] & 1<<(3-j))==0) {
+  e2:	20 81       	ld	r18, Z
+  e4:	31 81       	ldd	r19, Z+1	; 0x01
+  e6:	08 2e       	mov	r0, r24
+  e8:	02 c0       	rjmp	.+4      	; 0xee <refreshDisplay+0x3a>
+  ea:	35 95       	asr	r19
+  ec:	27 95       	ror	r18
+  ee:	0a 94       	dec	r0
+  f0:	e2 f7       	brpl	.-8      	; 0xea <refreshDisplay+0x36>
+  f2:	20 fd       	sbrc	r18, 0
+  f4:	02 c0       	rjmp	.+4      	; 0xfa <refreshDisplay+0x46>
+				PORTB &= ~(1<<pinData);
+  f6:	2a 98       	cbi	0x05, 2	; 5
+  f8:	01 c0       	rjmp	.+2      	; 0xfc <refreshDisplay+0x48>
+				} else {
+				PORTB |= 1<<pinData;
+  fa:	2a 9a       	sbi	0x05, 2	; 5
+			}
+			PORTB |= 1<<pinClock; //turn clock pin HIGH
+  fc:	29 9a       	sbi	0x05, 1	; 5
+			PORTB &= ~(1<<pinClock); //turn clock pin LOW
+  fe:	29 98       	cbi	0x05, 1	; 5
+ 100:	01 97       	sbiw	r24, 0x01	; 1
+ 102:	78 f7       	brcc	.-34     	; 0xe2 <refreshDisplay+0x2e>
+		}
+		PORTB |= 1<<pinLatch; //turn latch pin HIGH
+ 104:	28 9a       	sbi	0x05, 0	; 5
+}
+void resetPins() {
+	PORTD &= ~(1<<pin5v);	
+}
+void refreshDisplay() {
+	for (int i=0;i<4;i++) {
+ 106:	4f 5f       	subi	r20, 0xFF	; 255
+ 108:	5f 4f       	sbci	r21, 0xFF	; 255
+ 10a:	32 96       	adiw	r30, 0x02	; 2
+ 10c:	44 30       	cpi	r20, 0x04	; 4
+ 10e:	51 05       	cpc	r21, r1
+ 110:	c9 f6       	brne	.-78     	; 0xc4 <refreshDisplay+0x10>
+			PORTB |= 1<<pinClock; //turn clock pin HIGH
+			PORTB &= ~(1<<pinClock); //turn clock pin LOW
+		}
+		PORTB |= 1<<pinLatch; //turn latch pin HIGH
+	}	
+}
+ 112:	08 95       	ret
+
+00000114 <main>:
+volatile const uint8_t sensCDir =3;
+volatile uint8_t sens;
+int main(void)
+{	
+	//initialize interrupts
+	DDRD &= ~(1<<PIND2) &~(1<<PIND3); //make pin 2 & 3 an input
+ 114:	8a b1       	in	r24, 0x0a	; 10
+ 116:	83 7f       	andi	r24, 0xF3	; 243
+ 118:	8a b9       	out	0x0a, r24	; 10
+	PORTD |= (1<<PIND2) |(1<<PIND3); //pull-up pin 2 & 3
+ 11a:	8b b1       	in	r24, 0x0b	; 11
+ 11c:	8c 60       	ori	r24, 0x0C	; 12
+ 11e:	8b b9       	out	0x0b, r24	; 11
+	
+	EICRA |= (1<<ISC10) |(1<<ISC00); //Set interrupt on any logic change
+ 120:	e9 e6       	ldi	r30, 0x69	; 105
+ 122:	f0 e0       	ldi	r31, 0x00	; 0
+ 124:	80 81       	ld	r24, Z
+ 126:	85 60       	ori	r24, 0x05	; 5
+ 128:	80 83       	st	Z, r24
+	EIMSK |= (1<<INT0) |(1<<INT1); //Turn on INT0 and INT1
+ 12a:	8d b3       	in	r24, 0x1d	; 29
+ 12c:	83 60       	ori	r24, 0x03	; 3
+ 12e:	8d bb       	out	0x1d, r24	; 29
+	sei();
+ 130:	78 94       	sei
+	//end initialize interrupts
+	
+	DDRD |= 1<<pin5v;
+ 132:	56 9a       	sbi	0x0a, 6	; 10
+	DDRD &= ~(1<<pinEncoder0) &~(1<<pinEncoder1) &~(1<<pinEncoderButton);
+ 134:	8a b1       	in	r24, 0x0a	; 10
+ 136:	83 7e       	andi	r24, 0xE3	; 227
+ 138:	8a b9       	out	0x0a, r24	; 10
+	
+	PORTD &= ~(1<<pin5v);
+ 13a:	5e 98       	cbi	0x0b, 6	; 11
+	PORTD |= (1<<pinEncoder0) |(1<<pinEncoder1) |(1<<pinEncoderButton); //pull-up input pins
+ 13c:	8b b1       	in	r24, 0x0b	; 11
+ 13e:	8c 61       	ori	r24, 0x1C	; 28
+ 140:	8b b9       	out	0x0b, r24	; 11
+	//PORTD |= (1<<pinEncoderButton); //pull-up input pins
+	
+	DDRB |= 1<<pinLatch |1<<pinClock |1<<pinData;
+ 142:	84 b1       	in	r24, 0x04	; 4
+ 144:	87 60       	ori	r24, 0x07	; 7
+ 146:	84 b9       	out	0x04, r24	; 4
+	PORTB |= 0b00000000;
+ 148:	85 b1       	in	r24, 0x05	; 5
+ 14a:	85 b9       	out	0x05, r24	; 5
+	
+	num[0] = 2;
+ 14c:	82 e0       	ldi	r24, 0x02	; 2
+ 14e:	90 e0       	ldi	r25, 0x00	; 0
+ 150:	90 93 07 01 	sts	0x0107, r25
+ 154:	80 93 06 01 	sts	0x0106, r24
+	num[1] = 1;
+ 158:	81 e0       	ldi	r24, 0x01	; 1
+ 15a:	90 e0       	ldi	r25, 0x00	; 0
+ 15c:	90 93 09 01 	sts	0x0109, r25
+ 160:	80 93 08 01 	sts	0x0108, r24
+	num[2] = 9;
+ 164:	89 e0       	ldi	r24, 0x09	; 9
+ 166:	90 e0       	ldi	r25, 0x00	; 0
+ 168:	90 93 0b 01 	sts	0x010B, r25
+ 16c:	80 93 0a 01 	sts	0x010A, r24
+	num[3] = 3;
+ 170:	83 e0       	ldi	r24, 0x03	; 3
+ 172:	90 e0       	ldi	r25, 0x00	; 0
+ 174:	90 93 0d 01 	sts	0x010D, r25
+ 178:	80 93 0c 01 	sts	0x010C, r24
+				} else {
+					sleepMode = 1;
+					groundAll();
+				}
+			}
+			lastButtonState = 1;
+ 17c:	c1 e0       	ldi	r28, 0x01	; 1
+ 17e:	d0 e0       	ldi	r29, 0x00	; 0
+			if (lastButtonState!=1) {
+				if (sleepMode) {
+					sleepMode = 0;	
+					resetPins();				
+				} else {
+					sleepMode = 1;
+ 180:	11 e0       	ldi	r17, 0x01	; 1
+	num[2] = 9;
+	num[3] = 3;
+	
+    while(1)
+    {
+		if (sleepMode==0) {
+ 182:	80 91 05 01 	lds	r24, 0x0105
+ 186:	81 11       	cpse	r24, r1
+ 188:	02 c0       	rjmp	.+4      	; 0x18e <main+0x7a>
+			refreshDisplay();			
+ 18a:	0e 94 5a 00 	call	0xb4	; 0xb4 <refreshDisplay>
+		}
+		if (bit_is_clear(PIND, pinEncoderButton)) {
+ 18e:	4c 99       	sbic	0x09, 4	; 9
+ 190:	18 c0       	rjmp	.+48     	; 0x1c2 <main+0xae>
+			if (lastButtonState!=1) {
+ 192:	80 91 03 01 	lds	r24, 0x0103
+ 196:	90 91 04 01 	lds	r25, 0x0104
+ 19a:	01 97       	sbiw	r24, 0x01	; 1
+ 19c:	69 f0       	breq	.+26     	; 0x1b8 <main+0xa4>
+				if (sleepMode) {
+ 19e:	80 91 05 01 	lds	r24, 0x0105
+ 1a2:	88 23       	and	r24, r24
+ 1a4:	29 f0       	breq	.+10     	; 0x1b0 <main+0x9c>
+					sleepMode = 0;	
+ 1a6:	10 92 05 01 	sts	0x0105, r1
+					resetPins();				
+ 1aa:	0e 94 58 00 	call	0xb0	; 0xb0 <resetPins>
+ 1ae:	04 c0       	rjmp	.+8      	; 0x1b8 <main+0xa4>
+				} else {
+					sleepMode = 1;
+ 1b0:	10 93 05 01 	sts	0x0105, r17
+					groundAll();
+ 1b4:	0e 94 53 00 	call	0xa6	; 0xa6 <groundAll>
+				}
+			}
+			lastButtonState = 1;
+ 1b8:	d0 93 04 01 	sts	0x0104, r29
+ 1bc:	c0 93 03 01 	sts	0x0103, r28
+ 1c0:	e0 cf       	rjmp	.-64     	; 0x182 <main+0x6e>
+		} else {
+			lastButtonState = 0;
+ 1c2:	10 92 04 01 	sts	0x0104, r1
+ 1c6:	10 92 03 01 	sts	0x0103, r1
+ 1ca:	db cf       	rjmp	.-74     	; 0x182 <main+0x6e>
+
+000001cc <updateEncoder>:
+	updateEncoder();
+	refreshDisplay();
+}
+
+void updateEncoder() {
+	int MSB = bit_is_clear(PIND, pinEncoder0); //MSB = most significant bit
+ 1cc:	69 b1       	in	r22, 0x09	; 9
+	int LSB = bit_is_clear(PIND, pinEncoder1); //LSB = least significant bit
+ 1ce:	59 b1       	in	r21, 0x09	; 9
+	updateEncoder();
+	refreshDisplay();
+}
+
+void updateEncoder() {
+	int MSB = bit_is_clear(PIND, pinEncoder0); //MSB = most significant bit
+ 1d0:	66 95       	lsr	r22
+ 1d2:	66 95       	lsr	r22
+ 1d4:	41 e0       	ldi	r20, 0x01	; 1
+ 1d6:	64 27       	eor	r22, r20
+ 1d8:	26 2f       	mov	r18, r22
+ 1da:	21 70       	andi	r18, 0x01	; 1
+ 1dc:	30 e0       	ldi	r19, 0x00	; 0
+	int LSB = bit_is_clear(PIND, pinEncoder1); //LSB = least significant bit
+
+	int encoded = (MSB << 1) |LSB; //converting the 2 pin value to single number
+ 1de:	22 0f       	add	r18, r18
+ 1e0:	33 1f       	adc	r19, r19
+	refreshDisplay();
+}
+
+void updateEncoder() {
+	int MSB = bit_is_clear(PIND, pinEncoder0); //MSB = most significant bit
+	int LSB = bit_is_clear(PIND, pinEncoder1); //LSB = least significant bit
+ 1e2:	56 95       	lsr	r21
+ 1e4:	56 95       	lsr	r21
+ 1e6:	56 95       	lsr	r21
+ 1e8:	45 27       	eor	r20, r21
+ 1ea:	84 2f       	mov	r24, r20
+ 1ec:	81 70       	andi	r24, 0x01	; 1
+ 1ee:	90 e0       	ldi	r25, 0x00	; 0
+
+	int encoded = (MSB << 1) |LSB; //converting the 2 pin value to single number
+ 1f0:	28 2b       	or	r18, r24
+ 1f2:	39 2b       	or	r19, r25
+	int sum  = (lastEncoded << 2) | encoded; //adding it to the previous encoded value
+ 1f4:	80 91 0f 01 	lds	r24, 0x010F
+ 1f8:	90 91 10 01 	lds	r25, 0x0110
+ 1fc:	88 0f       	add	r24, r24
+ 1fe:	99 1f       	adc	r25, r25
+ 200:	88 0f       	add	r24, r24
+ 202:	99 1f       	adc	r25, r25
+ 204:	82 2b       	or	r24, r18
+ 206:	93 2b       	or	r25, r19
+
+	if(sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011) {
+ 208:	8d 30       	cpi	r24, 0x0D	; 13
+ 20a:	91 05       	cpc	r25, r1
+ 20c:	49 f0       	breq	.+18     	; 0x220 <updateEncoder+0x54>
+ 20e:	84 30       	cpi	r24, 0x04	; 4
+ 210:	91 05       	cpc	r25, r1
+ 212:	31 f0       	breq	.+12     	; 0x220 <updateEncoder+0x54>
+ 214:	82 30       	cpi	r24, 0x02	; 2
+ 216:	91 05       	cpc	r25, r1
+ 218:	19 f0       	breq	.+6      	; 0x220 <updateEncoder+0x54>
+ 21a:	8b 30       	cpi	r24, 0x0B	; 11
+ 21c:	91 05       	cpc	r25, r1
+ 21e:	d9 f4       	brne	.+54     	; 0x256 <updateEncoder+0x8a>
+		if (dir ==1) {
+ 220:	80 91 02 01 	lds	r24, 0x0102
+ 224:	81 30       	cpi	r24, 0x01	; 1
+ 226:	29 f4       	brne	.+10     	; 0x232 <updateEncoder+0x66>
+			//changeEncoded = 1;
+			
+			sensDir=sensCDir;
+ 228:	80 91 00 01 	lds	r24, 0x0100
+ 22c:	80 93 01 01 	sts	0x0101, r24
+ 230:	3d c0       	rjmp	.+122    	; 0x2ac <updateEncoder+0xe0>
+			// Serial.println("0RIGHT");
+		} else if (sensDir==0) {
+ 232:	80 91 01 01 	lds	r24, 0x0101
+ 236:	81 11       	cpse	r24, r1
+ 238:	08 c0       	rjmp	.+16     	; 0x24a <updateEncoder+0x7e>
+			dir=1;
+ 23a:	81 e0       	ldi	r24, 0x01	; 1
+ 23c:	80 93 02 01 	sts	0x0102, r24
+			sensDir=sensCDir;
+ 240:	80 91 00 01 	lds	r24, 0x0100
+ 244:	80 93 01 01 	sts	0x0101, r24
+ 248:	31 c0       	rjmp	.+98     	; 0x2ac <updateEncoder+0xe0>
+			//     Serial.println("1RIGHT");
+		} else {
+			sensDir--;
+ 24a:	80 91 01 01 	lds	r24, 0x0101
+ 24e:	81 50       	subi	r24, 0x01	; 1
+ 250:	80 93 01 01 	sts	0x0101, r24
+ 254:	2b c0       	rjmp	.+86     	; 0x2ac <updateEncoder+0xe0>
+		}
+	} else if(sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000) {
+ 256:	8e 30       	cpi	r24, 0x0E	; 14
+ 258:	91 05       	cpc	r25, r1
+ 25a:	41 f0       	breq	.+16     	; 0x26c <updateEncoder+0xa0>
+ 25c:	87 30       	cpi	r24, 0x07	; 7
+ 25e:	91 05       	cpc	r25, r1
+ 260:	29 f0       	breq	.+10     	; 0x26c <updateEncoder+0xa0>
+ 262:	81 30       	cpi	r24, 0x01	; 1
+ 264:	91 05       	cpc	r25, r1
+ 266:	11 f0       	breq	.+4      	; 0x26c <updateEncoder+0xa0>
+ 268:	08 97       	sbiw	r24, 0x08	; 8
+ 26a:	d9 f4       	brne	.+54     	; 0x2a2 <updateEncoder+0xd6>
+		if (dir==2) {
+ 26c:	80 91 02 01 	lds	r24, 0x0102
+ 270:	82 30       	cpi	r24, 0x02	; 2
+ 272:	29 f4       	brne	.+10     	; 0x27e <updateEncoder+0xb2>
+			//changeEncoded = 1;
+			sensDir=sensCDir;
+ 274:	80 91 00 01 	lds	r24, 0x0100
+ 278:	80 93 01 01 	sts	0x0101, r24
+ 27c:	17 c0       	rjmp	.+46     	; 0x2ac <updateEncoder+0xe0>
+			//    Serial.println("0LEFT");
+		} else if (sensDir==0) {
+ 27e:	80 91 01 01 	lds	r24, 0x0101
+ 282:	81 11       	cpse	r24, r1
+ 284:	08 c0       	rjmp	.+16     	; 0x296 <updateEncoder+0xca>
+			dir=2;
+ 286:	82 e0       	ldi	r24, 0x02	; 2
+ 288:	80 93 02 01 	sts	0x0102, r24
+			sensDir=sensCDir;
+ 28c:	80 91 00 01 	lds	r24, 0x0100
+ 290:	80 93 01 01 	sts	0x0101, r24
+ 294:	0b c0       	rjmp	.+22     	; 0x2ac <updateEncoder+0xe0>
+			//   Serial.println("1LEFT");
+		} else {
+			sensDir--;
+ 296:	80 91 01 01 	lds	r24, 0x0101
+ 29a:	81 50       	subi	r24, 0x01	; 1
+ 29c:	80 93 01 01 	sts	0x0101, r24
+ 2a0:	05 c0       	rjmp	.+10     	; 0x2ac <updateEncoder+0xe0>
+		}
+	} else {
+		lastEncoded = encoded; //store this value for next time
+ 2a2:	30 93 10 01 	sts	0x0110, r19
+ 2a6:	20 93 0f 01 	sts	0x010F, r18
+		return;
+ 2aa:	08 95       	ret
+}
+if (sens<=0) {
+ 2ac:	80 91 0e 01 	lds	r24, 0x010E
+ 2b0:	81 11       	cpse	r24, r1
+ 2b2:	04 c0       	rjmp	.+8      	; 0x2bc <updateEncoder+0xf0>
+	sens = rotSens;
+ 2b4:	83 e0       	ldi	r24, 0x03	; 3
+ 2b6:	80 93 0e 01 	sts	0x010E, r24
+ 2ba:	20 c0       	rjmp	.+64     	; 0x2fc <updateEncoder+0x130>
+	} else if (sens==rotSens) {
+ 2bc:	80 91 0e 01 	lds	r24, 0x010E
+ 2c0:	83 30       	cpi	r24, 0x03	; 3
+ 2c2:	b9 f4       	brne	.+46     	; 0x2f2 <updateEncoder+0x126>
+	sens--;
+ 2c4:	80 91 0e 01 	lds	r24, 0x010E
+ 2c8:	81 50       	subi	r24, 0x01	; 1
+ 2ca:	80 93 0e 01 	sts	0x010E, r24
+	if (num[0]>=9) {
+ 2ce:	80 91 06 01 	lds	r24, 0x0106
+ 2d2:	90 91 07 01 	lds	r25, 0x0107
+ 2d6:	89 30       	cpi	r24, 0x09	; 9
+ 2d8:	91 05       	cpc	r25, r1
+ 2da:	2c f0       	brlt	.+10     	; 0x2e6 <updateEncoder+0x11a>
+		num[0] = 0;
+ 2dc:	10 92 07 01 	sts	0x0107, r1
+ 2e0:	10 92 06 01 	sts	0x0106, r1
+ 2e4:	0b c0       	rjmp	.+22     	; 0x2fc <updateEncoder+0x130>
+		} else {
+		num[0]++;
+ 2e6:	01 96       	adiw	r24, 0x01	; 1
+ 2e8:	90 93 07 01 	sts	0x0107, r25
+ 2ec:	80 93 06 01 	sts	0x0106, r24
+ 2f0:	05 c0       	rjmp	.+10     	; 0x2fc <updateEncoder+0x130>
+	}
+	
+	} else {
+	sens--;
+ 2f2:	80 91 0e 01 	lds	r24, 0x010E
+ 2f6:	81 50       	subi	r24, 0x01	; 1
+ 2f8:	80 93 0e 01 	sts	0x010E, r24
+}
+	
+	lastEncoded = encoded; //store this value for next time
+ 2fc:	30 93 10 01 	sts	0x0110, r19
+ 300:	20 93 0f 01 	sts	0x010F, r18
+ 304:	08 95       	ret
+
+00000306 <__vector_2>:
+
+ISR(INT0_vect) {
+	updateEncoder();
+	refreshDisplay();
+}
+ISR(INT1_vect) {
+ 306:	1f 92       	push	r1
+ 308:	0f 92       	push	r0
+ 30a:	0f b6       	in	r0, 0x3f	; 63
+ 30c:	0f 92       	push	r0
+ 30e:	11 24       	eor	r1, r1
+ 310:	2f 93       	push	r18
+ 312:	3f 93       	push	r19
+ 314:	4f 93       	push	r20
+ 316:	5f 93       	push	r21
+ 318:	6f 93       	push	r22
+ 31a:	7f 93       	push	r23
+ 31c:	8f 93       	push	r24
+ 31e:	9f 93       	push	r25
+ 320:	af 93       	push	r26
+ 322:	bf 93       	push	r27
+ 324:	ef 93       	push	r30
+ 326:	ff 93       	push	r31
+	updateEncoder();
+ 328:	0e 94 e6 00 	call	0x1cc	; 0x1cc <updateEncoder>
+	refreshDisplay();
+ 32c:	0e 94 5a 00 	call	0xb4	; 0xb4 <refreshDisplay>
+}
+ 330:	ff 91       	pop	r31
+ 332:	ef 91       	pop	r30
+ 334:	bf 91       	pop	r27
+ 336:	af 91       	pop	r26
+ 338:	9f 91       	pop	r25
+ 33a:	8f 91       	pop	r24
+ 33c:	7f 91       	pop	r23
+ 33e:	6f 91       	pop	r22
+ 340:	5f 91       	pop	r21
+ 342:	4f 91       	pop	r20
+ 344:	3f 91       	pop	r19
+ 346:	2f 91       	pop	r18
+ 348:	0f 90       	pop	r0
+ 34a:	0f be       	out	0x3f, r0	; 63
+ 34c:	0f 90       	pop	r0
+ 34e:	1f 90       	pop	r1
+ 350:	18 95       	reti
+
+00000352 <__vector_1>:
+		}
+		PORTB |= 1<<pinLatch; //turn latch pin HIGH
+	}	
+}
+
+ISR(INT0_vect) {
+ 352:	1f 92       	push	r1
+ 354:	0f 92       	push	r0
+ 356:	0f b6       	in	r0, 0x3f	; 63
+ 358:	0f 92       	push	r0
+ 35a:	11 24       	eor	r1, r1
+ 35c:	2f 93       	push	r18
+ 35e:	3f 93       	push	r19
+ 360:	4f 93       	push	r20
+ 362:	5f 93       	push	r21
+ 364:	6f 93       	push	r22
+ 366:	7f 93       	push	r23
+ 368:	8f 93       	push	r24
+ 36a:	9f 93       	push	r25
+ 36c:	af 93       	push	r26
+ 36e:	bf 93       	push	r27
+ 370:	ef 93       	push	r30
+ 372:	ff 93       	push	r31
+	updateEncoder();
+ 374:	0e 94 e6 00 	call	0x1cc	; 0x1cc <updateEncoder>
+	refreshDisplay();
+ 378:	0e 94 5a 00 	call	0xb4	; 0xb4 <refreshDisplay>
+}
+ 37c:	ff 91       	pop	r31
+ 37e:	ef 91       	pop	r30
+ 380:	bf 91       	pop	r27
+ 382:	af 91       	pop	r26
+ 384:	9f 91       	pop	r25
+ 386:	8f 91       	pop	r24
+ 388:	7f 91       	pop	r23
+ 38a:	6f 91       	pop	r22
+ 38c:	5f 91       	pop	r21
+ 38e:	4f 91       	pop	r20
+ 390:	3f 91       	pop	r19
+ 392:	2f 91       	pop	r18
+ 394:	0f 90       	pop	r0
+ 396:	0f be       	out	0x3f, r0	; 63
+ 398:	0f 90       	pop	r0
+ 39a:	1f 90       	pop	r1
+ 39c:	18 95       	reti
+
+0000039e <_exit>:
+ 39e:	f8 94       	cli
+
+000003a0 <__stop_program>:
+ 3a0:	ff cf       	rjmp	.-2      	; 0x3a0 <__stop_program>

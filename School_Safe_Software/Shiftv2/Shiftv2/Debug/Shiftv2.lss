@@ -1,0 +1,234 @@
+
+Shiftv2.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000000  00800100  00000138  000001cc  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000138  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000008  00800100  00800100  000001cc  2**0
+                  ALLOC
+  3 .stab         000006cc  00000000  00000000  000001cc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000097  00000000  00000000  00000898  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .comment      0000002f  00000000  00000000  0000092f  2**0
+                  CONTENTS, READONLY
+  6 .debug_aranges 00000020  00000000  00000000  0000095e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_info   000000ea  00000000  00000000  0000097e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_abbrev 00000097  00000000  00000000  00000a68  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_line   0000005c  00000000  00000000  00000aff  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_frame  00000024  00000000  00000000  00000b5c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_str    000000a1  00000000  00000000  00000b80  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_loc    00000048  00000000  00000000  00000c21  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_ranges 00000028  00000000  00000000  00000c69  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 34 00 	jmp	0x68	; 0x68 <__ctors_end>
+   4:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+   8:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+   c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  10:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  14:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  18:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  1c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  20:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  24:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  28:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  2c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  30:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  34:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  38:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  3c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  40:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  44:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  48:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  4c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  50:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  54:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  58:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  5c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  60:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  64:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+
+00000068 <__ctors_end>:
+  68:	11 24       	eor	r1, r1
+  6a:	1f be       	out	0x3f, r1	; 63
+  6c:	cf ef       	ldi	r28, 0xFF	; 255
+  6e:	d4 e0       	ldi	r29, 0x04	; 4
+  70:	de bf       	out	0x3e, r29	; 62
+  72:	cd bf       	out	0x3d, r28	; 61
+
+00000074 <__do_clear_bss>:
+  74:	21 e0       	ldi	r18, 0x01	; 1
+  76:	a0 e0       	ldi	r26, 0x00	; 0
+  78:	b1 e0       	ldi	r27, 0x01	; 1
+  7a:	01 c0       	rjmp	.+2      	; 0x7e <.do_clear_bss_start>
+
+0000007c <.do_clear_bss_loop>:
+  7c:	1d 92       	st	X+, r1
+
+0000007e <.do_clear_bss_start>:
+  7e:	a8 30       	cpi	r26, 0x08	; 8
+  80:	b2 07       	cpc	r27, r18
+  82:	e1 f7       	brne	.-8      	; 0x7c <.do_clear_bss_loop>
+  84:	0e 94 48 00 	call	0x90	; 0x90 <main>
+  88:	0c 94 9a 00 	jmp	0x134	; 0x134 <_exit>
+
+0000008c <__bad_interrupt>:
+  8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000090 <main>:
+#include <avr/io.h>
+#include <util/delay.h>
+int num[4];
+int main(void)
+{
+	DDRD |= 1<<PIND6;
+  90:	56 9a       	sbi	0x0a, 6	; 10
+	PORTD &= ~(1<<PIND6);
+  92:	5e 98       	cbi	0x0b, 6	; 11
+	DDRB |= 0b00000111;
+  94:	84 b1       	in	r24, 0x04	; 4
+  96:	87 60       	ori	r24, 0x07	; 7
+  98:	84 b9       	out	0x04, r24	; 4
+	PORTB |= 0b00000000;
+  9a:	85 b1       	in	r24, 0x05	; 5
+  9c:	85 b9       	out	0x05, r24	; 5
+	
+	num[0] = 2;
+  9e:	82 e0       	ldi	r24, 0x02	; 2
+  a0:	90 e0       	ldi	r25, 0x00	; 0
+  a2:	90 93 01 01 	sts	0x0101, r25
+  a6:	80 93 00 01 	sts	0x0100, r24
+	num[1] = 1;
+  aa:	81 e0       	ldi	r24, 0x01	; 1
+  ac:	90 e0       	ldi	r25, 0x00	; 0
+  ae:	90 93 03 01 	sts	0x0103, r25
+  b2:	80 93 02 01 	sts	0x0102, r24
+	num[2] = 9;
+  b6:	89 e0       	ldi	r24, 0x09	; 9
+  b8:	90 e0       	ldi	r25, 0x00	; 0
+  ba:	90 93 05 01 	sts	0x0105, r25
+  be:	80 93 04 01 	sts	0x0104, r24
+	num[3] = 3;
+  c2:	83 e0       	ldi	r24, 0x03	; 3
+  c4:	90 e0       	ldi	r25, 0x00	; 0
+  c6:	90 93 07 01 	sts	0x0107, r25
+  ca:	80 93 06 01 	sts	0x0106, r24
+	
+    while(1)
+    {
+		for (int i=0;i<4;i++) {
+  ce:	20 e0       	ldi	r18, 0x00	; 0
+  d0:	30 e0       	ldi	r19, 0x00	; 0
+			PORTB &= ~(1<<PINB0); //turn latch pin LOW
+			
+			for (int j=0;j<4;j++) {
+  d2:	60 e0       	ldi	r22, 0x00	; 0
+  d4:	70 e0       	ldi	r23, 0x00	; 0
+  d6:	a3 e0       	ldi	r26, 0x03	; 3
+  d8:	b0 e0       	ldi	r27, 0x00	; 0
+	num[3] = 3;
+	
+    while(1)
+    {
+		for (int i=0;i<4;i++) {
+			PORTB &= ~(1<<PINB0); //turn latch pin LOW
+  da:	28 98       	cbi	0x05, 0	; 5
+			
+			for (int j=0;j<4;j++) {
+  dc:	cb 01       	movw	r24, r22
+				if (i==j) {
+  de:	28 17       	cp	r18, r24
+  e0:	39 07       	cpc	r19, r25
+  e2:	11 f4       	brne	.+4      	; 0xe8 <main+0x58>
+					PORTB &= ~(1<<PINB2);					
+  e4:	2a 98       	cbi	0x05, 2	; 5
+  e6:	01 c0       	rjmp	.+2      	; 0xea <main+0x5a>
+				} else {
+					PORTB |= 1<<PINB2;				
+  e8:	2a 9a       	sbi	0x05, 2	; 5
+				}
+				PORTB |= 1<<PINB1; //turn clock pin HIGH
+  ea:	29 9a       	sbi	0x05, 1	; 5
+				PORTB &= ~(1<<PINB1); //turn clock pin LOW
+  ec:	29 98       	cbi	0x05, 1	; 5
+    while(1)
+    {
+		for (int i=0;i<4;i++) {
+			PORTB &= ~(1<<PINB0); //turn latch pin LOW
+			
+			for (int j=0;j<4;j++) {
+  ee:	01 96       	adiw	r24, 0x01	; 1
+  f0:	84 30       	cpi	r24, 0x04	; 4
+  f2:	91 05       	cpc	r25, r1
+  f4:	a1 f7       	brne	.-24     	; 0xde <main+0x4e>
+  f6:	cd 01       	movw	r24, r26
+				}
+				PORTB |= 1<<PINB1; //turn clock pin HIGH
+				PORTB &= ~(1<<PINB1); //turn clock pin LOW
+			}			
+			for (int j=0;j<4;j++) {
+				if ((num[i] & 1<<(3-j))==0) {
+  f8:	f9 01       	movw	r30, r18
+  fa:	ee 0f       	add	r30, r30
+  fc:	ff 1f       	adc	r31, r31
+  fe:	e0 50       	subi	r30, 0x00	; 0
+ 100:	ff 4f       	sbci	r31, 0xFF	; 255
+ 102:	40 81       	ld	r20, Z
+ 104:	51 81       	ldd	r21, Z+1	; 0x01
+ 106:	08 2e       	mov	r0, r24
+ 108:	02 c0       	rjmp	.+4      	; 0x10e <main+0x7e>
+ 10a:	55 95       	asr	r21
+ 10c:	47 95       	ror	r20
+ 10e:	0a 94       	dec	r0
+ 110:	e2 f7       	brpl	.-8      	; 0x10a <main+0x7a>
+ 112:	40 fd       	sbrc	r20, 0
+ 114:	02 c0       	rjmp	.+4      	; 0x11a <main+0x8a>
+					PORTB &= ~(1<<PINB2);
+ 116:	2a 98       	cbi	0x05, 2	; 5
+ 118:	01 c0       	rjmp	.+2      	; 0x11c <main+0x8c>
+					} else {
+					PORTB |= 1<<PINB2;
+ 11a:	2a 9a       	sbi	0x05, 2	; 5
+				}
+				PORTB |= 1<<PINB1; //turn clock pin HIGH
+ 11c:	29 9a       	sbi	0x05, 1	; 5
+				PORTB &= ~(1<<PINB1); //turn clock pin LOW			
+ 11e:	29 98       	cbi	0x05, 1	; 5
+ 120:	01 97       	sbiw	r24, 0x01	; 1
+ 122:	78 f7       	brcc	.-34     	; 0x102 <main+0x72>
+			}
+			PORTB |= 1<<PINB0; //turn latch pin HIGH			
+ 124:	28 9a       	sbi	0x05, 0	; 5
+	num[2] = 9;
+	num[3] = 3;
+	
+    while(1)
+    {
+		for (int i=0;i<4;i++) {
+ 126:	2f 5f       	subi	r18, 0xFF	; 255
+ 128:	3f 4f       	sbci	r19, 0xFF	; 255
+ 12a:	24 30       	cpi	r18, 0x04	; 4
+ 12c:	31 05       	cpc	r19, r1
+ 12e:	ac f2       	brlt	.-86     	; 0xda <main+0x4a>
+ 130:	9b 01       	movw	r18, r22
+ 132:	d3 cf       	rjmp	.-90     	; 0xda <main+0x4a>
+
+00000134 <_exit>:
+ 134:	f8 94       	cli
+
+00000136 <__stop_program>:
+ 136:	ff cf       	rjmp	.-2      	; 0x136 <__stop_program>
