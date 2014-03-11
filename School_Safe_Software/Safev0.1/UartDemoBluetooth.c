@@ -13,9 +13,7 @@
 #define F_CPU 1000000
 //include needed libraries.
 #include <avr/io.h>
-#include <util/delay.h>
 #include <avr/interrupt.h>
-#include <string.h>
 
 #include "libs/uart.c" //include basic uart capability written by Robert.
 
@@ -29,16 +27,19 @@
 #define ENCODER_PIN_B	PD3
 #define ENCODER_BUTTON	PD4
 
-volatile uint8_t ticks = 0; //keeps rotary ticks
-volatile uint8_t direction = 0; //keeps direction so we can keep track when to jump to the next number.
-int pin = 1234;
+volatile uint8_t ticks = 100; //keeps rotary ticks
+volatile uint8_t direction = 1; //keeps direction so we can keep track when to jump to the next number.
+volatile uint8_t prev_direction = 1;
+//keep track of how many times the direction changes.
+volatile static uint8_t direction_count = 0;
+int pin = 0; //the actuall pin.
+int new_pin = 0; //currently displayed pin.
 
 
 void shiftOut(uint8_t data)
 {
-	uint8_t i = 7;
-	
 	PORTB &= ~( 1<<LATCH ); //pull latch low
+	int i = 7;
 	while(i >= 0)
 	{
 		//check i'th bit against data, shift it by I to the right.
@@ -75,6 +76,34 @@ void displayNum(int num)
 		shiftOut(segment | m%10); //this all shifts out the data
 	}
 }
+
+void inputPin()
+{
+	//if the direction changed 4 times we set pin to zero
+	if(direction_count > 4 )
+	{
+		//reset everything so we can start over entering the number.
+		prev_direction = direction = direction_count = pin = new_pin = 0;
+		ticks = 100;
+	}
+	//if the direction changes
+	if(direction != prev_direction)
+	{
+		//when we detect a change in direction increase direction_count.
+		direction_count++;
+		//make the prev_direction the current one.
+		//so we can detect a change again.
+		prev_direction = direction;
+		ticks = 100; //set ticks to 100 so the first number start at zero (modulo 10)
+		new_pin = pin*10; //shift the digit to the left.
+	}
+	//if the direction doesn't change
+	else
+	{
+		pin = new_pin + (ticks%10);//the pin is the shifted number + the actually change of the first number.
+	}
+}
+
 int main(void)
 {
 	//some setup code
@@ -93,18 +122,15 @@ int main(void)
 	
 	DDRB  |= 	 ( 1<<LATCH )|( 1<<CLOCK )|( 1<<DATA_OUT ); //register pins to output
 	PORTB &=   ~(( 1<<LATCH )|( 1<<CLOCK )|( 1<<DATA_OUT )); //clear register pins.
-	//initialize uart
-	init_uart();
+	
 	//main loop.
+	init_uart();
 	while(1)
 	{
-		pin = atoi(uart_buffer);
+		uart_put_str((char*) uart_buffer);
+		inputPin();
+		//always display pin
 		displayNum(pin);
-		/*
-		int i;
-		for(i = 0;i<10000;i++)
-			displayNum(i);
-		*/
 	}
 	
 	return 1;
@@ -116,15 +142,18 @@ ISR(INT0_vect)
 	//and thus add ticks.
 	if((PIND & (1<<ENCODER_PIN_B)))
 	{
-		ticks++;
+		direction = 1; //keep direction
+		ticks--; //update ticks
 	}
 }
-//same for this function only subtracting ticks.
+//same for this function only adding ticks.
 ISR(INT1_vect)
 {
 	if((PIND & (1<<ENCODER_PIN_A)))
 	{
-		ticks--;
+		direction = 0;
+		ticks++;
 	}
 }
+
 

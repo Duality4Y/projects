@@ -127,6 +127,7 @@ int main(void)
 	init_uart();
 	while(1)
 	{
+		uart_put('a');
 		inputPin();
 		//always display pin
 		displayNum(pin);
