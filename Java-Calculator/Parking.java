@@ -36,13 +36,18 @@ class Parking extends JFrame
 	//contains all the buttons.
 	ArrayList<JButton> buttons = new ArrayList();
 	
+	private boolean kaartIsIngeworpen = false;
+	private double teBetalenBedrag = 12.00;
 	public Parking()
 	{
 		JTextArea output = new JTextArea(1,15);
 		JTextArea input = new JTextArea(1,15);
+		
 		mainPanel = new JPanel(new GridLayout(3,1));
+		
 		invoerPanel = new JPanel(new GridLayout(1,1));
 		outputPanel = new JPanel(new GridLayout(1,1));
+		
 		buttonPanel = new JPanel(new GridLayout(1,5));
 		
 		//create handlers.
@@ -56,6 +61,9 @@ class Parking extends JFrame
 		invoerPanel.add(input);
 		invoerPanel.add(output);
 		
+		//set listeners for input and output field.
+		//input.addActionListener(tfListener);
+		//output.addActionListener(tfListener);
 		//create buttons
 		for(int i = 0;i<buttonContent.length;i++)
 		{
@@ -87,22 +95,56 @@ class Parking extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
+			String action = event.getActionCommand();
+			printPressed(action);
 		}
+		public void printPressed(String action)
+		{
+			System.out.println(action+" pressed");
+		}
+
 	}
 	//handler voor buttons. maar 5 buttons.
 	class buttonhandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
+			/*
+			 * "0.20€", "1€", "Back", "Give", "Chart"
+			 * */
 			String action = event.getActionCommand();
-			switch(action)
+			if(action.equals("0.20€"))
 			{
-				case "a":
-				break;
-				default:
-				printPressed(action);
-				break;
 			}
+			else if(action.equals("1€"))
+			{
+			}
+			else if(action.equals("Back"))
+			{
+			}
+			else if(action.equals("Give"))
+			{
+			}
+			else if(action.equals("Chart"))
+			{
+				if(kaartIsIngeworpen && parkeerAutomaat.voldoendeBetaald())
+				{
+					kaartIsIngeworpen = false;
+					parkeerAutomaat.setPrijs(teBetalenBedrag);
+				}
+				else
+				{
+					kaartIsIngeworpen = true; //kaart ingworpen
+					for(JButton button:buttons)
+					{
+						if(button.getText().equals("Chart"))
+						{
+							button.setEnabled(false);
+						}
+					}
+				}
+			}
+			this.printPressed(action);
 		}
 		public void printPressed(String action)
 		{
