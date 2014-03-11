@@ -137,7 +137,7 @@ class Parking extends JFrame
 				{
 					kaartIsIngeworpen = true; //kaart ingworpen
 					parkeerAutomaat.setPrijs(teBetalenBedrag);//set het te betalen bedrag
-					//output.setText("thing");//display what to pay.
+					output.setText("thing");//display what to pay.
 					for(JButton button:buttons)
 					{
 						if(button.getText().equals("Chart"))
