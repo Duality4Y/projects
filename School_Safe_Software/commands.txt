@@ -1,0 +1,16 @@
+login <4 digit number>: login with de 4 digit number as pin
+  when acces:
+    1: set 5v line to low, and all other pins to ground
+    0: tunrs 5v line HIGH and the other neccesary pins
+    open: change servo to open state
+    close: change servo to closed state
+    sread: read servo value
+    pread: read the pin code
+    pin <4 digit number>: set the pin
+    sleep: enter sleep mode
+    logout: logout, basically set a boolean to false
+    login <4 digit number>: login with de 4 digit number as pin
+  no acces:
+    message acces denied
+BT
+  send BTOK
