@@ -16,8 +16,8 @@ class Parking extends JFrame
 	 * en een prijs veld
 	 * */
 	private JPanel invoerPanel,outputPanel;
-	private JTextArea output;
-	private JTextArea input;
+	private JTextField output = new JTextField(15);
+	private JTextArea input = new JTextArea(1,15);
 	/*
 	 * 5 knoppen
 	 * 
@@ -40,8 +40,6 @@ class Parking extends JFrame
 	private double teBetalenBedrag = 12.00;
 	public Parking()
 	{
-		JTextArea output = new JTextArea(1,15);
-		JTextArea input = new JTextArea(1,15);
 		
 		mainPanel = new JPanel(new GridLayout(3,1));
 		
@@ -129,15 +127,10 @@ class Parking extends JFrame
 			}
 			else if(action.equals("Chart"))
 			{
-				if(kaartIsIngeworpen)
-				{
-					kaartIsIngeworpen = false;
-				}
-				else
+				if(kaartIsIngeworpen == false)
 				{
 					kaartIsIngeworpen = true; //kaart ingworpen
 					parkeerAutomaat.setPrijs(teBetalenBedrag);//set het te betalen bedrag
-					output.setText("thing");//display what to pay.
 					for(JButton button:buttons)
 					{
 						if(button.getText().equals("Chart"))
@@ -147,6 +140,7 @@ class Parking extends JFrame
 					}
 				}
 			}
+			output.setText("this");
 			this.printPressed(action);
 		}
 		public void printPressed(String action)

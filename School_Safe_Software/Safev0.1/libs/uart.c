@@ -13,7 +13,7 @@
 
 #define BUFFERSIZE 20
 volatile uint8_t uart_buffIndex = 0;
-volatile unsigned char uart_buffer[BUFFERSIZE];
+unsigned char uart_buffer[BUFFERSIZE];
 
 void init_uart()
 {

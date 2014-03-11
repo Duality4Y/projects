@@ -14,8 +14,13 @@
 //include needed libraries.
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <string.h>
+#include <avr/eeprom.h>
 
 #include "libs/uart.c" //include basic uart capability written by Robert.
+
+#define true 1
+#define false 0
 
 //pin defines 
 #define POWERCONTROL 	PD6
@@ -103,7 +108,42 @@ void inputPin()
 		pin = new_pin + (ticks%10);//the pin is the shifted number + the actually change of the first number.
 	}
 }
-
+void lock(uint8_t isLocked){}
+void runSerialInputCommands(unsigned char* inputStr)
+{
+	//uart_put_str(inputStr);
+	//if there is data in the buffer
+	if(inputStr[0])
+	{
+		//parse commands
+		if(strcmp(inputStr, "1") != 0)
+		{
+			PORTD &= ~(1<<POWERCONTROL);
+			uart_clear();
+		}
+		else if(strcmp(inputStr, "0") != 0)
+		{
+			PORTD |= (1<<POWERCONTROL);
+			uart_clear();
+		}
+		else if(strcmp(inputStr, "open") != 0)
+		{
+			pin = 10;
+			uart_put_str("\nOpening...\n\r");
+			lock(true);
+		}
+		else if(strcmp(inputStr, "close")!= 0)
+		{
+			uart_put_str("Closing...\n\r");
+			lock(false);
+		}
+		//clear all so we can receive new input.
+		else
+		{
+			uart_clear();
+		}
+	}
+}
 int main(void)
 {
 	//some setup code
@@ -125,10 +165,11 @@ int main(void)
 	
 	//main loop.
 	init_uart();
+	//serial comm
+	unsigned char* inputStr = uart_buffer;
 	while(1)
 	{
-		uart_put('a');
-		inputPin();
+		runSerialInputCommands(inputStr);
 		//always display pin
 		displayNum(pin);
 	}
