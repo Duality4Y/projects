@@ -59,7 +59,9 @@ class Parking extends JFrame
 		mainPanel.add(buttonPanel);
 		
 		invoerPanel.add(input);
-		invoerPanel.add(output);
+		input.setEditable(true);//we can enter things.
+		outputPanel.add(output);
+		output.setEditable(false);//we can only show things.
 		
 		//set listeners for input and output field.
 		//input.addActionListener(tfListener);
@@ -127,14 +129,15 @@ class Parking extends JFrame
 			}
 			else if(action.equals("Chart"))
 			{
-				if(kaartIsIngeworpen && parkeerAutomaat.voldoendeBetaald())
+				if(kaartIsIngeworpen)
 				{
 					kaartIsIngeworpen = false;
-					parkeerAutomaat.setPrijs(teBetalenBedrag);
 				}
 				else
 				{
 					kaartIsIngeworpen = true; //kaart ingworpen
+					parkeerAutomaat.setPrijs(teBetalenBedrag);//set het te betalen bedrag
+					//output.setText("thing");//display what to pay.
 					for(JButton button:buttons)
 					{
 						if(button.getText().equals("Chart"))
