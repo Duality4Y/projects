@@ -133,6 +133,10 @@ class Parking extends JFrame
 						}
 					}
 				}
+				if(parkeerAutomaat.getBetaald() < parkeerAutomaat.getPrijs())
+				{
+					parkeerAutomaat.setBetaald(parkeerAutomaat.getBetaald() - parkeerAutomaat.getPrijs());
+				}
 			}
 			else if(action.equals("Chart"))
 			{
@@ -150,7 +154,7 @@ class Parking extends JFrame
 					}
 				}
 			}
-			output.setText("te betalen: "+parkeerAutomaat.getPrijs()+" betaald: "+parkeerAutomaat.getBetaald());
+			output.setText("te betalen: "+parkeerAutomaat.getPrijs()+" Cent. betaald: "+parkeerAutomaat.getBetaald()+" Cent.");
 			this.printPressed(action);
 		}
 		public void printPressed(String action)
