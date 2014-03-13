@@ -25,7 +25,7 @@ public class ParkeerAutomaat
 
     public void setBetaald(int bedrag)
     {
-		this.betaald = 0;
+		this.betaald = bedrag;
     }
     
     public void setPrijs(int prijs)

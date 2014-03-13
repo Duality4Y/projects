@@ -135,6 +135,7 @@ class Parking extends JFrame
 					if(parkeerAutomaat.getBetaald() > parkeerAutomaat.getPrijs())
 					{
 						System.out.println("got here");
+						parkeerAutomaat.haalAfVanBetaald(parkeerAutomaat.getPrijs());
 					}
 				}
 			}
