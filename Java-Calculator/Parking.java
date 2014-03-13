@@ -132,10 +132,10 @@ class Parking extends JFrame
 							button.setEnabled(true);
 						}
 					}
-				}
-				if(parkeerAutomaat.getBetaald() < parkeerAutomaat.getPrijs())
-				{
-					parkeerAutomaat.setBetaald(parkeerAutomaat.getBetaald() - parkeerAutomaat.getPrijs());
+					if(parkeerAutomaat.getBetaald() > parkeerAutomaat.getPrijs())
+					{
+						System.out.println("got here");
+					}
 				}
 			}
 			else if(action.equals("Chart"))
@@ -144,7 +144,6 @@ class Parking extends JFrame
 				{
 					kaartIsIngeworpen = true; //kaart ingworpen
 					parkeerAutomaat.setPrijs(teBetalenBedrag);//set het te betalen bedrag
-					parkeerAutomaat.setBetaald(0); //altijd vanaf nul beginnen met betalen.
 					for(JButton button:buttons)
 					{
 						if(button.getText().equals("Chart"))
