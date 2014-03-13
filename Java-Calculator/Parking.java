@@ -115,15 +115,28 @@ class Parking extends JFrame
 			String action = event.getActionCommand();
 			if(action.equals("0.20€"))
 			{
+				parkeerAutomaat.voegToeAanBetaald(0.20);
 			}
 			else if(action.equals("1€"))
 			{
+				parkeerAutomaat.voegToeAanBetaald(1.00);
 			}
 			else if(action.equals("Back"))
 			{
 			}
 			else if(action.equals("Give"))
 			{
+				if(parkeerAutomaat.voldoendeBetaald() && kaartIsIngeworpen == true)
+				{
+					kaartIsIngeworpen = false;
+					for(JButton button:buttons)
+					{
+						if(button.getText().equals("Chart"))
+						{
+							button.setEnabled(true);
+						}
+					}
+				}
 			}
 			else if(action.equals("Chart"))
 			{
@@ -135,12 +148,12 @@ class Parking extends JFrame
 					{
 						if(button.getText().equals("Chart"))
 						{
-							button.setEnabled(false);
+							button.setEnabled(false); //disable de button.
 						}
 					}
 				}
 			}
-			output.setText("this");
+			output.setText("te betalen: "+parkeerAutomaat.getPrijs()+" betaald: "+parkeerAutomaat.getBetaald());
 			this.printPressed(action);
 		}
 		public void printPressed(String action)

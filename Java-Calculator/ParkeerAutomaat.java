@@ -1,4 +1,3 @@
-
 public class ParkeerAutomaat
 {
     private double prijs;
@@ -6,26 +5,27 @@ public class ParkeerAutomaat
 
     public boolean voldoendeBetaald()
     {
-	  return betaald>=prijs;
+	  return this.betaald >= this.prijs;
     }
 
-    public void haalAfVanBetaald()
+    public void haalAfVanBetaald(double bedrag)
     {
-		this.prijs -= betaald;
+		this.betaald -= bedrag;
     }
 
-    public void voegToeAanBetaald(int bedrag)
+    public void voegToeAanBetaald(double bedrag)
     {
-		betaald += bedrag;
+		this.betaald += bedrag;
     }
 
     public double getBetaald()
     {
-		return betaald;
+		return this.betaald;
     }
 
     public void setBetaald(double bedrag)
     {//geef beginwaarde
+		
     }
     
     public void setPrijs(double prijs)
@@ -35,6 +35,6 @@ public class ParkeerAutomaat
 
     public double getPrijs()
     {
-		return prijs;
+		return this.prijs;
     }
 }
