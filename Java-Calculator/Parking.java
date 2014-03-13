@@ -38,6 +38,7 @@ class Parking extends JFrame
 	
 	private boolean kaartIsIngeworpen = false;
 	private double teBetalenBedrag = 12.00;
+	private double previousIngeworpenMunt = 0;
 	public Parking()
 	{
 		
@@ -144,6 +145,7 @@ class Parking extends JFrame
 				{
 					kaartIsIngeworpen = true; //kaart ingworpen
 					parkeerAutomaat.setPrijs(teBetalenBedrag);//set het te betalen bedrag
+					parkeerAutomaat.setBetaald(0.00); //altijd vanaf nul beginnen met betalen.
 					for(JButton button:buttons)
 					{
 						if(button.getText().equals("Chart"))
