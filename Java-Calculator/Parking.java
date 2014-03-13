@@ -15,9 +15,8 @@ class Parking extends JFrame
 	 * een invoer veld
 	 * en een prijs veld
 	 * */
-	private JPanel invoerPanel,outputPanel;
+	private JPanel outputPanel;
 	private JTextField output = new JTextField(15);
-	private JTextArea input = new JTextArea(1,15);
 	/*
 	 * 5 knoppen
 	 * 
@@ -41,9 +40,8 @@ class Parking extends JFrame
 	public Parking()
 	{
 		
-		mainPanel = new JPanel(new GridLayout(3,1));
+		mainPanel = new JPanel(new GridLayout(2,1));
 		
-		invoerPanel = new JPanel(new GridLayout(1,1));
 		outputPanel = new JPanel(new GridLayout(1,1));
 		
 		buttonPanel = new JPanel(new GridLayout(1,5));
@@ -52,12 +50,9 @@ class Parking extends JFrame
 		buttonhandler handler = new buttonhandler();
 		TextFieldListener tfListener = new TextFieldListener();
 		
-		//mainPanel.add(invoerPanel);
 		mainPanel.add(outputPanel);
 		mainPanel.add(buttonPanel);
 		
-		invoerPanel.add(input);
-		input.setEditable(true);//we can enter things.
 		outputPanel.add(output);
 		output.setEditable(false);//we can only show things.
 		
@@ -80,7 +75,7 @@ class Parking extends JFrame
 	}
 	public static void main(String args[])
 	{
-		int window_height = 110;
+		int window_height = 220;
 		int window_width = 420;
 		
 		JFrame frame = new Parking();
