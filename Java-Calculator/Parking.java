@@ -37,8 +37,7 @@ class Parking extends JFrame
 	ArrayList<JButton> buttons = new ArrayList();
 	
 	private boolean kaartIsIngeworpen = false;
-	private double teBetalenBedrag = 12.00;
-	private double previousIngeworpenMunt = 0;
+	private int teBetalenBedrag = 1200;
 	public Parking()
 	{
 		
@@ -53,7 +52,7 @@ class Parking extends JFrame
 		buttonhandler handler = new buttonhandler();
 		TextFieldListener tfListener = new TextFieldListener();
 		
-		mainPanel.add(invoerPanel);
+		//mainPanel.add(invoerPanel);
 		mainPanel.add(outputPanel);
 		mainPanel.add(buttonPanel);
 		
@@ -81,7 +80,7 @@ class Parking extends JFrame
 	}
 	public static void main(String args[])
 	{
-		int window_height = 220;
+		int window_height = 110;
 		int window_width = 420;
 		
 		JFrame frame = new Parking();
@@ -116,14 +115,15 @@ class Parking extends JFrame
 			String action = event.getActionCommand();
 			if(action.equals("0.20€"))
 			{
-				parkeerAutomaat.voegToeAanBetaald(0.20);
+				parkeerAutomaat.voegToeAanBetaald(20);
 			}
 			else if(action.equals("1€"))
 			{
-				parkeerAutomaat.voegToeAanBetaald(1.00);
+				parkeerAutomaat.voegToeAanBetaald(100);
 			}
 			else if(action.equals("Back"))
 			{
+				parkeerAutomaat.setBetaald(0);
 			}
 			else if(action.equals("Give"))
 			{
@@ -145,7 +145,7 @@ class Parking extends JFrame
 				{
 					kaartIsIngeworpen = true; //kaart ingworpen
 					parkeerAutomaat.setPrijs(teBetalenBedrag);//set het te betalen bedrag
-					parkeerAutomaat.setBetaald(0.00); //altijd vanaf nul beginnen met betalen.
+					parkeerAutomaat.setBetaald(0); //altijd vanaf nul beginnen met betalen.
 					for(JButton button:buttons)
 					{
 						if(button.getText().equals("Chart"))
