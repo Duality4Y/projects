@@ -24,7 +24,7 @@
 #define false 0
 
 //pin defines 
-#define POWERCONTROL 	PD6
+#define POWERCONTROL 	PD7
 #define LATCH 			PB0
 #define CLOCK 			PB1
 #define DATA_OUT		PB2
@@ -38,7 +38,7 @@ volatile uint8_t direction = 1; //keeps direction so we can keep track when to j
 volatile uint8_t prev_direction = 1;
 //keep track of how many times the direction changes.
 volatile static uint8_t direction_count = 0;
-int pin = 1234; //the actuall pin.
+int pin = 0000; //the actuall pin.
 int new_pin = 1234; //currently displayed pin.
 uint8_t isLoggedIn = 0;
 
@@ -90,7 +90,7 @@ void displayNum(int num)
 void inputPin()
 {
 	//if the direction changed 4 times we set pin to zero
-	if(direction_count > 4 )
+	if(direction_count > 3 )
 	{
 		//reset everything so we can start over entering the number.
 		prev_direction = direction = direction_count = pin = new_pin = 0;
@@ -138,6 +138,7 @@ void runSerialInputCommands(unsigned char* inputStr)
 		else if(strcmp("0", inputStr) == 0)
 		{
 			PORTD |= (1<<POWERCONTROL);
+			PORTB &= 0x00;
 			uart_clear();
 		}
 		else if(strcmp("open", inputStr) == 0)
@@ -174,16 +175,6 @@ void runSerialInputCommands(unsigned char* inputStr)
 				}
 			}
 			uart_clear();
-			/*
-			if(strcmp(strPin, inputStr) == 0)
-			{
-				isLoggedIn = true;
-				enterCommandMode(inputStr);
-			}
-			else
-			{
-				uart_put_str("pin doesn't match\n");
-			}*/
 		}
 		/*
 		else if(strcmp("sread", inputStr) == 0)
@@ -235,11 +226,13 @@ int main(void)
 	
 	DDRB  |= 	 ( 1<<LATCH )|( 1<<CLOCK )|( 1<<DATA_OUT ); //register pins to output
 	PORTB &=   ~(( 1<<LATCH )|( 1<<CLOCK )|( 1<<DATA_OUT )); //clear register pins.
+	//if a default pin is set, the direction count must be set to reset on next enter.
+	direction_count = 4;
+	//serial comm
+	init_uart();
+	unsigned char* inputStr = uart_buffer;
 	
 	//main loop.
-	init_uart();
-	//serial comm
-	unsigned char* inputStr = uart_buffer;
 	while(1)
 	{
 		runSerialInputCommands(inputStr);
