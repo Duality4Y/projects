@@ -15,6 +15,10 @@ volatile uint8_t prev_direction = 1;
 //keep track of how many times the direction changes.
 //if a default pin is set, the direction count must be set to reset on next enter.
 volatile uint8_t direction_count = 4;
+
+//will keep time.
+unsigned long timer2_Count = 0;
+
 int pin = 0000; //the actuall pin.
 int new_pin = 1234; //currently displayed pin.
 uint8_t isLoggedIn = 0;
@@ -23,6 +27,18 @@ unsigned char* inputStr = uart_buffer;
 
 //will hold formated string
 unsigned char prettyString[50];
+
+void initDisplay()
+{
+	//enable the timer overflow interupt.
+	TIMSK2 |= (1<<TOIE2);
+	//no prescaler no wave form generation and no pin toggle.
+	TCCR2B = (0<<CS22)|(0<<CS21)|(1<<CS20);
+	//initialy clear timer count register.
+	TCNT2 = 0;
+	//enable global interrupts.
+	sei();
+}
 
 void initShifter()
 {
@@ -37,6 +53,7 @@ void initRotary()
 	EICRA |= 	( 1<<ISC11 );//enable INT0 to trigger on falling edge.
 	EIMSK |= 	( 1<<INT0 )|( 1<<INT1 );
 	sei();
+	
 	//set encoder pins to input.
 	DDRD  &=   ~(( 1<<ENCODER_PIN_A )|( 1<<ENCODER_PIN_B )|( 1<<ENCODER_BUTTON ));
 	PORTD |= 	 ( 1<<ENCODER_PIN_A )|( 1<<ENCODER_PIN_B )|( 1<<ENCODER_BUTTON ); //set pullups on encoder pins.
@@ -213,6 +230,20 @@ void runSerialInputCommands(unsigned char* inputStr)
 	{
 		uart_clear();
 	}
+}
+
+//this interupt service routine is called everytime timer2 overflows.
+ISR(TIMER2_OVF_vect)
+{
+	//display the number.
+	displayNum(pin);
+	//aditionaly we also keep track of time.
+	timer2_Count+=1;
+	/*
+	 * the function is roughly called 147 times a second.
+	 * so if we want the number of seconds that has passed,
+	 * we do timer2_Count%147;
+	 * */
 }
 
 //this interupt service routine is entered when pin a is triggered.
