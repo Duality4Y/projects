@@ -9,6 +9,7 @@
 #define true 1
 #define false 0
 
+
 volatile uint8_t ticks = 100; //keeps rotary ticks
 volatile uint8_t direction = 1; //keeps direction so we can keep track when to jump to the next number.
 volatile uint8_t prev_direction = 1;
@@ -16,10 +17,10 @@ volatile uint8_t prev_direction = 1;
 //if a default pin is set, the direction count must be set to reset on next enter.
 volatile uint8_t direction_count = 4;
 
-//will keep time.
-unsigned long timer2_Count = 0;
+//will keep time. using timer2
+volatile unsigned long timer2_Count = 0;
 
-int pin = 0000; //the actuall pin.
+volatile int pin = 0000; //the actuall pin.
 int new_pin = 1234; //currently displayed pin.
 uint8_t isLoggedIn = 0;
 //create a link to the serial buffer to use.
@@ -235,8 +236,6 @@ void runSerialInputCommands(unsigned char* inputStr)
 //this interupt service routine is called everytime timer2 overflows.
 ISR(TIMER2_OVF_vect)
 {
-	//display the number.
-	displayNum(pin);
 	//aditionaly we also keep track of time.
 	timer2_Count+=1;
 	/*
@@ -244,6 +243,9 @@ ISR(TIMER2_OVF_vect)
 	 * so if we want the number of seconds that has passed,
 	 * we do timer2_Count%147;
 	 * */
+	 
+	//display the number.
+	displayNum(pin);
 }
 
 //this interupt service routine is entered when pin a is triggered.

@@ -23,13 +23,13 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=337;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2Flibs%2Fuart.c;0;4
-FILE_NAME_1=3807;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2FUartDemoBluetooth.c;0;4
-FILE_NAME_2=6502;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2FSafe_v_0.4%28Robert%29.c;0;4
+current_page=1
+FILE_NAME_0=380;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2FSafe_v_0.4%28Robert%29.c;0;4
+FILE_NAME_1=461;C;0;EISO-8859-1;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2FtimeTrackingDemo.c;0;4
+FILE_NAME_2=592;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2Flibs%2FsafeFunctions.c;0;4
 
 [VTE]
-last_dir=/home/robert/projects
+last_dir=/home/robert/projects/School_Safe_Software/Safev0.1
 
 [build-menu]
 EX_00_LB=Upload

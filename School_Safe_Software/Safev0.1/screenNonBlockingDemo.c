@@ -11,15 +11,17 @@
 #include "libs/safeFunctions.c"
 
 int main(void)
-{	
-	DDRD |= (1<<PD6); //output on OC1 pin (portb.1)
+{
+	//initialize everyting we are going to use.
 	initShifter();
 	initDisplay();
 	initPowerControle();
-	initRotary();
 	//preset a value to show it actually works.
 	//and it will show 1234 on the display.
 	pin = 1234;
+	/*
+	 * if everything works the display wil show pin.
+	 * */
 	while(1)
 	{
 		//displayNum(ticks);

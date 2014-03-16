@@ -9,33 +9,22 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "libs/safeFunctions.c"
-
-unsigned long timer2_Count = 0;
-
 int main(void)
 {
-	//enable the timer overflow interupt.
-	TIMSK2 |= (1<<TOIE2);
-	//no prescaler no wave form generation and no pin toggle.
-	TCCR2B = (0<<CS22)|(0<<CS21)|(1<<CS20);
-	//enable global interrupts.
-	sei();
-	
-	DDRD |= (1<<PD6); //output on OC1 pin (portb.1)
+	//initialize everything we are going to use.
 	initShifter();
+	initDisplay();
 	initPowerControle();
 	initRotary();
+	init_uart();
 	while(1)
 	{
+		//if a second as elapsed
+		if(!(timer2_Count%147))
+		{
+			pin += 1;
+		}
+		//pin = timer2_Count;
 		//displayNum(ticks);
 	}
-} 
-
-ISR(TIMER2_OVF_vect)
-{
-	timer2_Count += 1;
-	if(! (timer2_Count%220))
-		ticks = !ticks;
-	//ticks+=1;
-	displayNum(ticks);
 }
