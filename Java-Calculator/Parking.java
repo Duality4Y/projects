@@ -7,10 +7,11 @@ import java.util.*;
 class Parking extends JFrame
 {
 	//handlers.
-	muntInwerpen Inwerpen; //voor het inwerpen van munten
-	geefTerug Terug; //voor het terug geven van munten
-    geef Geef; //voor het geven van het geld.
-	kaart Kaart; //word aangeroepen als kaart ingeworpen word.
+	muntInwerpen Inwerpen;
+	geefTerug Terug;
+    geef Geef;
+	kaart Kaart;
+	
 	private ParkeerAutomaat parkeerAutomaat = new ParkeerAutomaat();
 	
 	//window information
@@ -74,7 +75,26 @@ class Parking extends JFrame
 		//add all the buttons to the button panel
 		for(JButton button: buttons)
 		{
-			if(button.getText().equals("0.20€")){}
+			if(button.getText().equals("0.20€"))
+			{
+				button.addActionListener(Inwerpen);
+			}
+			if(button.getText().equals("1€"))
+			{
+				button.addActionListener(Inwerpen);
+			}
+			if(button.getText().equals("Back"))
+			{
+				button.addActionListener(Terug);
+			}
+			if(button.getText().equals("Give"))
+			{
+				button.addActionListener(Geef);
+			}
+			if(button.getText().equals("Chart"))
+			{
+				button.addActionListener(Kaart);
+			}
 		}
 		setContentPane(mainPanel);
 		/*
