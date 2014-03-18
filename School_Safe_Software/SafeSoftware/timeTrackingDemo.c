@@ -9,6 +9,9 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "libs/safeFunctions.c"
+
+#include <stdio.h>
+
 int main(void)
 {
 	//initialize everything we are going to use.
@@ -17,14 +20,19 @@ int main(void)
 	initPowerControle();
 	initRotary();
 	init_uart();
+	unsigned int previous = 0;
 	while(1)
 	{
-		//if a second as elapsed
-		if(!(timer2_Count%147))
+		//pin = getSecondsPassed();
+		unsigned int current = getSecondsPassed();
+		if(current-previous > 1)
 		{
+			previous = current;
 			pin += 1;
 		}
-		//pin = timer2_Count;
-		//displayNum(ticks);
+		else
+		{
+			uart_put_str("ticks");
+		}
 	}
 }

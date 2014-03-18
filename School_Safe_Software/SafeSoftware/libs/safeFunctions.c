@@ -4,23 +4,23 @@
  * */
 #include <avr/interrupt.h>
 #include "pinDefs.h"
-#include "uart.c"
+#include "uart.c" //include basic uart capability written by Robert.
 
 #define true 1
 #define false 0
 
 
 volatile uint8_t ticks = 100; //keeps rotary ticks
-volatile uint8_t direction = 1; //keeps direction so we can keep track when to jump to the next number.
-volatile uint8_t prev_direction = 1;
+volatile uint8_t tick_count = 0; //keeps actual count entered.
+volatile uint8_t direction = 0; //keeps direction so we can keep track when to jump to the next number.
+uint8_t prev_direction = 1;
 //keep track of how many times the direction changes.
-//if a default pin is set, the direction count must be set to reset on next enter.
-volatile uint8_t direction_count = 4;
+uint8_t direction_count = 0;
 
 //will keep time. using timer2
 volatile unsigned long timer2_Count = 0;
-
-volatile int pin = 0000; //the actuall pin.
+unsigned int seconds = 0;
+int pin = 0000; //the actuall pin.
 int new_pin = 1234; //currently displayed pin.
 uint8_t isLoggedIn = 0;
 //create a link to the serial buffer to use.
@@ -29,14 +29,16 @@ unsigned char* inputStr = uart_buffer;
 //will hold formated string
 unsigned char prettyString[50];
 
+uint8_t displayIsRefreshed = 0;
+
 void initDisplay()
 {
 	//enable the timer overflow interupt.
 	TIMSK2 |= (1<<TOIE2);
 	//no prescaler no wave form generation and no pin toggle.
-	TCCR2B = (0<<CS22)|(0<<CS21)|(1<<CS20);
+	TCCR2B |= (0<<CS22)|(1<<CS21)|(1<<CS20);
 	//initialy clear timer count register.
-	TCNT2 = 0;
+	TCNT2 |= 0;
 	//enable global interrupts.
 	sei();
 }
@@ -73,7 +75,7 @@ void powerOff(){}
 void shiftOut(uint8_t data)
 {
 	PORTB &= ~( 1<<LATCH ); //pull latch low
-	int i = 7;
+	volatile int i = 7;
 	while(i >= 0)
 	{
 		//check i'th bit against data, shift it by I to the right.
@@ -118,17 +120,17 @@ void inputPin()
 	{
 		//reset everything so we can start over entering the number.
 		prev_direction = direction = direction_count = pin = new_pin = 0;
-		ticks = 100;
+		//ticks = 100;
 	}
 	//if the direction changes
-	if(direction != prev_direction)
+	else if(direction != prev_direction)
 	{
 		//when we detect a change in direction increase direction_count.
 		direction_count++;
 		//make the prev_direction the current one.
 		//so we can detect a change again.
 		prev_direction = direction;
-		ticks = 100; //set ticks to 100 so the first number start at zero (modulo 10)
+		//ticks = 100; //set ticks to 100 so the first number start at zero (modulo 10)
 		new_pin = pin*10; //shift the digit to the left.
 	}
 	//if the direction doesn't change
@@ -233,11 +235,24 @@ void runSerialInputCommands(unsigned char* inputStr)
 	}
 }
 
+unsigned int getSecondsPassed()
+{
+	//disable interupts to prevent timer2_count from changing in the middle of a test.
+	cli();
+	//roughly every 200 times the interupt is called equalls to about a second.
+	if(!(timer2_Count%147))
+	{
+		seconds += 1;
+	}
+	sei();
+	return seconds;
+}
+
 //this interupt service routine is called everytime timer2 overflows.
 ISR(TIMER2_OVF_vect)
 {
 	//aditionaly we also keep track of time.
-	timer2_Count+=1;
+	//timer2_Count += 1;
 	/*
 	 * the function is roughly called 147 times a second.
 	 * so if we want the number of seconds that has passed,
@@ -257,6 +272,10 @@ ISR(INT0_vect)
 	{
 		direction = 1; //keep direction
 		ticks--; //update ticks
+		if(!(ticks%2))
+		{
+			tick_count--;
+		}
 	}
 }
 //same for this function only adding ticks.
@@ -266,5 +285,9 @@ ISR(INT1_vect)
 	{
 		direction = 0;
 		ticks++;
+		if(!(ticks%2))
+		{
+			tick_count++;
+		}
 	}
 }

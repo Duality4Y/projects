@@ -16,7 +16,6 @@
 #include <avr/interrupt.h>
 
 #include "libs/pinDefs.h" //inlucde pindefinitions.
-#include "libs/uart.c" //include basic uart capability written by Robert.
 #include "libs/safeFunctions.c" //include functions that the safe uses.
 
 
@@ -30,14 +29,18 @@ int main(void)
 	initRotary();
 	//initialize shifter.
 	initShifter();
+	//initialize display
+	//initDisplay();
 	//initialize serial comm
 	init_uart();	
 	//main loop.
 	while(1)
 	{
 		runSerialInputCommands(inputStr);
+		//uart_put_str(inputStr);
 		//always display pin
 		inputPin();
+		pin = ticks;
 		displayNum(pin);
 	}
 	

@@ -28,16 +28,16 @@ void init_uart()
 	UBRR0L = UBRR;
 	//UBRR0L = 0x0C;
 	//format 8data 1 stop bit
-	UCSR0C = (3<<UCSZ00);
+	UCSR0C |= (3<<UCSZ00);
 	
 	//set rx as input (PD0)
 	DDRD &= ~(1<<PD0);
 	//set tx as output (PD1)
 	DDRD |= (1<<PD1);
-	//enable global interrupts
-	sei();
 	//enable uart recieve interupt.
 	UCSR0B |= (1<<RXCIE0);
+	//enable global interrupts
+	sei();
 }
 //function for transmitting a character on serial.
 void uart_put(unsigned char data)
@@ -51,12 +51,10 @@ void uart_put(unsigned char data)
 void uart_put_str(char *str)
 {
 	//while characters in string, transmit character.
-	int i = 0;
-	do
+	while(*str)
 	{
-		uart_put(str[i++]);
+		uart_put(*str++);
 	}
-	while(str[i]);
 	
 }
 //function for recieving data.
