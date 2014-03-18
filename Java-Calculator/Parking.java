@@ -75,6 +75,7 @@ class Parking extends JFrame
 		//add all the buttons to the button panel
 		for(JButton button: buttons)
 		{
+			buttonPanel.add(button);
 			if(button.getText().equals("0.20€"))
 			{
 				button.addActionListener(Inwerpen);
