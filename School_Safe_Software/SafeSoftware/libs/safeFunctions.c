@@ -29,20 +29,6 @@ unsigned char* inputStr = uart_buffer;
 //will hold formated string
 unsigned char prettyString[50];
 
-uint8_t displayIsRefreshed = 0;
-
-void initDisplay()
-{
-	//enable the timer overflow interupt.
-	TIMSK2 |= (1<<TOIE2);
-	//no prescaler no wave form generation and no pin toggle.
-	TCCR2B |= (0<<CS22)|(1<<CS21)|(1<<CS20);
-	//initialy clear timer count register.
-	TCNT2 |= 0;
-	//enable global interrupts.
-	sei();
-}
-
 void initShifter()
 {
 	DDRB  |= 	 ( 1<<LATCH )|( 1<<CLOCK )|( 1<<DATA_OUT ); //register pins to output
@@ -248,23 +234,8 @@ unsigned int getSecondsPassed()
 	return seconds;
 }
 
-//this interupt service routine is called everytime timer2 overflows.
-ISR(TIMER2_OVF_vect)
-{
-	//aditionaly we also keep track of time.
-	//timer2_Count += 1;
-	/*
-	 * the function is roughly called 147 times a second.
-	 * so if we want the number of seconds that has passed,
-	 * we do timer2_Count%147;
-	 * */
-	 
-	//display the number.
-	displayNum(pin);
-}
-
 //this interupt service routine is entered when pin a is triggered.
-ISR(INT0_vect)
+ISR(INT0_vect, ISR_NOBLOCK)
 {
 	//if the pin it's self is low, and pin b is high we now rotation happend
 	//and thus add ticks.
@@ -272,22 +243,14 @@ ISR(INT0_vect)
 	{
 		direction = 1; //keep direction
 		ticks--; //update ticks
-		if(!(ticks%2))
-		{
-			tick_count--;
-		}
 	}
 }
 //same for this function only adding ticks.
-ISR(INT1_vect)
+ISR(INT1_vect,ISR_NOBLOCK)
 {
 	if((PIND & (1<<ENCODER_PIN_A)))
 	{
 		direction = 0;
 		ticks++;
-		if(!(ticks%2))
-		{
-			tick_count++;
-		}
 	}
 }

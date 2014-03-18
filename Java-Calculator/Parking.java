@@ -6,6 +6,11 @@ import java.util.*;
 
 class Parking extends JFrame
 {
+	//handlers.
+	muntInwerpen Inwerpen; //voor het inwerpen van munten
+	geefTerug Terug; //voor het terug geven van munten
+    geef Geef; //voor het geven van het geld.
+	kaart Kaart; //word aangeroepen als kaart ingeworpen word.
 	private ParkeerAutomaat parkeerAutomaat = new ParkeerAutomaat();
 	
 	//window information
@@ -47,10 +52,10 @@ class Parking extends JFrame
 		buttonPanel = new JPanel(new GridLayout(1,5));
 		
 		//create handlers.
-		buttonhandler muntInwerpen = new buttonhandler(); //voor het inwerpen van munten
-		buttonhandler geefTerug = new buttonhandler(); //voor het terug geven van munten
-		buttonhandler geef = new buttonhandler(); //voor het geven van het geld.
-		buttonhandler kaart = new buttonhandler(); //word aangeroepen als kaart ingeworpen word.
+		muntInwerpen Inwerpen = new muntInwerpen(); //voor het inwerpen van munten
+		geefTerug Terug = new geefTerug(); //voor het terug geven van munten
+		geef Geef = new geef(); //voor het geven van het geld.
+		kaart Kaart = new kaart(); //word aangeroepen als kaart ingeworpen word.
 		
 		mainPanel.add(outputPanel);
 		mainPanel.add(buttonPanel);
@@ -72,6 +77,12 @@ class Parking extends JFrame
 			if(button.getText().equals("0.20€")){}
 		}
 		setContentPane(mainPanel);
+		/*
+		buttonhandler muntInwerpen = new buttonhandler(); //voor het inwerpen van munten
+		buttonhandler geefTerug = new buttonhandler(); //voor het terug geven van munten
+		buttonhandler geef = new buttonhandler(); //voor het geven van het geld.
+		buttonhandler kaart = new buttonhandler(); //word aangeroepen als kaart ingeworpen word.
+		* */
 	}
 	public static void main(String args[])
 	{
@@ -85,11 +96,75 @@ class Parking extends JFrame
 		frame.setSize(window_width, window_height);
 		frame.setVisible(true);
 	}
+	public void displayCurrent()
+	{
+		output.setText("te betalen: "+parkeerAutomaat.getPrijs()+" Cent. betaald: "+parkeerAutomaat.getBetaald()+" Cent.");
+		//this.printPressed(action);
+	}
 	class muntInwerpen implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			
+			String action = e.getActionCommand();
+			if(action.equals("0.20€"))
+			{
+				parkeerAutomaat.voegToeAanBetaald(20);
+			}
+			else if(action.equals("1€"))
+			{
+				parkeerAutomaat.voegToeAanBetaald(100);
+			}
+			displayCurrent();
+		}
+	}
+	class geef implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			if(parkeerAutomaat.voldoendeBetaald() && kaartIsIngeworpen == true)
+			{
+				kaartIsIngeworpen = false;
+				for(JButton button:buttons)
+				{
+					if(button.getText().equals("Chart"))
+					{
+						button.setEnabled(true);
+					}
+				}
+				if(parkeerAutomaat.getBetaald() > parkeerAutomaat.getPrijs())
+				{
+					System.out.println("got here");
+					parkeerAutomaat.haalAfVanBetaald(parkeerAutomaat.getPrijs());
+				}
+			}
+			displayCurrent();
+		}
+	}
+	class geefTerug implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			parkeerAutomaat.setBetaald(0);
+			displayCurrent();
+		}
+	}
+	class kaart implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			if(kaartIsIngeworpen == false)
+			{
+				kaartIsIngeworpen = true; //kaart ingworpen
+				parkeerAutomaat.setPrijs(teBetalenBedrag);//set het te betalen bedrag
+				for(JButton button:buttons)
+				{
+					if(button.getText().equals("Chart"))
+					{
+						button.setEnabled(false); //disable de button.
+					}
+				}
+			}
+			displayCurrent();
 		}
 	}
 }

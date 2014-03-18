@@ -22,7 +22,7 @@ int main(void)
 	// Set timer2 TOP=OCR2A clear on compare(COM2B1), and fast PWM(using WGM20, WGM21 and WGM22)
 	// Set prescale to 1024(using CS20, CS21 and CS22)
 	TCCR0A = (1<<COM0A1) |(1<<WGM01) | (1<<WGM00);     
-	TCCR0B = (0<<WGM02) | (1<<CS00) |(1<<CS01) |(0<<CS02);
+	TCCR0B = (0<<WGM02) | (1<<CS00) |(0<<CS01) |(1<<CS02);
 	DDRD |= (1<<PIND6); //output on OC1 pin (portb.1)
 	//stopPWM();
 	//while(1){} //Prevents the next loop from starting. Servos can sometimes be annoying

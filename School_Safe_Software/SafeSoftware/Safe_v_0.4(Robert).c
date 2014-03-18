@@ -10,8 +10,9 @@
  * 	wil try implementing entering a number with rotary encoder.
  * */
 
-#define F_CPU 1000000
+#define F_CPU 8000000
 //include needed libraries.
+#include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -29,8 +30,6 @@ int main(void)
 	initRotary();
 	//initialize shifter.
 	initShifter();
-	//initialize display
-	//initDisplay();
 	//initialize serial comm
 	init_uart();	
 	//main loop.
@@ -38,10 +37,10 @@ int main(void)
 	{
 		runSerialInputCommands(inputStr);
 		//uart_put_str(inputStr);
-		//always display pin
+		//lets the user input the pincode.
 		inputPin();
-		pin = ticks;
-		displayNum(pin);
+		//displays pin
+		displayNum(ticks);
 	}
 	
 	return 1;

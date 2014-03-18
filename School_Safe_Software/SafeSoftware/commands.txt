@@ -15,6 +15,7 @@ login <4 digit number>: login with de 4 digit number as pin
 BT
   send BTOK
 
+//rules for speaking to each other.
 #define OFF	 	0
 #define ON 		1
 #define OPEN 	2
@@ -27,6 +28,8 @@ BT
 #define LOGOUT 	9
 #define LOGIN 	10
 
+
+//action undertaken by safe firmware.
 if BTOK:
 	send OK
 if SREAD:

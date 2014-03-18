@@ -23,11 +23,12 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=295;C;0;EISO-8859-1;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2FtimeTrackingDemo.c;0;4
-FILE_NAME_1=3617;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2Flibs%2FsafeFunctions.c;0;4
-FILE_NAME_2=1252;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2Flibs%2Fuart.c;0;4
-FILE_NAME_3=327;C;0;EISO-8859-1;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafev0.1%2FservoControleWithRotaryDemo.c;0;4
+current_page=2
+FILE_NAME_0=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Fuart.c;0;4
+FILE_NAME_1=5738;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FsafeFunctions.c;0;4
+FILE_NAME_2=293;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FSafe_v_0.4%28Robert%29.c;0;4
+FILE_NAME_3=814;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Fcommands.txt;0;4
+FILE_NAME_4=609;C;0;EISO-8859-1;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FservoControleWithRotaryDemo.c;0;4
 
 [VTE]
 last_dir=/home/robert/projects/School_Safe_Software/SafeSoftware
