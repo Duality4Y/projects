@@ -28,9 +28,9 @@ public class ParkeerAutomaat
 		this.betaald = bedrag;
     }
     
-    public void setPrijs(int prijs)
+    public void setPrijs()
     {
-		this.prijs = prijs;
+		this.prijs = (int)(Math.random()*1000);
     }
 
     public int getPrijs()

@@ -17,7 +17,7 @@ class Parking extends JFrame
 	//window information
 	private JPanel mainPanel,buttonPanel;
 	/*
-	 * twee tekst velden,
+	 * 1 tekst velden,
 	 * een invoer veld
 	 * en een prijs veld
 	 * */
@@ -176,7 +176,7 @@ class Parking extends JFrame
 			if(kaartIsIngeworpen == false)
 			{
 				kaartIsIngeworpen = true; //kaart ingworpen
-				parkeerAutomaat.setPrijs(teBetalenBedrag);//set het te betalen bedrag
+				parkeerAutomaat.setPrijs();//set het te betalen bedrag
 				for(JButton button:buttons)
 				{
 					if(button.getText().equals("Chart"))
