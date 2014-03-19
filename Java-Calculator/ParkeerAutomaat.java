@@ -30,7 +30,7 @@ public class ParkeerAutomaat
     
     public void setPrijs()
     {
-		this.prijs = (int)(Math.random()*20);
+		this.prijs = (int)(Math.random()*20)*100;
     }
 
     public int getPrijs()

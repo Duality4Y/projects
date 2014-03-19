@@ -14,7 +14,7 @@ indent_mode=2
 
 [project]
 name=SafeBluetooth
-base_path=/home/robert/projects/School_Safe_Software/Safev0.1
+base_path=/home/robert/projects/School_Safe_Software/SafeSoftware
 description=
 file_patterns=
 
@@ -23,21 +23,26 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Fuart.c;0;4
-FILE_NAME_1=5738;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FsafeFunctions.c;0;4
-FILE_NAME_2=293;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FSafe_v_0.4%28Robert%29.c;0;4
-FILE_NAME_3=814;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Fcommands.txt;0;4
-FILE_NAME_4=609;C;0;EISO-8859-1;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FservoControleWithRotaryDemo.c;0;4
+current_page=1
+FILE_NAME_0=5226;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FsafeFunctions.c;0;4
+FILE_NAME_1=825;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FSafe_v_0.4%28Robert%29.c;0;4
+FILE_NAME_2=858;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Fcommands.txt;0;4
+FILE_NAME_3=609;C;0;EISO-8859-1;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FservoControleWithRotaryDemo.c;0;4
+FILE_NAME_4=499;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Fuart.c;0;4
+FILE_NAME_5=558;C;0;EISO-8859-1;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FtimeTrackingDemo.c;0;4
+FILE_NAME_6=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FpinDefs.h;0;4
 
 [VTE]
 last_dir=/home/robert/projects/School_Safe_Software/SafeSoftware
 
 [build-menu]
 EX_00_LB=Upload
-EX_00_CM=avrdude -p m168 -c usbasp -e -U flash:w:build.hex -B 4
+EX_00_CM=avrdude -p m168 -c usbasp -e -U flash:w:build.hex 
 EX_00_WD=
 CFT_00_LB=_Compile
 CFT_00_CM=avr-gcc -mmcu=atmega168 -Os -o build.elf "%f"
 CFT_00_WD=
 filetypes=C;
+CFT_01_LB=_Build
+CFT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
+CFT_01_WD=

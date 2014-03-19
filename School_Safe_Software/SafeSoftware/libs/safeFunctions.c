@@ -3,6 +3,7 @@
  * the safe will use.
  * */
 #include <avr/interrupt.h>
+#include <util/delay.h>
 #include "pinDefs.h"
 #include "uart.c" //include basic uart capability written by Robert.
 
@@ -10,9 +11,9 @@
 #define false 0
 
 
-volatile uint8_t ticks = 100; //keeps rotary ticks
+uint8_t ticks = 0; //keeps rotary ticks
 volatile uint8_t tick_count = 0; //keeps actual count entered.
-volatile uint8_t direction = 0; //keeps direction so we can keep track when to jump to the next number.
+volatile uint8_t direction = 1; //keeps direction so we can keep track when to jump to the next number.
 uint8_t prev_direction = 1;
 //keep track of how many times the direction changes.
 uint8_t direction_count = 0;
@@ -20,14 +21,30 @@ uint8_t direction_count = 0;
 //will keep time. using timer2
 volatile unsigned long timer2_Count = 0;
 unsigned int seconds = 0;
-int pin = 0000; //the actuall pin.
-int new_pin = 1234; //currently displayed pin.
+
+int pin = 8888; //the actuall pin.
+int new_pin = 8888; //currently displayed pin.
+
+//keep track of wheter someone is logged in or not.
 uint8_t isLoggedIn = 0;
 //create a link to the serial buffer to use.
-unsigned char* inputStr = uart_buffer;
+volatile unsigned char* inputStr = uart_buffer;
 
 //will hold formated string
 unsigned char prettyString[50];
+
+void initServo()
+{
+	//initialize timer 2 with a prescaler of 1024 and wave form generation ctc.
+	TCCR2A |= (1<<WGM21); 
+	TCCR2B |= (1<<CS20)|(1<<CS21)|(1<<CS22);
+	TIMSK2 |= (1<<OCIE2A)|(1<<OCIE2B); //enable compare interupst.
+	OCR2A = 158; // 8000000/1024/50 = 156.25 but the scope shows 158 closer to 20ms pulse.
+	OCR2B = 0; //period controle.
+	sei(); //enable global interups.
+	
+	SERVO_DDR |= (1<<SERVO_PIN);
+}
 
 void initShifter()
 {
@@ -38,13 +55,14 @@ void initShifter()
 void initRotary()
 {
 	//enable internal interupts.
-	EICRA |= 	( 1<<ISC01 );//enable INT1 to trigger on falling edge.
-	EICRA |= 	( 1<<ISC11 );//enable INT0 to trigger on falling edge.
+	EICRA |= 	(0 << ISC00 )|( 1<<ISC01 );//enable INT1 to trigger on rising edge.
+	EICRA |= 	(0 << ISC10 )|( 1<<ISC11 );//enable INT0 to trigger on rising edge.
 	EIMSK |= 	( 1<<INT0 )|( 1<<INT1 );
 	sei();
 	
 	//set encoder pins to input.
 	DDRD  &=   ~(( 1<<ENCODER_PIN_A )|( 1<<ENCODER_PIN_B )|( 1<<ENCODER_BUTTON ));
+	//enable pullups
 	PORTD |= 	 ( 1<<ENCODER_PIN_A )|( 1<<ENCODER_PIN_B )|( 1<<ENCODER_BUTTON ); //set pullups on encoder pins.
 }
 
@@ -55,9 +73,37 @@ void initPowerControle()
 	PORTD |=   ~( 1<<POWERCONTROL ); //enable internal pullup on POWERCONTROL pin
 }
 
-void powerOn(){}
-void powerOff(){}
-
+/*
+ * the check in setServoPos() allows you to easily switch from closed to open
+ * closed by passing it a 0 (the servo will close the door)
+ * open by passeing it a 0-1 if uint8_t it wil pass 255, and open the door. 
+ * */
+//this function takes a value between 0 and 10. and sets the servo to the position accordingly.
+void setServoPos(uint8_t position)
+{
+	//check if value in range.
+	if(position > 10)
+		position = 10;
+	if(position < 0)
+		position = 0;
+	//set the position.
+	OCR2B = position+4;
+	//this particular servo ranges from 4 for OCR2B to 14
+}
+//this function powers on the elecktronics.
+void powerOn()
+{
+	PORTD &= ~(1<<POWERCONTROL);
+	DDRB |= (1<<LATCH)|(1<<CLOCK)|(1<<DATA_OUT);
+}
+//this function wil power of the elecktronics.
+void powerOff()
+{
+	
+	PORTD |= (1<<POWERCONTROL);
+	DDRB &= ~( (1<<LATCH)|(1<<CLOCK)|(1<<DATA_OUT));
+}
+//this function shifts out data.
 void shiftOut(uint8_t data)
 {
 	PORTB &= ~( 1<<LATCH ); //pull latch low
@@ -77,6 +123,7 @@ void shiftOut(uint8_t data)
 	}//decrementing counter meens msb first.
 	PORTB |= ( 1<<LATCH ); //pull latch high
 }
+//this function wil display a number onto the 7 segment display.
 void displayNum(int num)
 {
 	/*
@@ -89,41 +136,26 @@ void displayNum(int num)
 	 * and so on and so on.
 	 * we repeat it so fast the numbers appears one by one on the display
 	 * */
-	uint8_t segment = 1;
-	int i,m;
+	 
+	 //quick check to see if the nummber is out of range
+	 if(num > 9999 || num < 0)
+		num = 0;
+	 
+	uint8_t segment = 1; //keep track of which segment is selected
+	//i is used to determine which segment is selected.
+	//and m is sed to determine which 10 power of num we display.
+	int i,m; 
 	for(i = 0,m = num;i<4;i++,m/=10)
 	{
 		//select display/segment
-		segment = 0xF0& ~((1<<i)<<4); //this selects the transistor to switch
+		segment = 0xF0 & ~((1<<i)<<4); //this selects the transistor to switch
 		shiftOut(segment | m%10); //this all shifts out the data
 	}
 }
 
-void inputPin()
+void inputPinCode()
 {
-	//if the direction changed 4 times we set pin to zero
-	if(direction_count > 3 )
-	{
-		//reset everything so we can start over entering the number.
-		prev_direction = direction = direction_count = pin = new_pin = 0;
-		//ticks = 100;
-	}
-	//if the direction changes
-	else if(direction != prev_direction)
-	{
-		//when we detect a change in direction increase direction_count.
-		direction_count++;
-		//make the prev_direction the current one.
-		//so we can detect a change again.
-		prev_direction = direction;
-		//ticks = 100; //set ticks to 100 so the first number start at zero (modulo 10)
-		new_pin = pin*10; //shift the digit to the left.
-	}
-	//if the direction doesn't change
-	else
-	{
-		pin = new_pin + (ticks%10);//the pin is the shifted number + the actually change of the first number.
-	}
+	pin = (ticks);
 }
 void lock(uint8_t isLocked){}
 void enterCommandMode(unsigned char* inputStr)
@@ -135,7 +167,7 @@ void enterCommandMode(unsigned char* inputStr)
 		
 	}
 }
-void runSerialInputCommands(unsigned char* inputStr)
+void runSerialInputCommands(volatile unsigned char* inputStr)
 {
 	//uart_put_str(inputStr);
 	//if there is data in the buffer
@@ -144,13 +176,12 @@ void runSerialInputCommands(unsigned char* inputStr)
 		//parse commands
 		if(strcmp("1", inputStr) == 0)
 		{
-			PORTD &= ~(1<<POWERCONTROL);
+			powerOn();
 			uart_clear();
 		}
 		else if(strcmp("0", inputStr) == 0)
 		{
-			PORTD |= (1<<POWERCONTROL);
-			PORTB &= 0x00;
+			powerOff();
 			uart_clear();
 		}
 		else if(strcmp("open", inputStr) == 0)
@@ -188,6 +219,11 @@ void runSerialInputCommands(unsigned char* inputStr)
 			}
 			uart_clear();
 		}
+		else if(strcmp("BT") == 0)
+		{
+			uart_put_str("\n\rBTOK\n");
+			uart_clear();
+		}
 		/*
 		else if(strcmp("sread", inputStr) == 0)
 		{
@@ -221,17 +257,17 @@ void runSerialInputCommands(unsigned char* inputStr)
 	}
 }
 
-unsigned int getSecondsPassed()
+//this interupt service routine is entered to set the off period.
+ISR(TIMER2_COMPB_vect)
 {
-	//disable interupts to prevent timer2_count from changing in the middle of a test.
-	cli();
-	//roughly every 200 times the interupt is called equalls to about a second.
-	if(!(timer2_Count%147))
-	{
-		seconds += 1;
-	}
-	sei();
-	return seconds;
+	SERVO_PORT &= ~(1<<SERVO_PIN);
+}
+//this interupt service routine is entered to set the on period
+//when this interupt service routine is enterd (at which time) will also determine the frequentie.
+ISR(TIMER2_COMPA_vect)
+{
+	TCNT2 = 0;
+	SERVO_PORT |= (1<<SERVO_PIN);
 }
 
 //this interupt service routine is entered when pin a is triggered.
@@ -239,6 +275,7 @@ ISR(INT0_vect, ISR_NOBLOCK)
 {
 	//if the pin it's self is low, and pin b is high we now rotation happend
 	//and thus add ticks.
+	_delay_ms(1);
 	if((PIND & (1<<ENCODER_PIN_B)))
 	{
 		direction = 1; //keep direction
@@ -248,6 +285,7 @@ ISR(INT0_vect, ISR_NOBLOCK)
 //same for this function only adding ticks.
 ISR(INT1_vect,ISR_NOBLOCK)
 {
+	_delay_ms(1);
 	if((PIND & (1<<ENCODER_PIN_A)))
 	{
 		direction = 0;

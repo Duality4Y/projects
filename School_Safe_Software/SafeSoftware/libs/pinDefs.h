@@ -9,4 +9,6 @@
 #define ENCODER_PIN_B	PD3
 #define ENCODER_BUTTON	PD4
 
-#define SERVO 			PD6
+#define SERVO_PORT		PORTD
+#define SERVO_DDR 		DDRD
+#define SERVO_PIN		PD6

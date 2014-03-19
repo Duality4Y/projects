@@ -10,9 +10,8 @@
  * 	wil try implementing entering a number with rotary encoder.
  * */
 
-#define F_CPU 8000000
+#define F_CPU 8000000UL
 //include needed libraries.
-#include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -31,15 +30,18 @@ int main(void)
 	//initialize shifter.
 	initShifter();
 	//initialize serial comm
-	init_uart();	
+	init_uart();
+	//initialize the servo code.
+	initServo();
 	//main loop.
 	while(1)
 	{
 		runSerialInputCommands(inputStr);
-		//uart_put_str(inputStr);
+		uart_put_str(inputStr);
 		//lets the user input the pincode.
-		inputPin();
+		//inputPinCode();
 		//displays pin
+		setServoPos(ticks);
 		displayNum(ticks);
 	}
 	

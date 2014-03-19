@@ -23,14 +23,12 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
+current_page=2
 FILE_NAME_0=82;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCalculator1.java;0;4
 FILE_NAME_1=576;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCalculator2.java;0;4
-FILE_NAME_2=437;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FParking.java;0;4
-FILE_NAME_3=534;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FParkeerAutomaat.java;0;4
-FILE_NAME_4=895;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FDropbox%2FProject%20Kluis%2FSoftware%2FShiftOut%2FShiftOut.ino;0;4
-FILE_NAME_5=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FDropbox%2FProject%20Kluis%2FSoftware%2F7SegmentDisplay%2F7SegmentDisplay.ino;0;4
-FILE_NAME_6=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FDropbox%2FProject%20Kluis%2FSoftware%2FRotary%2FRotary.ino;0;4
+FILE_NAME_2=3832;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FParking.java;0;4
+FILE_NAME_3=558;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FParkeerAutomaat.java;0;4
+FILE_NAME_4=0;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2Fbackupparking.java;0;4
 
 [VTE]
 last_dir=/home/robert/projects/Java-Calculator

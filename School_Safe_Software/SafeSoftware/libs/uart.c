@@ -13,20 +13,19 @@
 
 #define BUFFERSIZE 20
 volatile uint8_t uart_buffIndex = 0;
-unsigned char uart_buffer[BUFFERSIZE];
+volatile unsigned char uart_buffer[BUFFERSIZE];
 
 void init_uart()
 {
 	//init serial.
 	//status regB enable receive and transmit
 	UCSR0B |= (1<<RXEN0)|(1<<TXEN0);
-	//(9600)
+	
 	//high byte (baud rate)
 	UBRR0H = UBRR>>8;
-	//UBRR0H = 0x00;
 	//low byte (baud rate)
 	UBRR0L = UBRR;
-	//UBRR0L = 0x0C;
+	
 	//format 8data 1 stop bit
 	UCSR0C |= (3<<UCSZ00);
 	
@@ -48,7 +47,7 @@ void uart_put(unsigned char data)
 	UDR0 = data;
 }
 //function for transmitting a string over serial (must be null terminated)
-void uart_put_str(char *str)
+void uart_put_str(volatile char *str)
 {
 	//while characters in string, transmit character.
 	while(*str)

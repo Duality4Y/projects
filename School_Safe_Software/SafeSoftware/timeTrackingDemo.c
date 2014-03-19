@@ -7,32 +7,46 @@
 #define F_CPU 1000000UL //This speed is used standard on the Arduino Nano v3.0
 
 #include <avr/io.h>
-#include <util/delay.h>
 #include "libs/safeFunctions.c"
-
-#include <stdio.h>
 
 int main(void)
 {
+	//initialize timer 2 with a prescaler of 1024 and wave form generation ctc.
+	TCCR2A |= (1<<WGM21);
+	TCCR2B |= (1<<CS20)|(1<<CS21)|(1<<CS22);
+	TIMSK2 |= (1<<OCIE2A)|(1<<OCIE2B);
+	OCR2A = 158;
+	OCR2B = 0;
+	sei();
+	
+	DDRD |= (1<<PD6);
 	//initialize everything we are going to use.
 	initShifter();
-	initDisplay();
 	initPowerControle();
 	initRotary();
-	init_uart();
-	unsigned int previous = 0;
+	//init_uart();
+	ticks = 4;
 	while(1)
 	{
-		//pin = getSecondsPassed();
-		unsigned int current = getSecondsPassed();
-		if(current-previous > 1)
-		{
-			previous = current;
-			pin += 1;
-		}
-		else
-		{
-			uart_put_str("ticks");
-		}
+		displayNum(ticks);
+		OCR2B = ticks;
+		if(ticks > 14)
+			ticks = 14;
+		if(ticks < 4)
+			ticks = 4;
 	}
 }
+
+ISR(TIMER2_COMPB_vect)
+{
+	PORTD &= ~(1<<PD6);
+}
+ISR(TIMER2_COMPA_vect)
+{
+	PORTD |= (1<<PD6);
+	//PORTD |= (1<<PD6);
+	//OCR2A = ticks;
+	//int final = (ticks/100);
+	//PORTD ^= (1<<PD6);displayNum(ticks);
+}
+

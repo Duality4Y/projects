@@ -136,6 +136,29 @@ class Parking extends JFrame
 			{
 				parkeerAutomaat.voegToeAanBetaald(100);
 			}
+			
+			if(parkeerAutomaat.voldoendeBetaald() == true)
+			{
+				
+				for(JButton button:buttons)
+				{
+					if(button.getText().equals("Give"))
+					{
+						button.setEnabled(true);
+					}
+				}
+				
+			}
+			else
+			{
+				for(JButton button:buttons)
+				{
+					if(button.getText().equals("Give"))
+					{
+						button.setEnabled(false);
+					}
+				}
+			}
 			displayCurrent();
 		}
 	}
@@ -145,13 +168,6 @@ class Parking extends JFrame
 		{
 			if(parkeerAutomaat.voldoendeBetaald() && kaartIsIngeworpen == true)
 			{
-				for(JButton button:buttons)
-				{
-					if(button.getText().equals("Give"))
-					{
-						button.setEnabled(true);
-					}
-				}
 				kaartIsIngeworpen = false;
 				for(JButton button:buttons)
 				{
@@ -165,18 +181,6 @@ class Parking extends JFrame
 					System.out.println("got here");
 					parkeerAutomaat.haalAfVanBetaald(parkeerAutomaat.getPrijs());
 				}
-			}
-			if(parkeerAutomaat.voldoendeBetaald() == false)
-			{
-				
-				for(JButton button:buttons)
-				{
-					if(button.getText().equals("Give"))
-					{
-						button.setEnabled(false);
-					}
-				}
-				
 			}
 			displayCurrent();
 		}
