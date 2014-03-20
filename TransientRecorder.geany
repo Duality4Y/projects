@@ -1,0 +1,40 @@
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false
+
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=3
+
+[project]
+name=TransientRecorder
+base_path=/home/robert/projects/TransientRecorder/
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=1
+FILE_NAME_0=1008;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FKanaal.java;0;4
+FILE_NAME_1=53;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FTransientdata.java;0;4
+
+[VTE]
+last_dir=/home/robert/projects/School_Safe_Software/SafeSoftware
+
+[build-menu]
+JavaFT_00_LB=_Compile
+JavaFT_00_CM=rm *.class; javac "%f"
+JavaFT_00_WD=
+filetypes=Java;
+JavaFT_01_LB=_Git
+JavaFT_01_CM=cd .. ; git add . ; git commit -a -m "worked on transient recorder" ; git push
+JavaFT_01_WD=
