@@ -137,6 +137,13 @@ class Parking extends JFrame
 				parkeerAutomaat.voegToeAanBetaald(100);
 			}
 			displayCurrent();
+			for(JButton button:buttons)
+			{
+				if(button.getText().equals("Give"))
+				{
+					button.setEnabled(!parkeerAutomaat.voldoendeBetaald());
+				}
+			}
 		}
 	}
 	class geef implements ActionListener
@@ -157,13 +164,6 @@ class Parking extends JFrame
 				{
 					System.out.println("got here");
 					parkeerAutomaat.haalAfVanBetaald(parkeerAutomaat.getPrijs());
-				}
-				for(JButton button:buttons)
-				{
-					if(button.getText().equals("Give"))
-					{
-						button.setEnabled(!parkeerAutomaat.voldoendeBetaald());
-					}
 				}
 			}
 			displayCurrent();
