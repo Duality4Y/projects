@@ -141,7 +141,7 @@ class Parking extends JFrame
 			{
 				if(button.getText().equals("Give"))
 				{
-					button.setEnabled(!parkeerAutomaat.voldoendeBetaald());
+					button.setEnabled(parkeerAutomaat.voldoendeBetaald());
 				}
 			}
 		}
@@ -160,13 +160,19 @@ class Parking extends JFrame
 						button.setEnabled(true);
 					}
 				}
-				if(parkeerAutomaat.getBetaald() > parkeerAutomaat.getPrijs())
-				{
-					System.out.println("got here");
-					parkeerAutomaat.haalAfVanBetaald(parkeerAutomaat.getPrijs());
-				}
+			}
+			if(parkeerAutomaat.getBetaald() > parkeerAutomaat.getPrijs())
+			{
+				parkeerAutomaat.haalAfVanBetaald(parkeerAutomaat.getPrijs());
 			}
 			displayCurrent();
+			for(JButton button:buttons)
+			{
+				if(button.getText().equals("Give"))
+				{
+					button.setEnabled(parkeerAutomaat.voldoendeBetaald());
+				}
+			}
 		}
 	}
 	class geefTerug implements ActionListener
@@ -191,6 +197,13 @@ class Parking extends JFrame
 					{
 						button.setEnabled(false); //disable de button.
 					}
+				}
+			}
+			for(JButton button:buttons)
+			{
+				if(button.getText().equals("Give"))
+				{
+					button.setEnabled(parkeerAutomaat.voldoendeBetaald());
 				}
 			}
 			displayCurrent();
