@@ -136,29 +136,6 @@ class Parking extends JFrame
 			{
 				parkeerAutomaat.voegToeAanBetaald(100);
 			}
-			
-			if(parkeerAutomaat.voldoendeBetaald() == true)
-			{
-				
-				for(JButton button:buttons)
-				{
-					if(button.getText().equals("Give"))
-					{
-						button.setEnabled(true);
-					}
-				}
-				
-			}
-			else
-			{
-				for(JButton button:buttons)
-				{
-					if(button.getText().equals("Give"))
-					{
-						button.setEnabled(false);
-					}
-				}
-			}
 			displayCurrent();
 		}
 	}
@@ -180,6 +157,13 @@ class Parking extends JFrame
 				{
 					System.out.println("got here");
 					parkeerAutomaat.haalAfVanBetaald(parkeerAutomaat.getPrijs());
+				}
+				for(JButton button:buttons)
+				{
+					if(button.getText().equals("Give"))
+					{
+						button.setEnabled(!parkeerAutomaat.voldoendeBetaald());
+					}
 				}
 			}
 			displayCurrent();
