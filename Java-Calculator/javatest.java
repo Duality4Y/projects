@@ -24,6 +24,6 @@ class javatest
 		Moeder m = new Moeder();
 		Moeder m2 = new Kind();
 		Vader v = new Kind();
-		Kind k = new Vader();
+		Kind k = new Moeder();
 	}
 }
