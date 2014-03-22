@@ -42,7 +42,7 @@ int main(void)
 		//inputPinCode();
 		//displays pin
 		setServoPos(ticks);
-		displayNum(ticks);
+		displayNum(pin);
 	}
 	
 	return 1;

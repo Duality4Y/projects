@@ -11,4 +11,4 @@
 
 #define SERVO_PORT		PORTD
 #define SERVO_DDR 		DDRD
-#define SERVO_PIN		PD6
+#define SERVO_PIN		PD5

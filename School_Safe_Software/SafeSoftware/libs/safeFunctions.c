@@ -10,6 +10,18 @@
 #define true 1
 #define false 0
 
+//rules for speaking to computer and vise versa.
+#define OFF	 	42
+#define ON 		1
+#define OPEN 	2
+#define CLOSE 	3
+#define SREAD 	4
+#define BTOK	5
+#define PREAD 	6
+#define SETPIN 	7
+#define SLEEP 	8
+#define LOGOUT 	9
+#define LOGIN 	10
 
 uint8_t ticks = 0; //keeps rotary ticks
 volatile uint8_t tick_count = 0; //keeps actual count entered.
@@ -169,94 +181,25 @@ void enterCommandMode(unsigned char* inputStr)
 }
 void runSerialInputCommands(volatile unsigned char* inputStr)
 {
-	//uart_put_str(inputStr);
-	//if there is data in the buffer
 	if(inputStr[0])
 	{
-		//parse commands
-		if(strcmp("1", inputStr) == 0)
+		switch(inputStr[0])
 		{
-			powerOn();
-			uart_clear();
+			case OFF:
+				powerOff();
+				uart_clear();
+				break;
+			case ON:
+				powerOn();
+				uart_clear();
+				break;
 		}
-		else if(strcmp("0", inputStr) == 0)
-		{
-			powerOff();
-			uart_clear();
-		}
-		else if(strcmp("open", inputStr) == 0)
-		{
-			uart_put_str("\nOpening...\n\r");
-			lock(true);
-			uart_clear();
-		}
-		else if(strcmp("close", inputStr) == 0)
-		{
-			uart_put_str("\nClosing...\n\r");
-			lock(false);
-			uart_clear();
-		}
-		else if(strcmp("login", inputStr) == 0)
-		{
-			uart_clear();
-			uart_put_str("enter pin: (exit to leave)\n");
-			while(true)
-			{
-				if(pin == atoi(inputStr))
-				{
-					uart_put_str("pin matches acces granted.\n");
-					uart_clear();
-					isLoggedIn = true;
-					break;
-				}
-				if(strcmp("exit", inputStr) == 0)
-				{
-					uart_put_str("leaving\n");
-					uart_clear();
-					isLoggedIn = false;
-					break;
-				}
-			}
-			uart_clear();
-		}
-		else if(strcmp("BT") == 0)
-		{
-			uart_put_str("\n\rBTOK\n");
-			uart_clear();
-		}
-		/*
-		else if(strcmp("sread", inputStr) == 0)
-		{
-			uart_put_str("\nServo value: \n\r");
-			uart_clear();
-		}
-		//use strstr and strtok for composite commands.
-		else if(strstr("pset", inputStr))
-		{
-			uart_put_str(inputStr);
-			uart_clear();
-		}
-		else if(strcmp("pread", inputStr) == 0)
-		{
-			sprintf(prettyString, "\nPIN: %d \n\r", pin);
-			uart_put_str(prettyString);
-			uart_clear();
-		}
-		else if(strcmp("sleep", inputStr) == 0)
-		{
-			//sleep();
-		}
-		else if(strcmp("logout", inputStr) == 0)
-		{
-			
-		}*/
 	}
 	else
 	{
 		uart_clear();
 	}
 }
-
 //this interupt service routine is entered to set the off period.
 ISR(TIMER2_COMPB_vect)
 {
@@ -266,12 +209,11 @@ ISR(TIMER2_COMPB_vect)
 //when this interupt service routine is enterd (at which time) will also determine the frequentie.
 ISR(TIMER2_COMPA_vect)
 {
-	TCNT2 = 0;
 	SERVO_PORT |= (1<<SERVO_PIN);
 }
 
 //this interupt service routine is entered when pin a is triggered.
-ISR(INT0_vect, ISR_NOBLOCK)
+ISR(INT0_vect, ISR_BLOCK)
 {
 	//if the pin it's self is low, and pin b is high we now rotation happend
 	//and thus add ticks.
@@ -283,7 +225,7 @@ ISR(INT0_vect, ISR_NOBLOCK)
 	}
 }
 //same for this function only adding ticks.
-ISR(INT1_vect,ISR_NOBLOCK)
+ISR(INT1_vect,ISR_BLOCK)
 {
 	_delay_ms(1);
 	if((PIND & (1<<ENCODER_PIN_A)))

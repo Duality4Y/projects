@@ -16,7 +16,7 @@ BT
   send BTOK
 
 //rules for speaking to each other.
-#define OFF	 	0
+#define OFF	 	42
 #define ON 		1
 #define OPEN 	2
 #define CLOSE 	3
