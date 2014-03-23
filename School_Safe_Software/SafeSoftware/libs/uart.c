@@ -12,6 +12,7 @@
 #define UBRR	((F_CPU/BAUD/16)-1)
 
 #define BUFFERSIZE 20
+volatile serial_available = 0;
 volatile uint8_t uart_buffIndex = 0;
 volatile unsigned char uart_buffer[BUFFERSIZE];
 
@@ -81,7 +82,7 @@ ISR(USART_RX_vect)
 	}
 	uart_buffer[uart_buffIndex++] = data;
 	uart_buffer[uart_buffIndex] = '\0';
-	
+	serial_available = 1;
 	//for testing if serial data was recieved.
 	//blink();
 }

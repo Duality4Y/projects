@@ -36,12 +36,15 @@ int main(void)
 	//main loop.
 	while(1)
 	{
-		runSerialInputCommands(inputStr);
-		uart_put_str(inputStr);
+		//if there is new data we check to see the commands.
+		if(serial_available)
+		{
+			serial_available = 0;
+			runSerialInputCommands(inputStr);
+		}
 		//lets the user input the pincode.
-		//inputPinCode();
+		inputPinCode();
 		//displays pin
-		setServoPos(ticks);
 		displayNum(pin);
 	}
 	

@@ -4,6 +4,7 @@
  * */
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <string.h>
 #include "pinDefs.h"
 #include "uart.c" //include basic uart capability written by Robert.
 
@@ -38,12 +39,42 @@ int pin = 8888; //the actuall pin.
 int new_pin = 8888; //currently displayed pin.
 
 //keep track of wheter someone is logged in or not.
-uint8_t isLoggedIn = 0;
+uint8_t isLoggedIn = false;
 //create a link to the serial buffer to use.
 volatile unsigned char* inputStr = uart_buffer;
 
 //will hold formated string
 unsigned char prettyString[50];
+
+
+void enableServo()
+{
+	//enable servo by renabling the servo interupt.
+	TIMSK2 |= (1<<OCIE2A)|(1<<OCIE2B);
+}
+
+void disableServo()
+{
+	TIMSK2 &= ~((1<<OCIE2A)|(1<<OCIE2B));
+}
+
+/*
+ * the check in setServoPos() allows you to easily switch from closed to open
+ * closed by passing it a 0 (the servo will close the door)
+ * open by passeing it a 0-1 if uint8_t it wil pass 255, and open the door. 
+ * */
+//this function takes a value between 0 and 10. and sets the servo to the position accordingly.
+void setServoPos(uint8_t position)
+{
+	//check if value in range.
+	if(position > 10)
+		position = 10;
+	if(position < 0)
+		position = 0;
+	//set the position.
+	OCR2B = position+4;
+	//this particular servo ranges from 4 for OCR2B to 14
+}
 
 void initServo()
 {
@@ -56,6 +87,12 @@ void initServo()
 	sei(); //enable global interups.
 	
 	SERVO_DDR |= (1<<SERVO_PIN);
+	//always start in the locked position.
+	setServoPos(10); 
+	//wait for it to close.
+	_delay_ms(1000);
+	//always turn the servo off.
+	disableServo();
 }
 
 void initShifter()
@@ -85,35 +122,18 @@ void initPowerControle()
 	PORTD |=   ~( 1<<POWERCONTROL ); //enable internal pullup on POWERCONTROL pin
 }
 
-/*
- * the check in setServoPos() allows you to easily switch from closed to open
- * closed by passing it a 0 (the servo will close the door)
- * open by passeing it a 0-1 if uint8_t it wil pass 255, and open the door. 
- * */
-//this function takes a value between 0 and 10. and sets the servo to the position accordingly.
-void setServoPos(uint8_t position)
-{
-	//check if value in range.
-	if(position > 10)
-		position = 10;
-	if(position < 0)
-		position = 0;
-	//set the position.
-	OCR2B = position+4;
-	//this particular servo ranges from 4 for OCR2B to 14
-}
 //this function powers on the elecktronics.
 void powerOn()
 {
-	PORTD &= ~(1<<POWERCONTROL);
-	DDRB |= (1<<LATCH)|(1<<CLOCK)|(1<<DATA_OUT);
+	PORTD &= ~(1<<POWERCONTROL); //switch transistor on
+	DDRB |= (1<<LATCH)|(1<<CLOCK)|(1<<DATA_OUT);//turn shifter pins back to original state.
 }
 //this function wil power of the elecktronics.
 void powerOff()
 {
 	
-	PORTD |= (1<<POWERCONTROL);
-	DDRB &= ~( (1<<LATCH)|(1<<CLOCK)|(1<<DATA_OUT));
+	PORTD |= (1<<POWERCONTROL); //switch transistor off.
+	DDRB &= ~( (1<<LATCH)|(1<<CLOCK)|(1<<DATA_OUT)); //turn shifter pins high impedance.
 }
 //this function shifts out data.
 void shiftOut(uint8_t data)
@@ -165,11 +185,7 @@ void displayNum(int num)
 	}
 }
 
-void inputPinCode()
-{
-	pin = (ticks);
-}
-void lock(uint8_t isLocked){}
+void inputPinCode(){};
 void enterCommandMode(unsigned char* inputStr)
 {
 	uart_clear();
@@ -179,24 +195,101 @@ void enterCommandMode(unsigned char* inputStr)
 		
 	}
 }
+void open()
+{
+	enableServo();
+	
+	setServoPos(0); //unlock and push door.
+	_delay_ms(1000);
+	setServoPos(5); //go back half, leave unlocked and be out of the way.
+	_delay_ms(1000);
+	
+	disableServo();
+}
+void close()
+{
+	enableServo();
+	setServoPos(10);
+	_delay_ms(1000);
+	disableServo();
+}
+//could be used to get a pin after a command.
+int getPinParameter(volatile unsigned char* inputStr)
+{
+	int i = 0;
+	//clear fifth bit
+	uart_clear();
+	inputStr[4] = '\0';
+	while(!inputStr[4]){displayNum(pin);}; //wait for the pin to arrive.
+	//reset pin to 0000
+	pin = 0;
+	while(i < 4)
+	{
+		pin *= 10;
+		pin += inputStr[i];
+		displayNum(pin);
+		i++;
+	}
+	return pin;
+}
 void runSerialInputCommands(volatile unsigned char* inputStr)
 {
+	//see if there is anything in the buffer.
 	if(inputStr[0])
 	{
+		//if there is any data for debuging purposes print it.
+		//uart_put_str(inputStr);
+		//uart_put('\n');
+		
+		//actions that can be taken when logged in.
+		if(isLoggedIn)
+		{
+			switch(inputStr[0])
+			{
+				case OFF:
+					powerOff();
+					uart_clear();
+					break;
+				case ON:
+					powerOn();
+					uart_clear();
+					break;
+				case OPEN:
+					open();
+					uart_clear();
+					break;
+				case CLOSE:
+					close();
+					uart_clear();
+					break;
+				case SETPIN:
+					pin = getPinParameter(inputStr);
+					uart_clear();
+					break;
+				default:
+					uart_clear();
+					break;
+			}
+		}
+		//commands available if authorized or not.
 		switch(inputStr[0])
 		{
-			case OFF:
-				powerOff();
-				uart_clear();
-				break;
-			case ON:
-				powerOn();
-				uart_clear();
-				break;
+			case BTOK:
+			break;
 		}
-	}
-	else
-	{
+		//action that can/need to be taken when not logged in.
+		if(!isLoggedIn)
+		{
+			switch(inputStr[0])
+			{
+				case LOGIN:
+					if(pin == getPinParameter(inputStr))
+						isLoggedIn = true;
+					uart_clear();
+					break;
+			}
+		}
+		//always clear uart
 		uart_clear();
 	}
 }
@@ -217,7 +310,6 @@ ISR(INT0_vect, ISR_BLOCK)
 {
 	//if the pin it's self is low, and pin b is high we now rotation happend
 	//and thus add ticks.
-	_delay_ms(1);
 	if((PIND & (1<<ENCODER_PIN_B)))
 	{
 		direction = 1; //keep direction
@@ -227,7 +319,6 @@ ISR(INT0_vect, ISR_BLOCK)
 //same for this function only adding ticks.
 ISR(INT1_vect,ISR_BLOCK)
 {
-	_delay_ms(1);
 	if((PIND & (1<<ENCODER_PIN_A)))
 	{
 		direction = 0;
