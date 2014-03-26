@@ -21,7 +21,7 @@ BT
 #define OPEN 	2
 #define CLOSE 	3
 #define SREAD 	4
-#define BTOK	5
+#define BT	5
 #define PREAD 	6
 #define SETPIN 	7
 #define SLEEP 	8
@@ -30,8 +30,8 @@ BT
 
 
 //action undertaken by safe firmware.
-if BTOK:
-	send OK
+if BT:
+	send BTOK
 if SREAD:
 	send servo_val
 if PREAD:
@@ -41,3 +41,33 @@ if SETPIN:
 if LOGIN:
 	send "acces" if entered_pin == pin
 	else send "acces denied."
+
+login:
+10,pin,!0
+if pin 1234
+
+send 10
+send 1
+send 2
+send 3
+send 4
+send !0
+
+
+Response commands:
+#define BTOK 121 									//Needs to be unique, 150 = 66(B) + 84(T)
+#define FALSE 42 									//Used when an operation/command failes
+#define TRUE 1 										//Used when an operation/command succeeds
+#define SERIAL_ACCES 2							 	//Used to say that the client/android/pc has acces
+#define SERIAL_DENIED 3 							//Used to say that the client/android/pc has no acces
+#define ROTARY_NORMAL 20 							//Used to state that the rotarys states is in normal/no rotation
+#define ROTARY_LEFT 21 								//Used to state that the user is rotating the rotary to the left
+#define ROTARY_RIGHT 22 							//Used to state that the user is rotating the rotary to the right
+#define SEGMENT byte(1), byte(num0), byte(num1), byte(num2), byte(num3)
+#define DISCONNECTED 4 							//Used to say to the client/android/pc that the user has been succesfully logged out
+#define OPENED 5 									//Used to say that the safe is currently open
+#define CLOSED 6									//Used to say that the safi is currently closed
+
+usage of SEGMENT:
+When the client receiver this command, it will use the 4 least significant bytes, as the pin, which is then split
+in 4 separate digits to be shown on de seven segment displays on the GUI/android application

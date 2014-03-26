@@ -69,7 +69,9 @@ unsigned char uart_getdata(void)
 void uart_clear()
 {
 	uart_buffIndex = 0;
-	uart_buffer[uart_buffIndex] = '\0';
+	int i = 0;
+	for(i = 0;i<BUFFERSIZE;i++)
+		uart_buffer[i] = '\0';
 }
 
 ISR(USART_RX_vect)

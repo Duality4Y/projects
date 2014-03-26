@@ -4,7 +4,7 @@
  * Created: 5-3-2014 11:22:45
  *  Author: Darrel
  */ 
-#define pin5v PIND6
+#define pin5v PIND7
 #define pinLatch PINB0
 #define pinClock PINB1
 #define pinData PINB2
@@ -15,7 +15,7 @@
 
 #define rotSens 3
 
-#define F_CPU 1000000UL
+#define F_CPU 8000000UL
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -124,11 +124,11 @@ void refreshDisplay() {
 
 ISR(INT0_vect) {
 	updateEncoder();
-	refreshDisplay();
+	//refreshDisplay();
 }
 ISR(INT1_vect) {
 	updateEncoder();
-	refreshDisplay();
+	//refreshDisplay();
 }
 
 void updateEncoder() {

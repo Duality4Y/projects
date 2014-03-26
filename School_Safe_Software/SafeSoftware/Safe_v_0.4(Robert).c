@@ -8,6 +8,10 @@
  * 
  * Edited: 10 - 03 - 2014
  * 	wil try implementing entering a number with rotary encoder.
+ * 	implemented rotary
+ * Edited: 24 - 03 - 2014
+ * 	implemented command parsing.
+ * 	implemented servo disable.
  * */
 
 #define F_CPU 8000000UL
@@ -15,7 +19,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "libs/pinDefs.h" //inlucde pindefinitions.
 #include "libs/safeFunctions.c" //include functions that the safe uses.
 
 
@@ -36,6 +39,9 @@ int main(void)
 	//main loop.
 	while(1)
 	{
+	
+		//if there is any data for debuging purposes print it.
+		uart_put_str(inputStr);
 		//if there is new data we check to see the commands.
 		if(serial_available)
 		{
@@ -43,7 +49,7 @@ int main(void)
 			runSerialInputCommands(inputStr);
 		}
 		//lets the user input the pincode.
-		inputPinCode();
+		//inputPinCode();
 		//displays pin
 		displayNum(pin);
 	}
