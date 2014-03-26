@@ -2,25 +2,21 @@
  * this file contains functions and variables
  * the safe will use.
  * */
+ 
 #include <avr/interrupt.h>
-#include <util/delay.h>
-#include <string.h>
-#include "pinDefs.h"
-#include "safeVariables.c" //contains safe variables.
-#include "uart.c" //include basic uart capability written by Robert.
-#include "servo.c" //servo related code
-#include "rotary.c" //rotary related code
-#include "commandDefs.c" //has rules for talking to micro controller and computer.
+#include <avr/eeprom.h>
 
-//will keep time. using timer2
-volatile unsigned long timer2_Count = 0;
-unsigned int seconds = 0;
+#include "pinDefs.h"
+#include "safeConstants.c" 		//contains constants related to safe funtioning.
+#include "safeVariables.c" 		//contains safe variables.
+#include "time.c"				//contains code related to keeping track of time.
+#include "uart.c" 				//include basic uart capability written by Robert.
+#include "servo.c" 				//servo related code
+#include "rotary.c" 			//rotary related code
+#include "pinStore.c"			//code for storing the pin in eeprom.
 
 //create a link to the serial buffer to use.
 volatile unsigned char* inputStr = uart_buffer;
-
-//will hold formated string
-unsigned char prettyString[50];
 
 void initShifter()
 {
@@ -99,45 +95,50 @@ void displayNum(int num)
 }
 
 void inputPinCode(){};
+
 void open()
 {
 	enableServo();
 	
-	setServoPos(0); //unlock and push door.
-	_delay_ms(1000);
-	setServoPos(5); //go back half, leave unlocked and be out of the way.
-	_delay_ms(1000);
+	setServoPos(0); //unlock and push the door out.
+	finalServoPos = SERVO_OPENED; //set the final state to be open.
 	
-	disableServo();
+	//signal the java program that we have done ar requested.
+	uart_put(OPENED);
+	uart_put_str("\r\n");
 }
 void close()
 {
 	enableServo();
-	setServoPos(10);
-	_delay_ms(1000);
-	disableServo();
+	
+	setServoPos(10); //lock the door
+	finalServoPos = SERVO_CLOSED; //set the final state to be closed.
+	
+	//signal the java program that we have closed or are closing the door.
+	uart_put(CLOSED);
+	uart_put_str("\r\n");
 }
 //could be used to get a pin after a command.
 int getPinParameter(volatile unsigned char* inputStr)
 {
 	int i,temp_pin = 0;
-	//clear fifth bit
 	uart_clear();
+	//clear fifth byte
 	inputStr[4] = '\0';
 	while(!inputStr[4]){}; //wait for the pin to arrive.
+	//disable interupts as to prevent the data from being changed while processed.
+	cli();
 	while(i < 4)
 	{
 		temp_pin *= 10;
 		temp_pin += inputStr[i];
 		i++;
 	}
+	sei();
 	return temp_pin;
 }
 void runSerialInputCommands(volatile unsigned char* inputStr)
 {
-	
-	//if there is any data for debuging purposes print it.
-	uart_put_str(inputStr);
 	//see if there is anything in the buffer.
 	if(inputStr[0])
 	{		
@@ -166,41 +167,37 @@ void runSerialInputCommands(volatile unsigned char* inputStr)
 					pin = getPinParameter(inputStr);
 					uart_clear();
 					break;
+				case LOGOUT:
+					isLoggedIn = false;
+					uart_clear();
+					break;
 				default:
 					uart_clear();
 					break;
 			}
 		}
-		//action that can/need to be taken when not logged in.
-		if(!isLoggedIn)
-		{
-			switch(inputStr[0])
-			{
-				case LOGIN:
-					uart_put_str("got here! \r\n");
-					if(pin == getPinParameter(inputStr))
-					{
-						isLoggedIn = true;
-						uart_put_str("SACCES\r\n");
-					}
-					else
-					{
-						isLoggedIn = false;
-						uart_put_str("SDENIED\r\n");
-					}
-					uart_clear();
-					break;
-			}
-		}
-		//commands available if authorized or not.
 		switch(inputStr[0])
 		{
+			case LOGIN:
+				if(pin == getPinParameter(inputStr))
+				{
+					isLoggedIn = true;
+					uart_put_str("SACCES\r\n");
+				}
+				else
+				{
+					isLoggedIn = false;
+					uart_put_str("SDENIED\r\n");
+				}
+				uart_clear();
+				break;
 			case BTOK:
-			uart_put_str("BTOK\r\n");
-			uart_clear();
-			break;
+				uart_put_str("BTOK\r\n");
+				uart_clear();
+				break;
+			default:
+				uart_clear();
+				break;
 		}
-		//always clear uart
-		uart_clear();
 	}
 }

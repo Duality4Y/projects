@@ -48,8 +48,22 @@ int main(void)
 			serial_available = 0;
 			runSerialInputCommands(inputStr);
 		}
-		//lets the user input the pincode.
-		//inputPinCode();
+		//check the servo state, disable it when it's active
+		//for longer then a second.
+		if(isServoActive) //check to see if the state of the servo is active.
+		{
+			if(time-previousServo > 4)//see if 5 ticks have passed and thus a second has passed.
+			{
+				if(finalServoPos != (OCR2B-4))
+				{
+					setServoPos(finalServoPos);
+				}
+				else
+				{
+					disableServo();
+				}
+			}
+		}
 		//displays pin
 		displayNum(pin);
 	}
