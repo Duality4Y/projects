@@ -15,13 +15,6 @@ while(True):
 	if(command == "break"):
 		break
 	else:
-		try:
-			command = int(command)
-			print ">> send: "+str( ord( chr(command) ) )
-			s.write(chr(command))
-		except:
-			pass
-		try:
-			print ">> recieved: %d" % ord(s.read(size=1))
-		except TypeError, ValueError:
-			print ">> invalid input."
+		command = int(command)
+		print ">> send: "+str( ord( chr(command) ) )
+		s.write(chr(command))

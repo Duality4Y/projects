@@ -40,11 +40,16 @@ void disableServo()
 	TIMSK2 &= ~((1<<OCIE2A)|(1<<OCIE2B));
 }
 
+uint8_t getCurrentServoState()
+{
+	return (OCR2B-4);
+}
+
 void initServo()
 {
 	//initialize timer 2 with a prescaler of 1024 and wave form generation ctc.
 	TCCR2A |= (1<<WGM21); 
-	TCCR2B |= (1<<CS20)|(1<<CS21)|(1<<CS22);
+	TCCR2B |= (1<<CS20)|(0<<CS21)|(1<<CS22);
 	TIMSK2 |= (1<<OCIE2A)|(1<<OCIE2B); //enable compare interupst.
 	OCR2A = 158; // 8000000/1024/50 = 156.25 but the scope shows 158 closer to 20ms pulse.
 	OCR2B = 0; //period controle.

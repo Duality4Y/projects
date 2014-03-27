@@ -121,20 +121,21 @@ void close()
 //could be used to get a pin after a command.
 int getPinParameter(volatile unsigned char* inputStr)
 {
-	int i,temp_pin = 0;
+	int i = 0;
+	int temp_pin = i;
 	uart_clear();
 	//clear fifth byte
 	inputStr[4] = '\0';
-	while(!inputStr[4]){}; //wait for the pin to arrive.
+	while(!inputStr[4]){}; //wait for the pincode to arrive.
 	//disable interupts as to prevent the data from being changed while processed.
-	cli();
+	//cli();
 	while(i < 4)
 	{
 		temp_pin *= 10;
 		temp_pin += inputStr[i];
 		i++;
 	}
-	sei();
+	//sei();
 	return temp_pin;
 }
 void runSerialInputCommands(volatile unsigned char* inputStr)
@@ -179,20 +180,24 @@ void runSerialInputCommands(volatile unsigned char* inputStr)
 		switch(inputStr[0])
 		{
 			case LOGIN:
-				if(pin == getPinParameter(inputStr))
-				{
-					isLoggedIn = true;
-					uart_put_str("SACCES\r\n");
-				}
-				else
-				{
-					isLoggedIn = false;
-					uart_put_str("SDENIED\r\n");
-				}
+				pin = getPinParameter(inputStr);
+				//if(pin == getPinParameter(inputStr))
+				//{
+				//	isLoggedIn = true;
+				//	uart_put(SERIAL_ACCES);
+				//	uart_put_str("\r\n");
+				//}
+				//else
+				//{
+				//	isLoggedIn = false;
+				//	uart_put(SERIAL_DENIED);
+				//	uart_put_str("\r\n");
+				//}
 				uart_clear();
 				break;
-			case BTOK:
-				uart_put_str("BTOK\r\n");
+			case BT:
+				uart_put(BTOK);
+				uart_put_str("\r\n");
 				uart_clear();
 				break;
 			default:

@@ -14,7 +14,7 @@
  * 	implemented servo disable.
  * */
 
-#define F_CPU 8000000UL
+#define F_CPU 1000000UL
 //include needed libraries.
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -25,7 +25,8 @@
 int main(void)
 {
 	//some setup code
-	
+	storePin(1337);
+	initPin();
 	//initizialize power controle pins
 	initPowerControle();
 	//initizialize rotary.
@@ -41,7 +42,7 @@ int main(void)
 	{
 	
 		//if there is any data for debuging purposes print it.
-		uart_put_str(inputStr);
+		//uart_put_str(inputStr);
 		//if there is new data we check to see the commands.
 		if(serial_available)
 		{
@@ -54,7 +55,7 @@ int main(void)
 		{
 			if(time-previousServo > 4)//see if 5 ticks have passed and thus a second has passed.
 			{
-				if(finalServoPos != (OCR2B-4))
+				if(finalServoPos != getCurrentServoState())
 				{
 					setServoPos(finalServoPos);
 				}
