@@ -16,8 +16,14 @@ class DierenWinkel
 	{
 		for(HuisDier dier:dieren)
 		{
-			Sys
+			dier.maakGeluid();
 		}
+	}
+	
+	public static int main(String args[])
+	{
+		DierenWinkel dierenwinkel = new DierenWinkel();
+		return 1;
 	}
 }
 abstract class HuisDier

@@ -7,11 +7,6 @@
 #define true 1
 #define false 0
 
-//posible states the servo can have
-#define SERVO_CLOSED 10
-#define SERVO_OPENED 5
-#define SERVO_KICKED 0
-
 //rules for speaking to computer and vise versa.
 #define OFF	 	42
 #define ON 		1

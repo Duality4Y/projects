@@ -43,7 +43,7 @@ void init_uart()
 void uart_put(unsigned char data)
 {
 	//make certain that there is no data in UDR0
-	while ( !( UCSR0A & (1<<UDRE0)) );
+	//while ( !( UCSR0A & (1<<UDRE0)) );
 	//transmit data 
 	UDR0 = data;
 }
@@ -61,7 +61,7 @@ void uart_put_str(volatile char *str)
 unsigned char uart_getdata(void)
 {
 	//make sure that UDR is empty
-	while ( !(UCSR0A & (1<<RXC0)) );
+	//while ( !(UCSR0A & (1<<RXC0)) );
 	//return recieved data
 	return UDR0;
 }
@@ -76,14 +76,15 @@ void uart_clear()
 
 ISR(USART_RX_vect)
 {
+	unsigned char *bufp = (unsigned char *)uart_buffer;
 	unsigned char data = uart_getdata();
 	if(uart_buffIndex == BUFFERSIZE-1)
 	{
 		uart_buffIndex = 0;
-		uart_buffer[uart_buffIndex] = '\0';
+		bufp[uart_buffIndex] = '\0';
 	}
-	uart_buffer[uart_buffIndex++] = data;
-	uart_buffer[uart_buffIndex] = '\0';
+	bufp[uart_buffIndex++] = data;
+	bufp[uart_buffIndex] = '\0';
 	serial_available = 1;
 	//for testing if serial data was recieved.
 	//blink();

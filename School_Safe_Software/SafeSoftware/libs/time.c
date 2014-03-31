@@ -1,11 +1,11 @@
 /*
  * a way of keeping track of time.
- * by 
+ * by darrel 
  * */
 
 //Time tracking related
-volatile unsigned long time = 0; //Stores the time in fifth of seconds
-volatile unsigned long timeinSeconds = 0; //stores the time in seconds
+unsigned long time = 0; //Stores the time in fifth of seconds
+unsigned long timeinSeconds = 0; //stores the time in seconds
 
 void initTime()
 {
@@ -20,6 +20,12 @@ void initTime()
 ISR(TIMER0_COMPA_vect)
 {
 	//increment every 1/5 a second.
-	time++;
-	timeinSeconds = time/5;
+	unsigned long t = time;
+	unsigned long ts = timeinSeconds;
+	
+	t++;
+	ts = t/5;
+	
+	time = t;
+	timeinSeconds = ts;
 }

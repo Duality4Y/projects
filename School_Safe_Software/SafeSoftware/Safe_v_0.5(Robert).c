@@ -27,6 +27,16 @@
 #include "libs/safeFunctions.c" //include functions that the safe uses.
 
 
+
+void sendNumber(int num)
+{
+	int p,i;
+	for(i = 0,p = 1;i<4;p*=10,i++)
+	{
+		uart_put((num/p)%p);
+	}
+}
+
 int main(void)
 {
 	//some setup code
@@ -44,10 +54,11 @@ int main(void)
 	init_uart();
 	//initialize the servo code.
 	initServo();
+	//initialize time code
+	initTime();
 	//main loop.
 	while(1)
 	{
-	
 		//if there is any data for debuging purposes print it.
 		//uart_put_str(inputStr);
 		//if there is new data we check to see the commands.
@@ -60,7 +71,7 @@ int main(void)
 		//for longer then a second.
 		if(isServoActive) //check to see if the state of the servo is active.
 		{
-			if(time-previousServo > 4)//see if 5 ticks have passed and thus a second has passed.
+			if(time-previousServo > 5)//see if 5 ticks have passed and thus a second has passed.
 			{
 				if(finalServoPos != getCurrentServoState())
 				{
@@ -72,11 +83,8 @@ int main(void)
 				}
 			}
 		}
-		//displays pin
-		//displayNum(pin);
 	}
 	
 	return 1;
 }
-
 
