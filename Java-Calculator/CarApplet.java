@@ -8,7 +8,7 @@ class CarApplet extends JFrame
 	JPanel mainPanel;
 	public CarApplet()
 	{
-		mainPanel = new JPanel();
+		mainPanel = new DrawingPanel();
 		setContentPane(mainPanel);
 	}
 	public static void main(String args[])
@@ -20,9 +20,21 @@ class CarApplet extends JFrame
 	}
 }
 
-class DrawingPanel
+class DrawingPanel extends JPanel
 {
+	private Car car;
 	
+	public DrawingPanel()
+	{
+		car = new Car(20,150,80,30);
+	}
+	
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		setBackground(Color.WHITE);
+		car.draw(g);
+	}
 }
 
 class Car
@@ -50,6 +62,14 @@ class Car
 		
 		//the window		
 		partsList.add(new TriAngle(Color.red, left, under));
+	}
+	
+	public void draw(Graphics g)
+	{
+		for(Part part : partsList)
+		{
+			part.draw(g);
+		}
 	}
 }
 
