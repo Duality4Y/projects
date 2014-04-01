@@ -3,17 +3,17 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 
-class CarApplet extends JFrame
+class CarAppletTurning extends JFrame
 {
 	JPanel mainPanel;
-	public CarApplet()
+	public CarAppletTurning()
 	{
 		mainPanel = new DrawingPanel();
 		setContentPane(mainPanel);
 	}
 	public static void main(String args[])
 	{
-		CarApplet applet = new CarApplet();
+		CarAppletTurning applet = new CarAppletTurning();
 		applet.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		applet.setSize(500,500);
 		applet.setVisible(true);
@@ -45,21 +45,16 @@ class Car
 	{
 		partsList = new ArrayList<Part>();
 		
-		int weelsize = 20;
-		int chassisUnder = under - weelsize/2;
+		int wheelsize = 20;
+		int chassisUnder = under - wheelsize/2;
 		
 		//chassis
 		partsList.add( new RectAngle(Color.BLUE, left, under-10, width, height));
 		
 		//cabine
 		partsList.add( new RectAngle(Color.CYAN, left, under-10-height, 4*width/5, 4*height/5));
-		
-		//hind weel
-		partsList.add( new Circle(Color.YELLOW, left+5, under, weelsize));
-		
-		//front weel
-		partsList.add( new Circle(Color.YELLOW, left+width-30, under, weelsize));
-		
+		//wheels
+		partsList.add( new Wheels(Color.YELLOW, left, under, wheelsize, width) );
 		//the window		
 		partsList.add(new TriAngle(Color.RED, left, under));
 	}
@@ -180,5 +175,40 @@ class TriAngle extends AbstractPart implements Part
 			g.setColor(Color.black);
 			g.drawPolygon(xpoints, ypoints, xpoints.length);
 		}
+	}
+}
+
+class Wheels extends AbstractPart implements Part
+{
+	private int cross_section;
+	private Circle hind_wheel;
+	private	Circle front_wheel;
+	
+	//things that turn around on the wheel.
+	private Circle hind_wheel_deco;
+	private Circle front_wheel_deco;
+	
+	public Wheels(Color color, int left, int under, int cross_section, int body_width)
+	{
+		super(color, left, under);
+		this.cross_section = cross_section;
+		//make the actual wheels
+		this.hind_wheel = new Circle(color, left+5, under, cross_section);
+		this.front_wheel = new Circle(color, left+body_width-30, under, cross_section);
+		
+		//the deco's on the wheels. will be 1/3 the wheel size?
+		int decoSize = (int)(cross_section/3);
+		//int hindDecoX =
+		//int hindDecoY =  
+		this.hind_wheel_deco = new Circle(Color.GRAY, left+5+decoSize, under-decoSize, decoSize );
+		this.front_wheel_deco = new Circle(Color.GRAY, left+body_width-30+decoSize, under-decoSize, decoSize );
+	}
+	
+	public void draw(Graphics g)
+	{
+		hind_wheel.draw(g);
+		front_wheel.draw(g);
+		hind_wheel_deco.draw(g);
+		front_wheel_deco.draw(g);
 	}
 }
