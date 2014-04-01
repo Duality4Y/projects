@@ -4,7 +4,10 @@ class DierenWinkel
 	private ArrayList<HuisDier> dieren = new ArrayList<HuisDier>();
 	public DierenWinkel()
 	{
-		
+		voegToe(new Kat("Minoes"));
+		voegToe(new Hond("Bello"));
+		voegToe(new Hamster("lassie"));
+		printOverzicht();
 	}
 	
 	public void voegToe(HuisDier dier)
@@ -16,14 +19,13 @@ class DierenWinkel
 	{
 		for(HuisDier dier:dieren)
 		{
-			dier.maakGeluid();
+			System.out.println(dier.getNaam()+" zegt "+dier.maakGeluid());
 		}
 	}
 	
-	public static int main(String args[])
+	public static void main(String args[])
 	{
 		DierenWinkel dierenwinkel = new DierenWinkel();
-		return 1;
 	}
 }
 abstract class HuisDier
@@ -33,7 +35,7 @@ abstract class HuisDier
 	{
 		this.naam = naam;
 	}
-	abstract public void maakGeluid();
+	abstract public String maakGeluid();
 	public String getNaam()
 	{
 		return this.naam;
@@ -45,9 +47,9 @@ class Kat extends HuisDier
 	{
 		super(naam);
 	}
-	public void maakGeluid()
+	public String maakGeluid()
 	{
-		System.out.println("Mieaaauw?");
+		return "Mieaaauw?";
 	}
 }
 class Hond extends HuisDier
@@ -56,9 +58,9 @@ class Hond extends HuisDier
 	{
 		super(naam);
 	}
-	public void maakGeluid()
+	public String maakGeluid()
 	{
-		System.out.println("Woef Woef!");
+		return "Woef Woef!";
 	}
 }
 class Hamster extends HuisDier
@@ -67,8 +69,8 @@ class Hamster extends HuisDier
 	{
 		super(naam);
 	}
-	public void maakGeluid()
+	public String maakGeluid()
 	{
-		System.out.println("squeeek");
+		return "squeeek";
 	}
 }
