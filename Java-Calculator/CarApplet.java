@@ -31,6 +31,11 @@ class Car
 {
 }
 
+public interface Part
+{
+	public void draw(Graphics g);
+}
+
 abstract class Part
 {
 }
