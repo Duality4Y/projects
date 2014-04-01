@@ -5,6 +5,12 @@ import javax.swing.*;
 
 class CarApplet extends JFrame
 {
+	JPanel mainPanel;
+	public CarApplet()
+	{
+		mainPanel = new JPanel();
+		add(mainPanel);
+	}
 	public static void main(String args[])
 	{
 		CarApplet applet = new CarApplet();
