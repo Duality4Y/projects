@@ -49,19 +49,19 @@ class Car
 		int chassisUnder = under - weelsize/2;
 		
 		//chassis
-		partsList.add( new RectAngle(Color.BLUE, left, under-10, width, height));
+		partsList.add( new RectAngle(Color.BLUE, 0,0 , width, height));
 		
 		//cabine
-		partsList.add( new RectAngle(Color.CYAN, left, under-10-height, 4*width/5, 4*height/5));
+		//partsList.add( new RectAngle(Color.CYAN, left, under-10-height, 4*width/5, 4*height/5));
 		
 		//hind weel
-		partsList.add( new Circle(Color.YELLOW, left+5, under, weelsize));
+		//partsList.add( new Circle(Color.YELLOW, left+5, under, weelsize));
 		
 		//front weel
-		partsList.add( new Circle(Color.YELLOW, left+width-30, under, weelsize));
+		//partsList.add( new Circle(Color.YELLOW, left+width-30, under, weelsize));
 		
 		//the window		
-		partsList.add(new TriAngle(Color.RED, left, under));
+		//partsList.add(new TriAngle(Color.RED, left, under));
 	}
 	
 	public void draw(Graphics g)
