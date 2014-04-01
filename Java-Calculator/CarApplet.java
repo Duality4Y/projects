@@ -49,19 +49,19 @@ class Car
 		int chassisUnder = under - weelsize/2;
 		
 		//chassis
-		partsList.add( new RectAngle(Color.BLUE, 0,0 , width, height));
+		partsList.add( new RectAngle(Color.BLUE, left, under-10, width, height));
 		
 		//cabine
-		//partsList.add( new RectAngle(Color.CYAN, left, under-10-height, 4*width/5, 4*height/5));
+		partsList.add( new RectAngle(Color.CYAN, left, under-10-height, 4*width/5, 4*height/5));
 		
 		//hind weel
-		//partsList.add( new Circle(Color.YELLOW, left+5, under, weelsize));
+		partsList.add( new Circle(Color.YELLOW, left+5, under, weelsize));
 		
 		//front weel
-		//partsList.add( new Circle(Color.YELLOW, left+width-30, under, weelsize));
+		partsList.add( new Circle(Color.YELLOW, left+width-30, under, weelsize));
 		
 		//the window		
-		//partsList.add(new TriAngle(Color.RED, left, under));
+		partsList.add(new TriAngle(Color.RED, left, under));
 	}
 	
 	public void draw(Graphics g)
@@ -83,8 +83,8 @@ abstract class AbstractPart implements Part
 	//make static to associate variables with this class.
 	//and not with the class calling super() and using similair
 	//named variables.
-	protected static int left,under; 
-	protected static Color color;
+	protected int left,under; 
+	protected Color color;
 	
 	protected AbstractPart()
 	{
@@ -116,7 +116,7 @@ class Circle extends AbstractPart implements Part
 {
 	private int cross_section;
 	
-	public Circle(Color color, int left, int right, int cross_section)
+	public Circle(Color color, int left, int under, int cross_section)
 	{
 		super(color, left, under);
 		this.cross_section = cross_section;
@@ -135,7 +135,7 @@ class RectAngle extends AbstractPart implements Part
 {
 	private int width,height;
 	
-	public RectAngle(Color color, int left, int right, int width, int height)
+	public RectAngle(Color color, int left, int under, int width, int height)
 	{
 		super(color, left, under);
 		this.width = width;
@@ -170,7 +170,7 @@ class TriAngle extends AbstractPart implements Part
 			g.setColor(color);
 			g.fillPolygon(xpoints, ypoints, xpoints.length);
 			g.setColor(Color.black);
-			g.fillPolygon(xpoints, ypoints, xpoints.length);
+			g.drawPolygon(xpoints, ypoints, xpoints.length);
 		}
 	}
 }
