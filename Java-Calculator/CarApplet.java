@@ -1,11 +1,6 @@
-import javax.swing.JFrame;
-import java.awt.Graphics;
-import javax.swing.JPanel;
 import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import java.awt.BorderLayout;
-
+import java.awt.*;
+import javax.swing.*;
 import java.util.*;
 
 class CarApplet extends JFrame
@@ -36,7 +31,16 @@ class Car
 	
 	public Car(int left, int under, int width, int height)
 	{
-		partsList = new ArrayList<partsList>();
+		partsList = new ArrayList<Part>();
+		
+		int weelheight = 20;
+		int chassisUnder = under - weelheight/2;
+		
+		//chassis
+		partsList.add( new RectAngle(Color.White, left, under-10, width, height));
+		
+		//cabine
+		partsList.add( new RectAngle(Color.CYAN, left, under-10-height, 4*width/5, 4*height/5));
 	}
 }
 
