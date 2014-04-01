@@ -33,14 +33,23 @@ class Car
 	{
 		partsList = new ArrayList<Part>();
 		
-		int weelheight = 20;
-		int chassisUnder = under - weelheight/2;
+		int weelsize = 20;
+		int chassisUnder = under - weelsize/2;
 		
 		//chassis
-		partsList.add( new RectAngle(Color.White, left, under-10, width, height));
+		partsList.add( new RectAngle(Color.BLUE, left, under-10, width, height));
 		
 		//cabine
 		partsList.add( new RectAngle(Color.CYAN, left, under-10-height, 4*width/5, 4*height/5));
+		
+		//hind weel
+		partsList.add( new Circle(Color.YELLOW, left+5, under, weelsize));
+		
+		//front weel
+		partsList.add( new Circle(Color.YELLOW, left+width-30, under, weelsize));
+		
+		//the window		
+		partsList.add(new TriAngle(Color.red, left, under));
 	}
 }
 
@@ -124,10 +133,10 @@ class RectAngle extends AbstractPart implements Part
 
 class TriAngle extends AbstractPart implements Part
 {
-	private int[] xpoints;
-	private int[] ypoints;
+	private int[] xpoints = {85,85,100};
+	private int[] ypoints = {85,110,110};
 	
-	public TriAngle(Color color, int left, int under, int[] xpoints, int[] ypoints)
+	public TriAngle(Color color, int left, int under)
 	{
 		super(color,left,under);
 		this.xpoints = xpoints;
