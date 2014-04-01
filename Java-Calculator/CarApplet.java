@@ -61,7 +61,7 @@ class Car
 		partsList.add( new Circle(Color.YELLOW, left+width-30, under, weelsize));
 		
 		//the window		
-		partsList.add(new TriAngle(Color.red, left, under));
+		partsList.add(new TriAngle(Color.RED, left, under));
 	}
 	
 	public void draw(Graphics g)
