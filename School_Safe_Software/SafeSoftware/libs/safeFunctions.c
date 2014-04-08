@@ -45,8 +45,8 @@ void inputPinCode(){};
 
 void open()
 {
-	setServoPos(SERVO_KICKED); //unlock and push the door out.
-	finalServoPos = SERVO_KICKED; //set the final state to be open.
+	setServoPos(SERVO_OPENED); //unlock and push the door out.
+	finalServoPos = SERVO_OPENED; //set the final state to be open.
 	
 	//signal the java program that we have done ar requested.
 	uart_put(OPENED);
@@ -113,6 +113,8 @@ void runSerialInputCommands(volatile unsigned char* inputStr)
 					break;
 				case LOGOUT:
 					isLoggedIn = false;
+					uart_put(DISCONNECTED);
+					uart_put_str("\r\n");
 					uart_clear();
 					break;
 				default:

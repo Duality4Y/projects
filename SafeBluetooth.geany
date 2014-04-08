@@ -23,9 +23,9 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=6
+current_page=1
 FILE_NAME_0=1333;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FsafeFunctions.c;0;4
-FILE_NAME_1=1623;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FSafe_v_0.5%28Robert%29.c;0;4
+FILE_NAME_1=1818;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FSafe_v_0.5%28Robert%29.c;0;4
 FILE_NAME_2=493;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Ftime.c;0;4
 FILE_NAME_3=1213;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Fdisplay.c;0;4
 FILE_NAME_4=864;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Fshifter.c;0;4
@@ -33,11 +33,11 @@ FILE_NAME_5=979;C;0;EISO-8859-1;1;1;0;%2Fhome%2Frobert%2FDropbox%2FProject%20Klu
 FILE_NAME_6=261;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FDropbox%2FProject%20Kluis%2FSoftware%2FSafeSoftwareDarrel%2Flibs%2FpinDefs.h;0;4
 
 [VTE]
-last_dir=/home/robert/Dropbox/Project Kluis/Software/SafeSoftwareDarrel
+last_dir=/home/robert/projects/School_Safe_Software/SafeSoftware
 
 [build-menu]
 EX_00_LB=Upload
-EX_00_CM=avrdude -p m168 -c usbasp -e -U flash:w:build.hex -B 3 
+EX_00_CM=avrdude -p m168 -c usbasp -e -U flash:w:build.hex
 EX_00_WD=
 CFT_00_LB=_Compile
 CFT_00_CM=avr-gcc -mmcu=atmega168 -Os -o build.elf "%f"

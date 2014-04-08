@@ -23,13 +23,14 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=0;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2Fstoplicht.java;0;4
-FILE_NAME_1=1016;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FDierenwinkel.java;0;4
-FILE_NAME_2=0;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCalculator2.java;0;4
+current_page=3
+FILE_NAME_0=584;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCarApplet.java;0;4
+FILE_NAME_1=2232;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCarAppletTurning.java;0;4
+FILE_NAME_2=809;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FTellerApplet.java;0;4
+FILE_NAME_3=1500;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FDropbox%2FProject%20Kluis%2FSoftware%2FSafeSoftware%2FSafe_v_0.5%28Robert%29.c;0;4
 
 [VTE]
-last_dir=/home/robert/projects/Java-Calculator
+last_dir=/home/robert/Dropbox/Project Kluis/Software/SafeSoftware
 
 [build-menu]
 JavaFT_00_LB=_Compile

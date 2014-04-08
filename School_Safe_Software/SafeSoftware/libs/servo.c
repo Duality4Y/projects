@@ -13,8 +13,8 @@ volatile int previousServo = 0; //Keeps track for when we enabled the servo
 
 uint8_t interval = 1;
 
-#define SERVOMAX 			29
-#define SERVOMIN 			8
+#define SERVOMAX 			14
+#define SERVOMIN 			4
 #define SERVORANGE 			(SERVOMAX-SERVOMIN)
 #define SERVOCONTROLEREG 	OCR2A
 
@@ -62,12 +62,13 @@ uint8_t getCurrentServoState()
 void initServo()
 {
 	TCCR2A |= (1<<COM2A1)|(1<<WGM20)|(1<<WGM21);//fast pwm on pb3 (oc2a)
-	TCCR2B |= (0<<CS20)|(0<<CS21)|(1<<CS22); //about ~50hz with this prescaling.
+	TCCR2B |= (1<<CS20)|(1<<CS21)|(1<<CS22); //about ~50hz with 1024 prescaler.
 	//PB3 as output
 	DDRB |= (1<<PB3);
-	sei();
 	//enable and set servo to mid position.
 	setServoPos(SERVORANGE/2);
 	//make sure finalstate is mid state and then is disable.
 	finalServoPos = SERVORANGE/2;
+	//enalble global interupts
+	sei();
 }

@@ -19,7 +19,7 @@
  * 	implementing noblocking screen displaying.
  * */
 
-#define F_CPU 1000000UL
+#define F_CPU 8000000UL
 //include needed libraries.
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -71,7 +71,7 @@ int main(void)
 		//for longer then a second.
 		if(isServoActive) //check to see if the state of the servo is active.
 		{
-			if(time-previousServo > 5)//see if 5 ticks have passed and thus a second has passed.
+			if(time-previousServo > timeScale)//see if a second has passed
 			{
 				if(finalServoPos != getCurrentServoState())
 				{
@@ -83,6 +83,7 @@ int main(void)
 				}
 			}
 		}
+		displayedNum = ticks;
 	}
 	
 	return 1;
