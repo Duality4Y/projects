@@ -1,7 +1,8 @@
 import java.awt.Color;
 import java.awt.*;
 import javax.swing.*;
-import javax.util.Timer;
+import javax.swing.Timer;
+import java.awt.event.*;
 import java.util.*;
 
 class CarApplet extends JFrame
@@ -24,12 +25,20 @@ class CarApplet extends JFrame
 class DrawingPanel extends JPanel
 {
 	private Car car;
-	
+	private Timer timer;
 	public DrawingPanel()
 	{
 		car = new Car(20,150,80,30);
+		timer = new Timer(100, new TimerHandler());
+		timer.start();
 	}
-	
+	class TimerHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			car.rideRight();
+		}
+	}
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -42,8 +51,7 @@ class Car
 {
 	private ArrayList<Part> partsList;
 	
-	private Timer timer;
-	private int xPosition = 0;
+	public int xPosition = 0;
 	public Car(int left, int under, int width, int height)
 	{
 		partsList = new ArrayList<Part>();
@@ -66,14 +74,15 @@ class Car
 		//the window		
 		partsList.add(new TriAngle(Color.RED, left, under));
 	}
-	class TimerHanlder implements ActionListener
+	
+	public void rideRight()
 	{
-		public void actionPerformed(ActionEvent e)
+		for(Part part: partsList)
 		{
-			position++;
-			draw();
+			part.setXPosition(2);
 		}
 	}
+	
 	public void draw(Graphics g)
 	{
 		for(Part part : partsList)
@@ -120,6 +129,17 @@ abstract class AbstractPart implements Part
 	{
 		this.color = color;
 	}
+	
+	public void setXPosition(int x)
+	{
+		this.left = x;
+	}
+	
+	public int getXPosition()
+	{
+		return this.left;
+	}
+	
 }
 
 class Circle extends AbstractPart implements Part
@@ -138,6 +158,15 @@ class Circle extends AbstractPart implements Part
 		g.fillOval(left, under-cross_section, cross_section, cross_section);
 		g.setColor(Color.black);
 		g.drawOval(left, under-cross_section, cross_section, cross_section);
+	}
+	public void setXPosition(int x)
+	{
+		this.left = x;
+	}
+	
+	public int getXPosition()
+	{
+		return this.left;
 	}
 }
 
@@ -158,6 +187,15 @@ class RectAngle extends AbstractPart implements Part
 		g.fillRect(left, under-height, width, height);
 		g.setColor(Color.black);
 		g.drawRect(left, under-height, width, height);
+	}
+	public void setXPosition(int x)
+	{
+		this.left = x;
+	}
+	
+	public int getXPosition()
+	{
+		return this.left;
 	}
 }
 
@@ -190,5 +228,15 @@ class TriAngle extends AbstractPart implements Part
 			g.setColor(Color.black);
 			g.drawPolygon(xpoints, ypoints, xpoints.length);
 		}
+	}
+	
+	public void setXPosition(int x)
+	{
+		this.left = x;
+	}
+	
+	public int getXPosition()
+	{
+		return this.left;
 	}
 }
