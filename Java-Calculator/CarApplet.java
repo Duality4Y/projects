@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.*;
 import javax.swing.*;
+import javax.util.Timer;
 import java.util.*;
 
 class CarApplet extends JFrame
@@ -41,6 +42,8 @@ class Car
 {
 	private ArrayList<Part> partsList;
 	
+	private Timer timer;
+	private int xPosition = 0;
 	public Car(int left, int under, int width, int height)
 	{
 		partsList = new ArrayList<Part>();
@@ -63,7 +66,14 @@ class Car
 		//the window		
 		partsList.add(new TriAngle(Color.RED, left, under));
 	}
-	
+	class TimerHanlder implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			position++;
+			draw();
+		}
+	}
 	public void draw(Graphics g)
 	{
 		for(Part part : partsList)
