@@ -22,6 +22,7 @@ void initRotary()
 //this interupt service routine is entered when pin a is triggered.
 ISR(INT0_vect, ISR_BLOCK)
 {
+	sleep_disable();
 	//if the pin it's self is low, and pin b is high we now rotation happend
 	//and thus add ticks.
 	if((PIND & (1<<ENCODER_PIN_B)))
@@ -33,6 +34,7 @@ ISR(INT0_vect, ISR_BLOCK)
 //same for this function only adding ticks.
 ISR(INT1_vect,ISR_BLOCK)
 {
+	sleep_disable();
 	if((PIND & (1<<ENCODER_PIN_A)))
 	{
 		direction = 0;

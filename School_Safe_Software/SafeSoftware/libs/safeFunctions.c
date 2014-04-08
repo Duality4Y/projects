@@ -5,6 +5,7 @@
  
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
+#include <avr/sleep.h>
 
 #include "pinDefs.h"
 #include "safeConstants.c" 		//contains constants related to safe funtioning.
@@ -41,8 +42,20 @@ void powerOff()
 	DDRB &= ~( (1<<LATCH)|(1<<CLOCK)|(1<<DATA_OUT)); //turn shifter pins high impedance.
 }
 
-void inputPinCode(){};
-
+void inputPinCode(){}
+//this function will make the safe enter sleep mode.
+void sleep()
+{
+	cli();
+	sleep_enable();
+	/* 0, 1, or many lines of code here */
+	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+	sleep_cpu();
+	/* wake up here */
+	sleep_disable();
+	sei();
+	powerOn();
+}
 void open()
 {
 	setServoPos(SERVO_OPENED); //unlock and push the door out.

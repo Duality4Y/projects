@@ -83,7 +83,13 @@ int main(void)
 				}
 			}
 		}
-		displayedNum = ticks;
+		//if a 20seconds has elapsed turn safe off.
+		if(time/timeScale > 2)
+		{
+			powerOff();
+			sleep();
+		}
+		displayedNum = timeinSeconds;
 	}
 	
 	return 1;
