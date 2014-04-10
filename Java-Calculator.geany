@@ -24,12 +24,9 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=3096;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCarApplet.java;0;4
-FILE_NAME_1=2232;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCarAppletTurning.java;0;4
-FILE_NAME_2=809;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FTellerApplet.java;0;4
 
 [VTE]
-last_dir=/home/robert/projects/Java-Calculator
+last_dir=/home/robert/projects
 
 [build-menu]
 JavaFT_00_LB=_Compile
