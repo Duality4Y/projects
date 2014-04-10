@@ -19,22 +19,30 @@
  * 	implementing noblocking screen displaying.
  * */
 
-#define F_CPU 1000000UL
+#define F_CPU 8000000UL
 //include needed libraries.
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
 #include "libs/safeFunctions.c" //include functions that the safe uses.
 
-
-
+int previousTime = 0;
+int interval = 2;
 void sendNumber(int num)
 {
-	int p,i;
-	for(i = 0,p = 1;i<4;p*=10,i++)
-	{
-		uart_put((num/p)%p);
-	}
+	//uart_put(SEGMENT);
+	//int p,i;
+	//for(i = 0,p = 1;i<4;p*=10,i++)
+	//{
+	//	uart_put((num/p)%p);
+	//}
+	//uart_put(END_OF_TRANSMISSION);
+	uart_put(SEGMENT);
+	uart_put(1);
+	uart_put(3);
+	uart_put(3);
+	uart_put(8);
+	uart_put(15);
 }
 
 int main(void)
@@ -71,7 +79,7 @@ int main(void)
 		//for longer then a second.
 		if(isServoActive) //check to see if the state of the servo is active.
 		{
-			if(time-previousServo > 5)//see if 5 ticks have passed and thus a second has passed.
+			if(time-previousServo > timeScale)//see if a second has passed
 			{
 				if(finalServoPos != getCurrentServoState())
 				{
@@ -83,6 +91,15 @@ int main(void)
 				}
 			}
 		}
+		//if a 20seconds has elapsed turn safe off.
+		if(!(PIND & (1<<ENCODER_BUTTON)))
+		{
+			sendNumber(1338);
+			displayedNum = 1338;
+		}
+		else
+			displayedNum = time/timeScale;
+		
 	}
 	
 	return 1;

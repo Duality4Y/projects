@@ -37,15 +37,16 @@ void displayNum(int num)
 
 void initDisplay()
 {
-	TCCR1B |= (0<<CS12)|(0<<CS11)|(1<<CS10)|(1<<WGM12);
-	TIMSK1 |= (1<<OCIE1A);
-	OCR1A = 7000;//5950;
+	//TCCR1B |= (0<<CS12)|(0<<CS11)|(1<<CS10); //prescaler 
+	//TIMSK1 |= (1<<TOIE1);
+	TCCR0B |= (0<<CS02)|(1<<CS01)|(1<<CS00); //a prescaler of 64
+	TIMSK0 |= (1<<TOIE0);
 	sei();
 }
 
-ISR(TIMER1_COMPA_vect)
+ISR(TIMER0_OVF_vect, ISR_NOBLOCK)
 {
 	int temp = displayedNum;
 	displayNum(temp);
-	TCNT1 = 0;
+	TCNT0 = 255;
 }

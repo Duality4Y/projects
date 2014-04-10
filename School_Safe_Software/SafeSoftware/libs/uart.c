@@ -21,7 +21,6 @@ void init_uart()
 	//init serial.
 	//status regB enable receive and transmit
 	UCSR0B |= (1<<RXEN0)|(1<<TXEN0);
-	
 	//high byte (baud rate)
 	UBRR0H = UBRR>>8;
 	//low byte (baud rate)

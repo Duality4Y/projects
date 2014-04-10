@@ -5,6 +5,7 @@
  
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
+#include <avr/sleep.h>
 
 #include "pinDefs.h"
 #include "safeConstants.c" 		//contains constants related to safe funtioning.
@@ -41,12 +42,24 @@ void powerOff()
 	DDRB &= ~( (1<<LATCH)|(1<<CLOCK)|(1<<DATA_OUT)); //turn shifter pins high impedance.
 }
 
-void inputPinCode(){};
-
+void inputPinCode(){}
+//this function will make the safe enter sleep mode.
+void sleep()
+{
+	cli();
+	sleep_enable();
+	/* 0, 1, or many lines of code here */
+	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+	sleep_cpu();
+	/* wake up here */
+	sleep_disable();
+	sei();
+	powerOn();
+}
 void open()
 {
-	setServoPos(SERVO_KICKED); //unlock and push the door out.
-	finalServoPos = SERVO_KICKED; //set the final state to be open.
+	setServoPos(SERVO_OPENED); //unlock and push the door out.
+	finalServoPos = SERVO_OPENED; //set the final state to be open.
 	
 	//signal the java program that we have done ar requested.
 	uart_put(OPENED);
@@ -113,6 +126,8 @@ void runSerialInputCommands(volatile unsigned char* inputStr)
 					break;
 				case LOGOUT:
 					isLoggedIn = false;
+					uart_put(DISCONNECTED);
+					uart_put_str("\r\n");
 					uart_clear();
 					break;
 				default:
