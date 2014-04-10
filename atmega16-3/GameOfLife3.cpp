@@ -19,7 +19,7 @@
  * */
 
 //clock speed 8mhz
-#define F_CPU 8000000
+#define F_CPU 16000000UL
 
 //needed libraries
 #include <avr/io.h>
