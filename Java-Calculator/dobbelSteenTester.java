@@ -58,11 +58,14 @@ class Model
 	}
 	public void addNumber(int num)
 	{
-		numbers.add(num);
+		//numbers.add(num);
 	}
 	public void average()
 	{
-		
+		for(Integer number:numbers)
+		{
+			//System.out.println(number);
+		}
 	}
 }
 
