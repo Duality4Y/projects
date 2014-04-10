@@ -25,7 +25,6 @@ class CarApplet extends JFrame
 class DrawingPanel extends JPanel
 {
 	private Car car;
-	private Timer timer;
 	public DrawingPanel()
 	{
 		car = new Car(20,150,80,30);
