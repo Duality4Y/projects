@@ -26,15 +26,23 @@
 
 #include "libs/safeFunctions.c" //include functions that the safe uses.
 
-
-
+int previousTime = 0;
+int interval = 2;
 void sendNumber(int num)
 {
-	int p,i;
-	for(i = 0,p = 1;i<4;p*=10,i++)
-	{
-		uart_put((num/p)%p);
-	}
+	//uart_put(SEGMENT);
+	//int p,i;
+	//for(i = 0,p = 1;i<4;p*=10,i++)
+	//{
+	//	uart_put((num/p)%p);
+	//}
+	//uart_put(END_OF_TRANSMISSION);
+	uart_put(SEGMENT);
+	uart_put(1);
+	uart_put(3);
+	uart_put(3);
+	uart_put(8);
+	uart_put(15);
 }
 
 int main(void)
@@ -84,12 +92,14 @@ int main(void)
 			}
 		}
 		//if a 20seconds has elapsed turn safe off.
-		if(time/timeScale > 2)
+		if(!(PIND & (1<<ENCODER_BUTTON)))
 		{
-			powerOff();
-			sleep();
+			sendNumber(1338);
+			displayedNum = 1338;
 		}
-		displayedNum = timeinSeconds;
+		else
+			displayedNum = time/timeScale;
+		
 	}
 	
 	return 1;

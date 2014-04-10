@@ -11,8 +11,6 @@ volatile uint8_t isServoActive = false; //Simple boolean to know if the servo is
 volatile int finalServoPos = -1; //Stores the final position the servo has to get to, used when opening the safe
 volatile int previousServo = 0; //Keeps track for when we enabled the servo
 
-uint8_t interval = 1;
-
 #define SERVOMAX 			14
 #define SERVOMIN 			4
 #define SERVORANGE 			(SERVOMAX-SERVOMIN)

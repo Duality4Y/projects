@@ -29,7 +29,7 @@ class DrawingPanel extends JPanel
 	public DrawingPanel()
 	{
 		car = new Car(20,150,80,30);
-		timer = new Timer(100, new TimerHandler());
+		timer = new Timer(10, new TimerHandler());
 		timer.start();
 	}
 	class TimerHandler implements ActionListener
@@ -37,6 +37,8 @@ class DrawingPanel extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			car.rideRight();
+			car.turnWheel();
+			repaint();
 		}
 	}
 	public void paintComponent(Graphics g)
@@ -51,13 +53,28 @@ class Car
 {
 	private ArrayList<Part> partsList;
 	
-	public int xPosition = 0;
+	private int xPosition = 0;
+	private int left = 0;
+	private int under = 0;
+	private int width = 0;
+	private int height = 0;
+	private int wheelsize = 0;
+	
+	
+	double wheelAngle = 0;
+	
+	private Circle wheelDop1 = new Circle(Color.GRAY, left+width-30, under, wheelsize);
+	private Circle wheelDop2 = new Circle(Color.GRAY, left+5, under, wheelsize);
+	
 	public Car(int left, int under, int width, int height)
 	{
 		partsList = new ArrayList<Part>();
-		
-		int weelsize = 20;
-		int chassisUnder = under - weelsize/2;
+		this.left = left;
+		this.under = under;
+		this.width = width;
+		this.height = height;
+		this.wheelsize = 20;
+		int chassisUnder = under - wheelsize/2;
 		
 		//chassis
 		partsList.add( new RectAngle(Color.BLUE, left, under-10, width, height));
@@ -65,22 +82,45 @@ class Car
 		//cabine
 		partsList.add( new RectAngle(Color.CYAN, left, under-10-height, 4*width/5, 4*height/5));
 		
-		//hind weel
-		partsList.add( new Circle(Color.YELLOW, left+5, under, weelsize));
+		//hind wheel
+		partsList.add( new Circle(Color.YELLOW, left+5, under, wheelsize));
 		
-		//front weel
-		partsList.add( new Circle(Color.YELLOW, left+width-30, under, weelsize));
+		//front wheel
+		partsList.add( new Circle(Color.YELLOW, left+width-30, under, wheelsize));
 		
 		//the window		
 		partsList.add(new TriAngle(Color.RED, left, under));
 	}
-	
+	public void turnWheel()
+	{
+		int xoffset = (int)(Math.cos(wheelAngle));
+		int yoffset = (int)(Math.sin(wheelAngle));
+		wheelDop2 = new Circle(Color.GRAY, left+width-30+xoffset, under, wheelsize/3);
+		wheelDop1 = new Circle(Color.GRAY, left+5+xoffset, under, wheelsize/3);
+		wheelAngle+= 0.1;
+	}
 	public void rideRight()
 	{
-		for(Part part: partsList)
-		{
-			part.setXPosition(2);
-		}
+		this.partsList = new ArrayList<Part>();
+		//chassis
+		partsList.add( new RectAngle(Color.BLUE, left+this.xPosition, under-10, width, height));
+		
+		//cabine
+		partsList.add( new RectAngle(Color.CYAN, left+this.xPosition, under-10-height, 4*width/5, 4*height/5));
+		
+		//hind wheel
+		partsList.add( new Circle(Color.YELLOW, left+5+this.xPosition, under, wheelsize));
+		
+		//front wheel
+		partsList.add( new Circle(Color.YELLOW, left+width-30+this.xPosition, under, wheelsize));
+		
+		//the window		
+		partsList.add(new TriAngle(Color.RED, left+this.xPosition, under));
+		//wheel dops
+		wheelDop2 = new Circle(Color.GRAY, left+width-30+this.xPosition, under, wheelsize/3);
+		wheelDop1 = new Circle(Color.GRAY, left+5+this.xPosition, under, wheelsize/3);
+		this.left++;
+		xPosition++;
 	}
 	
 	public void draw(Graphics g)
@@ -88,6 +128,8 @@ class Car
 		for(Part part : partsList)
 		{
 			part.draw(g);
+			wheelDop1.draw(g);
+			wheelDop2.draw(g);
 		}
 	}
 }

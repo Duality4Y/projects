@@ -2,7 +2,7 @@
  * a way of keeping track of time.
  * by darrel 
  * */
-
+ 
 //Time tracking related
 volatile uint16_t time = 0; //Stores the time in fifth of seconds
 volatile uint16_t timeinSeconds = 0; //stores the time in seconds
@@ -28,13 +28,14 @@ void initTime()
 
 ISR(TIMER1_OVF_vect)
 {
-	//increment every 20ms a second.
+	//load variables in registers.
 	unsigned long t = time;
 	unsigned long ts = timeinSeconds;
 	
 	t++;
-	ts = t/timeScale; //devide by 7812 to get a second
+	ts = t/timeScale; //devide by scale to get seconds
 	
+	//put the values back in ram
 	time = t;
 	timeinSeconds = ts;
 }
