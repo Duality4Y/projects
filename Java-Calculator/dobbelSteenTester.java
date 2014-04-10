@@ -64,7 +64,7 @@ class Model
 	{
 		addNumber(randomGenerator.nextInt(8));
 		throwCount++;
-		System.out.println(numbers);
+		System.out.println(getAverage(2));
 	}
 	public void addNumber(int num)
 	{
@@ -88,7 +88,7 @@ class Model
 				total+=number;
 			}
 		}
-		return (int)throwCount/total;
+		return (int)total/throwCount;
 	}
 }
 
