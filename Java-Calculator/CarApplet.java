@@ -29,17 +29,6 @@ class DrawingPanel extends JPanel
 	public DrawingPanel()
 	{
 		car = new Car(20,150,80,30);
-		timer = new Timer(10, new TimerHandler());
-		timer.start();
-	}
-	class TimerHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-			car.rideRight();
-			car.turnWheel();
-			repaint();
-		}
 	}
 	public void paintComponent(Graphics g)
 	{
@@ -59,12 +48,6 @@ class Car
 	private int width = 0;
 	private int height = 0;
 	private int wheelsize = 0;
-	
-	
-	double wheelAngle = 0;
-	
-	private Circle wheelDop1 = new Circle(Color.GRAY, left+width-30, under, wheelsize);
-	private Circle wheelDop2 = new Circle(Color.GRAY, left+5, under, wheelsize);
 	
 	public Car(int left, int under, int width, int height)
 	{
@@ -91,45 +74,12 @@ class Car
 		//the window		
 		partsList.add(new TriAngle(Color.RED, left, under));
 	}
-	public void turnWheel()
-	{
-		int xoffset = (int)(Math.cos(wheelAngle));
-		int yoffset = (int)(Math.sin(wheelAngle));
-		wheelDop2 = new Circle(Color.GRAY, left+width-30+xoffset, under, wheelsize/3);
-		wheelDop1 = new Circle(Color.GRAY, left+5+xoffset, under, wheelsize/3);
-		wheelAngle+= 0.1;
-	}
-	public void rideRight()
-	{
-		this.partsList = new ArrayList<Part>();
-		//chassis
-		partsList.add( new RectAngle(Color.BLUE, left+this.xPosition, under-10, width, height));
-		
-		//cabine
-		partsList.add( new RectAngle(Color.CYAN, left+this.xPosition, under-10-height, 4*width/5, 4*height/5));
-		
-		//hind wheel
-		partsList.add( new Circle(Color.YELLOW, left+5+this.xPosition, under, wheelsize));
-		
-		//front wheel
-		partsList.add( new Circle(Color.YELLOW, left+width-30+this.xPosition, under, wheelsize));
-		
-		//the window		
-		partsList.add(new TriAngle(Color.RED, left+this.xPosition, under));
-		//wheel dops
-		wheelDop2 = new Circle(Color.GRAY, left+width-30+this.xPosition, under, wheelsize/3);
-		wheelDop1 = new Circle(Color.GRAY, left+5+this.xPosition, under, wheelsize/3);
-		this.left++;
-		xPosition++;
-	}
 	
 	public void draw(Graphics g)
 	{
 		for(Part part : partsList)
 		{
 			part.draw(g);
-			wheelDop1.draw(g);
-			wheelDop2.draw(g);
 		}
 	}
 }
@@ -172,16 +122,6 @@ abstract class AbstractPart implements Part
 		this.color = color;
 	}
 	
-	public void setXPosition(int x)
-	{
-		this.left = x;
-	}
-	
-	public int getXPosition()
-	{
-		return this.left;
-	}
-	
 }
 
 class Circle extends AbstractPart implements Part
@@ -200,15 +140,6 @@ class Circle extends AbstractPart implements Part
 		g.fillOval(left, under-cross_section, cross_section, cross_section);
 		g.setColor(Color.black);
 		g.drawOval(left, under-cross_section, cross_section, cross_section);
-	}
-	public void setXPosition(int x)
-	{
-		this.left = x;
-	}
-	
-	public int getXPosition()
-	{
-		return this.left;
 	}
 }
 
@@ -229,15 +160,6 @@ class RectAngle extends AbstractPart implements Part
 		g.fillRect(left, under-height, width, height);
 		g.setColor(Color.black);
 		g.drawRect(left, under-height, width, height);
-	}
-	public void setXPosition(int x)
-	{
-		this.left = x;
-	}
-	
-	public int getXPosition()
-	{
-		return this.left;
 	}
 }
 
@@ -270,15 +192,5 @@ class TriAngle extends AbstractPart implements Part
 			g.setColor(Color.black);
 			g.drawPolygon(xpoints, ypoints, xpoints.length);
 		}
-	}
-	
-	public void setXPosition(int x)
-	{
-		this.left = x;
-	}
-	
-	public int getXPosition()
-	{
-		return this.left;
 	}
 }
