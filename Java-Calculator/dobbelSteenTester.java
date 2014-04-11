@@ -3,12 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 class dobbelSteenTester extends JFrame
 {
 	private JPanel mainPanel;
-	private JPanel control;
-	private JPanel view;
+	private Control control;
+	private View view;
 	private Model model;
 	
 	public dobbelSteenTester()
@@ -21,6 +23,7 @@ class dobbelSteenTester extends JFrame
 		//create a instance of view.
 		view = new View(model);
 		
+		model.addObserver(view);
 		mainPanel.add(view);
 		mainPanel.add(control, BorderLayout.PAGE_END);
 		setContentPane(mainPanel);
@@ -35,15 +38,40 @@ class dobbelSteenTester extends JFrame
 	}
 }
 
-class View extends JPanel
+class View extends JPanel implements Observer
 {
+	private Model model;
 	public View(Model model)
 	{
-		
+		this.model = model;
+	}
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		if(model.getGraph() == model.BARGRAPH)
+		{
+			//g.fillRect(
+			for(int i = 0;i<7;i++)
+			{
+				model.getNumThrown(i);
+				g.setColor(Color.BLACK);
+				g.drawString(""+i, 100+(i*10), 100);
+			}
+		}
+		else if(model.getGraph() == model.TABLE)
+		{
+			
+		}
+	}
+	//update view here.
+	public void update(Observable obs, Object obj)
+	{
+		repaint();
+		System.out.println("got here");
 	}
 }
 
-class Model
+class Model extends Observable
 {
 	public static boolean BARGRAPH = true;
 	public static boolean TABLE = false;
@@ -80,6 +108,8 @@ class Model
 			throwCount++;
 			System.out.println(getTotalNumThrown(2));
 		}
+		setChanged();
+		notifyObservers();
 	}
 	
 	public boolean isThrowing()
@@ -94,6 +124,10 @@ class Model
 	{
 		this.selectedGraph = graph;
 	}
+	public boolean getGraph()
+	{
+		return this.selectedGraph;
+	}
 	public void addNumber(int num)
 	{
 		numbers.add(num);
@@ -105,6 +139,18 @@ class Model
 	public void stopThrowing()
 	{
 		timer.stop();
+	}
+	public int getNumThrown(int num)
+	{
+		int total = 0;
+		for(Integer number:numbers)
+		{
+			if(number == num)
+			{
+				total++;
+			}
+		}
+		return total;
 	}
 	public int getTotalNumThrown(int num)
 	{
@@ -130,7 +176,7 @@ class Control extends JPanel
 		super();
 		this.model = model;
 		
-		stopStartbutton = new JButton("stop");
+		stopStartbutton = new JButton("start");
 		stopStartbutton.addActionListener(new stopStartbuttonHandler());
 		graphSwitchbutton = new JButton("graph");
 		graphSwitchbutton.addActionListener(new graphSwitchbuttonHandler());
@@ -144,12 +190,12 @@ class Control extends JPanel
 			if(model.isThrowing())
 			{
 				model.setThrowing(false);
-				stopStartbutton.setText("stop");
+				stopStartbutton.setText("start");
 			}
 			else
 			{
 				model.setThrowing(true);
-				stopStartbutton.setText("start");
+				stopStartbutton.setText("stop");
 			}
 		}
 	}
@@ -157,7 +203,14 @@ class Control extends JPanel
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			//model.stopThrowing();
+			if(model.getGraph() == model.BARGRAPH)
+			{
+				model.selectGraph(model.TABLE);
+			}
+			else
+			{
+				model.selectGraph(model.BARGRAPH);
+			}
 		}
 	}
 }

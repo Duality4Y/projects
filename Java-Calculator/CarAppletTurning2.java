@@ -104,16 +104,16 @@ class Car
 		
 		int dotSize = wheelSize/4;
 		
-		wheelx = wheelx+(int)(dotSize*Math.cos(this.x))+wheelSize/2-dotSize/2;
-		wheely = wheely+(int)(dotSize*Math.sin(this.x))+wheelSize/2-dotSize/2;
+		wheelx = wheelx+(int)(dotSize*Math.cos(this.x/2))+wheelSize/2-dotSize/2;
+		wheely = wheely+(int)(dotSize*Math.sin(this.x/2))+wheelSize/2-dotSize/2;
 		g.setColor(Color.WHITE);
 		g.fillOval(wheelx,wheely , dotSize, dotSize);
 		
 		//front wheel rotating
 		wheelx = this.x+chassisWidth/6;
 		wheely = (this.y+chassisHeight+roofHeight)-(wheelSize/2);
-		wheelx = wheelx+(int)(dotSize*Math.cos(this.x))+wheelSize/4-dotSize/2;
-		wheely = wheely+(int)(dotSize*Math.sin(this.x))+wheelSize/4-dotSize/2;
+		wheelx = wheelx+(int)(dotSize*Math.cos(this.x/2))+wheelSize/2-dotSize/2;
+		wheely = wheely+(int)(dotSize*Math.sin(this.x/2))+wheelSize/2-dotSize/2;
 		g.fillOval(wheelx,wheely, dotSize, dotSize);
 	}
 	public void ride()
