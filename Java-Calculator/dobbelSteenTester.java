@@ -19,7 +19,7 @@ class dobbelSteenTester extends JFrame
 		//create a instance of control and give it a reference to model.
 		control = new Control(model);
 		//create a instance of view.
-		view = new View();
+		view = new View(model);
 		
 		mainPanel.add(view);
 		mainPanel.add(control, BorderLayout.PAGE_END);
@@ -37,15 +37,27 @@ class dobbelSteenTester extends JFrame
 
 class View extends JPanel
 {
+	public View(Model model)
+	{
+		
+	}
 }
 
 class Model
 {
+	public static boolean BARGRAPH = true;
+	public static boolean TABLE = false;
+	
 	private int thrownNumber = 0;
 	private int throwCount = 0;
+	
+	private boolean isThrowing = false;
+	private boolean selectedGraph = false;
+	
 	private Random randomGenerator = new Random();
 	private ArrayList<Integer> numbers;
 	private Timer timer;
+	
 	public Model()
 	{
 		numbers = new ArrayList<Integer>();
@@ -62,9 +74,25 @@ class Model
 	}
 	public void throwDice()
 	{
-		addNumber(randomGenerator.nextInt(8));
-		throwCount++;
-		System.out.println(getAverage(2));
+		if(isThrowing())
+		{
+			addNumber(randomGenerator.nextInt(8));
+			throwCount++;
+			System.out.println(getTotalNumThrown(2));
+		}
+	}
+	
+	public boolean isThrowing()
+	{
+		return this.isThrowing;
+	}
+	public void setThrowing(boolean throwing)
+	{
+		this.isThrowing = throwing;
+	}
+	public void selectGraph(boolean graph)
+	{
+		this.selectedGraph = graph;
 	}
 	public void addNumber(int num)
 	{
@@ -78,49 +106,58 @@ class Model
 	{
 		timer.stop();
 	}
-	public int getAverage(int num)
+	public int getTotalNumThrown(int num)
 	{
-		int total = 0;
+		int total = 1;
 		for(Integer number:numbers)
 		{
 			if(number == num)
 			{
-				total+=number;
+				total+=1;
 			}
 		}
-		return (int)total/throwCount;
+		return throwCount/total;
 	}
 }
 
 class Control extends JPanel
 {
-	private JButton startbutton;
-	private JButton stopbutton;
+	private JButton stopStartbutton;
+	private JButton graphSwitchbutton;
 	private Model model;
 	public Control(Model model)
 	{
 		super();
 		this.model = model;
 		
-		startbutton = new JButton("start");
-		startbutton.addActionListener(new startbuttonHandler());
-		stopbutton = new JButton("stop");
-		stopbutton.addActionListener(new stopbuttonHandler());
-		add(startbutton);
-		add(stopbutton);
+		stopStartbutton = new JButton("stop");
+		stopStartbutton.addActionListener(new stopStartbuttonHandler());
+		graphSwitchbutton = new JButton("graph");
+		graphSwitchbutton.addActionListener(new graphSwitchbuttonHandler());
+		add(stopStartbutton);
+		add(graphSwitchbutton);
 	}
-	class startbuttonHandler implements ActionListener
+	class stopStartbuttonHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			model.startThrowing();
+			if(model.isThrowing())
+			{
+				model.setThrowing(false);
+				stopStartbutton.setText("stop");
+			}
+			else
+			{
+				model.setThrowing(true);
+				stopStartbutton.setText("start");
+			}
 		}
 	}
-	class stopbuttonHandler implements ActionListener
+	class graphSwitchbuttonHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			model.stopThrowing();
+			//model.stopThrowing();
 		}
 	}
 }
