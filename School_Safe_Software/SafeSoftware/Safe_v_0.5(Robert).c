@@ -92,6 +92,7 @@ int main(void)
 			}
 		}
 		//if a 20seconds has elapsed turn safe off.
+		/*
 		if(!(PIND & (1<<ENCODER_BUTTON)))
 		{
 			sendNumber(1338);
@@ -99,6 +100,7 @@ int main(void)
 		}
 		else
 			displayedNum = time/timeScale;
+		*/
 		
 	}
 	
