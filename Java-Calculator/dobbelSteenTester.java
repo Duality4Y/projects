@@ -48,19 +48,24 @@ class View extends JPanel implements Observer
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		if(model.getGraph() == model.BARGRAPH)
+		int collomWidth = 50;
+		if(model.getGraph() == model.TABLE)
 		{
 			//g.fillRect(
 			for(int i = 0;i<7;i++)
 			{
-				model.getNumThrown(i);
 				g.setColor(Color.BLACK);
-				g.drawString(""+i, 100+(i*10), 100);
+				g.drawString(""+i, 100+(i*collomWidth), 370);
+				g.drawString(""+model.getNumThrown(i), 100+(i*collomWidth), 400);
 			}
 		}
-		else if(model.getGraph() == model.TABLE)
+		else if(model.getGraph() == model.BARGRAPH)
 		{
-			
+			for(int i = 0;i<7;i++)
+			{
+				g.setColor(Color.BLACK);
+				g.setColor(Color.BLUE);
+			}
 		}
 	}
 	//update view here.
@@ -104,7 +109,8 @@ class Model extends Observable
 	{
 		if(isThrowing())
 		{
-			addNumber(randomGenerator.nextInt(8));
+			//addNumber(randomGenerator.nextInt(8));
+			addNumber((int)(Math.random()*6.0)+1);
 			throwCount++;
 			System.out.println(getTotalNumThrown(2));
 		}
@@ -206,10 +212,12 @@ class Control extends JPanel
 			if(model.getGraph() == model.BARGRAPH)
 			{
 				model.selectGraph(model.TABLE);
+				graphSwitchbutton.setText("Bargraph");
 			}
 			else
 			{
 				model.selectGraph(model.BARGRAPH);
+				graphSwitchbutton.setText("Table");
 			}
 		}
 	}
