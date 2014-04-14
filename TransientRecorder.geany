@@ -23,9 +23,10 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=1008;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FKanaal.java;0;4
-FILE_NAME_1=89;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FTransientdata.java;0;4
+current_page=0
+FILE_NAME_0=194;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FKanaal.java;0;4
+FILE_NAME_1=88;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FTransientdata.java;0;4
+FILE_NAME_2=0;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FdobbelSteenTester.java;0;4
 
 [VTE]
 last_dir=/home/robert/projects/School_Safe_Software/SafeSoftware

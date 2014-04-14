@@ -1,25 +1,36 @@
 import javax.swing.*;
-class Channel extends Jpanel
+import java.awt.*;
+//import 
+
+class Channel extends JPanel
 {
-	private int color;
+	//class variables
+	private Color color;
 	private int sensitivity;
-	private int time;
 	private int channelNumber;
-	private String name;
 	private boolean selected;
 	
-	public Channel()
+	private TrancientSource tester;
+	
+	public Channel(Color color, int channelNumber, TransientModel model)
 	{
-		
+		this.color = color;
+		this.channelNumber = channelNumber;
+		this.selected = false;
+		this.sensitivity = 0;
+	
+		tester = new TrancientSource();
 	}
+	
 	/*
 	 * Setters and Getters down here.
 	 * */
-	public void setColor(int color)
+	public void setColor(Color color)
 	{
 		this.color = color;
 	}
-	public int getColor()
+	
+	public Color getColor()
 	{
 		return this.color;
 	}
@@ -33,39 +44,23 @@ class Channel extends Jpanel
 		return this.sensitivity;
 	}
 	
-	public void setTime(int time)
-	{
-		this.time = time;
-	}
-	public int getTime()
-	{
-		return this.time;
-	}
-	
 	public void setChannelNumber(int channelNumber)
 	{
 		this.channelNumber = channelNumber;
 	}
+	
 	public int getChannelNumber()
 	{
-		return this.ChannelNumber;
-	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	public String getName()
-	{
-		return this.name;
+		return this.channelNumber;
 	}
 	
 	public void selectChannel(boolean selected)
 	{
 		this.selected = selected;
 	}
+	
 	public boolean isSelected()
 	{
-		return (selected != 0);
+		return (selected);
 	}
 }
