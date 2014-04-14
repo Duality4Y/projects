@@ -23,12 +23,11 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=4
+current_page=3
 FILE_NAME_0=2454;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FdobbelSteenTester.java;0;4
 FILE_NAME_1=207;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCarApplet.java;0;4
 FILE_NAME_2=2986;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FCarAppletTurning2.java;0;4
 FILE_NAME_3=169;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2Frestaurant.java;0;4
-FILE_NAME_4=0;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FDropbox%2FProject%20Kluis%2FHardware%2Fschema%20en%20pcb%2FsafeV_1_0-BOM-values.txt;0;4
 
 [VTE]
 last_dir=/home/robert/projects/Java-Calculator

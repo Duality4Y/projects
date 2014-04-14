@@ -94,6 +94,23 @@ int getPinParameter(volatile unsigned char* inputStr)
 	//sei();
 	return temp_pin;
 }
+
+void sendNumber(int num)
+{
+	//uart_put(SEGMENT);
+	//int p,i;
+	//for(i = 0,p = 1;i<4;p*=10,i++)
+	//{
+	//	uart_put((num/p)%p);
+	//}
+	//uart_put(END_OF_TRANSMISSION);
+	uart_put(SEGMENT);
+	uart_put(1);
+	uart_put(3);
+	uart_put(3);
+	uart_put(8);
+	uart_put(15);
+}
 void runSerialInputCommands(volatile unsigned char* inputStr)
 {
 	//see if there is anything in the buffer.

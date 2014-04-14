@@ -1,5 +1,5 @@
-
-class Channel
+import javax.swing.*;
+class Channel extends Jpanel
 {
 	private int color;
 	private int sensitivity;

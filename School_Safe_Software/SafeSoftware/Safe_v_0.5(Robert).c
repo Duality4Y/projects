@@ -28,22 +28,6 @@
 
 int previousTime = 0;
 int interval = 2;
-void sendNumber(int num)
-{
-	//uart_put(SEGMENT);
-	//int p,i;
-	//for(i = 0,p = 1;i<4;p*=10,i++)
-	//{
-	//	uart_put((num/p)%p);
-	//}
-	//uart_put(END_OF_TRANSMISSION);
-	uart_put(SEGMENT);
-	uart_put(1);
-	uart_put(3);
-	uart_put(3);
-	uart_put(8);
-	uart_put(15);
-}
 
 int main(void)
 {
@@ -101,7 +85,11 @@ int main(void)
 		else
 			displayedNum = time/timeScale;
 		*/
-		
+		if(isLoggedIn)
+		{
+			sendNumber(1337);
+		}
+		displayedNum = ticks;
 	}
 	
 	return 1;

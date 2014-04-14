@@ -42,7 +42,7 @@ void init_uart()
 void uart_put(unsigned char data)
 {
 	//make certain that there is no data in UDR0
-	//while ( !( UCSR0A & (1<<UDRE0)) );
+	while ( !( UCSR0A & (1<<UDRE0)) );
 	//transmit data 
 	UDR0 = data;
 }
