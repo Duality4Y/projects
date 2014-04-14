@@ -29,10 +29,6 @@ public class TransientSource implements DummySerialPortEventListener {
 	/**
 	 * event handling, according to DummySerialPortEventListener.
 	 */
-	//public char getChannel()
-	//{
-	//	return char;
-	//}
 	public void serialEvent( DummySerialPortEvent event ) {		
 		if ( event.getEventType() == DummySerialPortEvent.DATA_AVAILABLE ) {
 			try {

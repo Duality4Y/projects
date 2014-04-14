@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.util.*;
 //import 
 
-class Channel extends JPanel
+class Channel extends JPanel implements DummySerialPortEventListener
 {
 	//class variables
 	private Color color;
@@ -10,16 +12,50 @@ class Channel extends JPanel
 	private int channelNumber;
 	private boolean selected;
 	
-	private TrancientSource tester;
+	//for getting the data.
+	private DummySerialPort port;
+	private InputStream input;
+	private boolean isForThisChannel;
+	private int valueA;
+	private int valueB;
 	
 	public Channel(Color color, int channelNumber, TransientModel model)
 	{
 		this.color = color;
 		this.channelNumber = channelNumber;
 		this.selected = false;
-		this.sensitivity = 0;
+		this.sensitivity = 1;
+		
+		this.port = new DummySerialPort(100);
+		try
+		{
+			port.addEventListener(this);
+		}catch(TooManyListenersException e){}
+		port.notifyOnDataAvailable(true);
+		input = port.getInputStream();
+	}
 	
-		tester = new TrancientSource();
+	public void serialEvent(DummySerialPortEvent event)
+	{
+		if(event.getEventType() == DummySerialPortEvent.DATA_AVAILABLE)
+		{
+			try
+			{
+				isForThisChannel = true;
+				if(input.available() > 0)
+				{
+					if(isForThisChannel == true)
+					{
+						this.valueA = (int)input.read();
+					}
+					else
+					{
+						this.valueB = (int)input.read();
+					}
+					isForThisChannel = !isForThisChannel;
+				}
+			}catch(IOException e){}
+		}
 	}
 	
 	/*
@@ -34,7 +70,18 @@ class Channel extends JPanel
 	{
 		return this.color;
 	}
-	
+	public int getValue()
+	{
+		if(this.channelNumber == 1)
+		{
+			
+		}
+		else if(this.channelNumber == 2)
+		{
+			
+		}
+		return -1;
+	}
 	public void setSensitivity(int sensitivity)
 	{
 		this.sensitivity = sensitivity;

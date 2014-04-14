@@ -1,9 +1,3 @@
-import java.util*;
-class TransientModel()
-{
-	ArrayList
-	public TransientModel()
-	{
-		
-	}
-}
+import java.util.*;
+
+class TransientModel{}
