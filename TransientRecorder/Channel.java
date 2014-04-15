@@ -79,35 +79,38 @@ class Channel extends JPanel implements DummySerialPortEventListener
 		{
 			try
 			{
-				isForThisChannel = true;
+				boolean channel = true;
 				if(input.available() > 0)
 				{
+					if(channel)
+						System.out.print((char) input.read());
+					else
+						System.out.println((int) input.read());
+					//char channel =  'A';
+					//int value = 	0;
+					//if(isForThisChannel)
+					//	channel =  (char)input.read();
+					//else
+					//	value = (int)input.read();
+					//if(channel == 'A')
+					//{
+					//	A_values.add(value);
+					//}
+					//else if(channel == 'B')
+					//{
+					//	B_values.add(value);
+					//}
 					
-					char channel =  'A';
-					int value = 	0;
-					if(isForThisChannel)
-						channel =  (char)input.read();
-					else
-						value = (int)input.read();
-					if(channel == 'A')
-					{
-						A_values.add(value);
-					}
-					else if(channel == 'B')
-					{
-						B_values.add(value);
-					}
-					/*
-					if(isForThisChannel == true)
-					{
-						A_values.add((int)input.read()/sensitivity);
-					}
-					else
-					{
-						B_values.add((int)input.read()/sensitivity);
-					}
-					isForThisChannel = !isForThisChannel;
-					* */
+					//if(isForThisChannel == true)
+					//{
+					//	A_values.add((int)input.read()/sensitivity);
+					//}
+					//else
+					//{
+					//	B_values.add((int)input.read()/sensitivity);
+					//}
+					//isForThisChannel = !isForThisChannel;
+					channel = !channel;
 				}
 			}catch(IOException e){}
 		}
