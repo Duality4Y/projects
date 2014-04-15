@@ -49,8 +49,11 @@ int main(void)
 	//initialize time code
 	initTime();
 	//main loop.
+	DDRB  |= (1<<PB4)|(1<<PB5);
+	PORTB |= (1<<PB5);
 	while(1)
 	{
+		/*
 		//if there is any data for debuging purposes print it.
 		//uart_put_str(inputStr);
 		//if there is new data we check to see the commands.
@@ -85,11 +88,20 @@ int main(void)
 		else
 			displayedNum = time/timeScale;
 		*/
+		/*
 		if(isLoggedIn)
 		{
 			sendNumber(1337);
 		}
 		displayedNum = ticks;
+		*/
+		_delay_ms(100);
+		PORTB |= (1<<PB5);
+		PORTB |= (1<<PB4);
+		_delay_ms(100);
+		PORTB &= ~(1<<PB5);
+		PORTB &= ~(1<<PB4);
+		
 	}
 	
 	return 1;

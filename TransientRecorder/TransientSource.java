@@ -66,6 +66,5 @@ public class TransientSource implements DummySerialPortEventListener {
 		TransientSource tester = new TransientSource();
 		tester.monitor( 10000 ); // see what happens during 10 secs
 		System.out.println("Done");
-		
 	}
 }

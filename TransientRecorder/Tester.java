@@ -14,7 +14,7 @@ import java.util.*;
  * 
  * @author Eelco Jannink for Saxion-CII
  */
-public class TrancientSource implements DummySerialPortEventListener {
+class TrancientSource implements DummySerialPortEventListener {
 	private DummySerialPort port;
 	private InputStream input;
 	
