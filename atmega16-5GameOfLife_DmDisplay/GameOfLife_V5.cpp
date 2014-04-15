@@ -42,8 +42,8 @@
 #define surviveAbility 2
 #define reproductiveNumber 3
 //parameters that define how big the field is. and how big a buffer to use.
-#define fieldWidth 16 //16
-#define fieldHeight 16 //16
+#define fieldWidth 10 //16
+#define fieldHeight 10 //16
 #define fieldSize (fieldWidth*fieldHeight)
 uint8_t field[fieldSize];
 //also create a buffer for holding all the changes.
@@ -343,11 +343,11 @@ int main(void)
 			//reset position to 0
 			position = fieldSize;
 			//set frame rate with a blocking delay..
-			delay(0); //worst way to do things
+			//delay(0); //worst way to do things
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
 			//set contrast with pot meter on analog pin 1 (not 0)
-			lcd.setContrast(adc_read(1)/32);
+			lcd.setContrast(32/2);
 			//change field if field the same a while, or iterations goes above a certain number which meens it's probaly in a loop
 			//check if button is pressed and create a new field.
 			if(changeCount == holdingNumber || (iterations > 1000) || (PINB & (1<<PB2)))

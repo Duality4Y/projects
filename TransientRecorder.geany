@@ -24,14 +24,14 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=88;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FKanaal.java;0;4
+FILE_NAME_0=2598;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FChannelControler.java;0;4
 FILE_NAME_1=24;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FdobbelSteenTester.java;0;4
-FILE_NAME_2=1859;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FTransientSource.java;0;4
+FILE_NAME_2=2093;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FTransientSource.java;0;4
 FILE_NAME_3=44;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FTransientModel.java;0;4
 FILE_NAME_4=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FpinDefs.h;0;4
 
 [VTE]
-last_dir=/home/robert/Dropbox/Transient recorder/recorder
+last_dir=/home/robert/projects/TransientRecorder
 
 [build-menu]
 JavaFT_00_LB=_Compile

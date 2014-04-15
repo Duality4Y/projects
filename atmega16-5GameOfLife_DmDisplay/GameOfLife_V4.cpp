@@ -339,7 +339,7 @@ int main(void)
 			//reset position to 0
 			position = fieldSize;
 			//set frame rate with a blocking delay..
-			delay(0); //worst way to do things
+			//delay(0); //worst way to do things
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
 			//set contrast with pot meter on analog pin 1 (not 0)

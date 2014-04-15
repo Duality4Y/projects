@@ -30,7 +30,7 @@
 #include <stdlib.h>
 
 //the code for working with the display. 
-#include "DmDisplay.h"
+#include "DmDisplay/DmDisplay.h"
 //contains life forms.
 #include "lifeForms.h"
 
@@ -38,8 +38,8 @@
 #define surviveAbility 2
 #define reproductiveNumber 3
 //parameters that define how big the field is. and how big a buffer to use.
-#define fieldWidth 20
-#define fieldHeight 5
+#define fieldWidth 20 //20
+#define fieldHeight 5 //5
 #define fieldSize (fieldWidth*fieldHeight)
 uint8_t field[fieldSize];
 //also create a buffer for holding all the changes.
@@ -61,8 +61,8 @@ int iterations = 0;
 //keeps position in field.
 uint8_t position = 0;
 //-------------------
-//select mode, RANDOM, or HOUSE
-#define HOUSE
+//select mode, RANDOM, or PATTERN
+#define PATTERN
 // a pattern
 uint8_t lightweight_spaceship[fieldSize] = {
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,
@@ -95,8 +95,17 @@ void copy_buffer(uint8_t *buffer, uint8_t *field)
 	while(size--) field[size] = buffer[size];
 }
 //put a costume "pattern" onto the playing field.
-void insert_pattern(uint8_t *pattern, uint8_t *field, LifeForm lifeForm)
-{
+void insert_pattern(uint8_t *field, LifeForm lifeForm, uint8_t x, uint8_t y)
+{	
+	uint8_t offset = 3;
+	for(int pos = 0;pos<(lifeForm.width*lifeForm.heigth);pos++)
+	{
+		/*
+		 * (pos/3) = y pos;
+		 * (pos%3) = x pos;
+		 * */
+		field[(pos/3)*(pos%3)+fieldWidth] = lifeForm.pattern[pos];
+	}
 }
 void insert_pattern(uint8_t *pattern, uint8_t *field)
 {
@@ -162,6 +171,10 @@ void clearArray(uint8_t *buffer)
 {
 	int size = fieldSize;
 	while(size--)buffer[size] = 0;
+}
+void clearField(uint8_t *buffer)
+{
+	clearArray(buffer);
 }
 //used to draw a lifing cell with a box
 void writeCell(void)
@@ -252,8 +265,8 @@ int main(void)
 	clearArray(buffer);
 	
 	//if house define insert that.
-	#ifdef HOUSE
-		insert_pattern(house, field);
+	#ifdef PATTERN
+		insert_pattern(field, Glider, 0,0);
 	#endif
 	//else random field.
 	#ifdef RANDOM
@@ -275,35 +288,35 @@ int main(void)
 		//if a position has a cell (1),
 		//then look how many around,
 		//if 2 or 3 around it lives, else it dies.
-		if(field[position])
-		{
-			if(totalAround(field, position)==surviveAbility)
-			{
-				buffer[position]=1;
-			}
-			else if(totalAround(field, position)==surviveAbility+1)
-			{
-				buffer[position]=1;
-			}
-			else
-			{
-				buffer[position]=0;
-			}
-		}
-		else
-		{
+		//if(field[position])
+		//{
+		//	if(totalAround(field, position)==surviveAbility)
+		//	{
+		//		buffer[position]=1;
+		//	}
+		//	else if(totalAround(field, position)==surviveAbility+1)
+		//	{
+		//		buffer[position]=1;
+		//	}
+		//	else
+		//	{
+		//		buffer[position]=0;
+		//	}
+		//}
+		//else
+		//{
 			//but if a position in the field is empty
 			//and it has 3 around, that position becomes alife.
 			
-			if(totalAround(field, position)==reproductiveNumber)
-			{
-				buffer[position] = 1;
-			}
-			else
-			{
-				buffer[position] = 0;
-			}
-		}
+		//	if(totalAround(field, position)==reproductiveNumber)
+		//	{
+		//		buffer[position] = 1;
+		//	}
+		//	else
+		//	{
+		//		buffer[position] = 0;
+		//	}
+		//}
 		//position keeps position in the field array,
 		//and at the same time drawing location on
 		//screen.
@@ -314,11 +327,11 @@ int main(void)
 			//reset position to 0
 			position = fieldSize;
 			//set frame rate with a blocking delay..
-			delay(100);
+			delay(adc_read(1));
 			//check wether we are in a steady state or just still evolving.
 			currentState = checkField(field);
 			//set contrast with pot meter on analog pin 1 (not 0)
-			lcd.setContrast(adc_read(1)/32);
+			lcd.setContrast(32/2);
 			//change field if field the same a while, or iterations goes above a certain number which meens it's probaly in a loop
 			//check if button is pressed and create a new field.
 			if(changeCount == holdingNumber || (iterations > 1000) || (PINB & (1<<PB2)))
@@ -328,7 +341,10 @@ int main(void)
 				//reset iteration count.
 				iterations = 0;
 				//create a random playing field.
-				createRandomField(field);
+				#ifdef PATTERN
+					insert_pattern(field, Glider, 0,0);
+				#endif
+					//createRandomField(field);
 				//put a pattern we created onto the field.
 				//insert_field(stable, field);
 				

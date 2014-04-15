@@ -50,7 +50,8 @@ int main(void)
 	initTime();
 	//main loop.
 	DDRB  |= (1<<PB4)|(1<<PB5);
-	PORTB |= (1<<PB5);
+	PORTB |= (1<<PB5)|(1<<PB4);
+	int val = 1111;
 	while(1)
 	{
 		/*
@@ -78,8 +79,6 @@ int main(void)
 				}
 			}
 		}
-		//if a 20seconds has elapsed turn safe off.
-		/*
 		if(!(PIND & (1<<ENCODER_BUTTON)))
 		{
 			sendNumber(1338);
@@ -87,21 +86,20 @@ int main(void)
 		}
 		else
 			displayedNum = time/timeScale;
-		*/
-		/*
 		if(isLoggedIn)
 		{
 			sendNumber(1337);
-		}
-		displayedNum = ticks;
-		*/
+		}*/
+		displayedNum = timeinSeconds*1111;
+		
+		/*
 		_delay_ms(100);
 		PORTB |= (1<<PB5);
 		PORTB |= (1<<PB4);
 		_delay_ms(100);
 		PORTB &= ~(1<<PB5);
 		PORTB &= ~(1<<PB4);
-		
+		*/
 	}
 	
 	return 1;

@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 //import 
 
-class Channel extends JPanel implements DummySerialPortEventListener
+class ChannelControler extends JPanel implements DummySerialPortEventListener
 {
 	//class variables
 	private Color color;
@@ -29,7 +29,7 @@ class Channel extends JPanel implements DummySerialPortEventListener
 	//alink to model.
 	private TransientModel model;
 	
-	public Channel(Color color, int channelNumber, TransientModel model)
+	public ChannelControler(Color color, int channelNumber, TransientModel model)
 	{
 		this.color = color;
 		this.channelNumber = channelNumber;
@@ -81,7 +81,7 @@ class Channel extends JPanel implements DummySerialPortEventListener
 			try {
 				// read data
 				channel = true;
-				if(input.available() > 0) {
+				while(input.available() > 0) {
 					if(channel)
 					{
 						chanSel = (char) input.read();
@@ -90,17 +90,17 @@ class Channel extends JPanel implements DummySerialPortEventListener
 					{
 						value = (int) input.read();
 					}
-					if(chanSel == 'A')
+					channel = !channel;
+					if(chanSel == 'A' && input.available() > 0)
 					{
 						A_values.add(value);
 					}
-					else if(chanSel == 'B')
+					else if(chanSel == 'B' && input.available() > 0)
 					{
 						B_values.add(value);
 					}
-					System.out.println(A_values);
-					System.out.println(B_values);
-					channel = !channel;
+					//System.out.println(A_values);
+					//System.out.println(B_values);
 				} 
 			} catch (IOException e) {
 			}
