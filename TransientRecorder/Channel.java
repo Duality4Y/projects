@@ -67,10 +67,10 @@ class Channel extends JPanel implements DummySerialPortEventListener
 			sensitivity += 5;
 		}
 	}
-	public int stillValues()
+	public boolean stillValues()
 	{
 		try{
-			return input.available();
+			return input.available() > 0;
 		}catch(IOException e){return -1;}
 	}
 	public void serialEvent(DummySerialPortEvent event)
@@ -79,39 +79,40 @@ class Channel extends JPanel implements DummySerialPortEventListener
 		{
 			try
 			{
+				System.out.println(input.read());
+				A_values.add((int)input.read());
+				//System.out.println(A_values);
+				System.out.println(input.read());
+				B_values.add((int)input.read());
+				//System.out.println(B_values);
+				
+				/*
 				boolean channel = true;
+				char channelSel = 1;
+				int value = 0;
 				if(input.available() > 0)
 				{
 					if(channel)
-						System.out.print((char) input.read());
+					{
+						channelSel = (char)input.read();
+					}
 					else
-						System.out.println((int) input.read());
-					//char channel =  'A';
-					//int value = 	0;
-					//if(isForThisChannel)
-					//	channel =  (char)input.read();
-					//else
-					//	value = (int)input.read();
-					//if(channel == 'A')
-					//{
-					//	A_values.add(value);
-					//}
-					//else if(channel == 'B')
-					//{
-					//	B_values.add(value);
-					//}
-					
-					//if(isForThisChannel == true)
-					//{
-					//	A_values.add((int)input.read()/sensitivity);
-					//}
-					//else
-					//{
-					//	B_values.add((int)input.read()/sensitivity);
-					//}
-					//isForThisChannel = !isForThisChannel;
+					{
+						value = (int)input.read();
+					}
+					//System.out.println("channel select: "+channelSel);
+					if(channelSel == 'A')
+					{
+						A_values.add(value);
+						//System.out.println("A"+value);
+					}
+					if(channelSel == 'B')
+					{
+						B_values.add(value);
+						//System.out.println("B"+value);
+					}
 					channel = !channel;
-				}
+				}*/
 			}catch(IOException e){}
 		}
 	}
@@ -132,7 +133,7 @@ class Channel extends JPanel implements DummySerialPortEventListener
 	{
 		Channel channel1 = new Channel(Color.GRAY, 1, new TransientModel());
 		Channel channel2 = new Channel(Color.GRAY, 2, new TransientModel());
-		while(channel1.stillValues() > 0 && channel2.stillValues() > 0)
+		while(channel1.stillValues() && channel2.stillValues())
 		{
 			System.out.println("Channel A"+channel1.getValues(1));
 			System.out.println("Channel B"+channel2.getValues(2));
@@ -140,15 +141,15 @@ class Channel extends JPanel implements DummySerialPortEventListener
 	}
 	public ArrayList<Integer> getValues(int channelnumber)
 	{
-		if(this.channelNumber == channelnumber)
-		{
+		//if(this.channelNumber == channelnumber)
+		//{
 			return A_values;
-		}
-		else if(this.channelNumber == channelnumber)
-		{
-			return B_values;
-		}
-		return null;
+		//}
+		//else if(this.channelNumber == channelnumber)
+		//{
+		//	return B_values;
+		//}
+		//return null;
 	}
 	public void setSensitivity(int sensitivity)
 	{
