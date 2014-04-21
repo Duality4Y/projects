@@ -7,10 +7,11 @@
 #include <avr/eeprom.h>
 #include <avr/sleep.h>
 
+#include "time.c"				//contains code related to keeping track of time.
 #include "pinDefs.h"
+#include "safeFunctions.h"
 #include "safeConstants.c" 		//contains constants related to safe funtioning.
 #include "safeVariables.c" 		//contains safe variables.
-#include "time.c"				//contains code related to keeping track of time.
 #include "uart.c" 				//include basic uart capability written by Robert.
 #include "servo.c" 				//servo related code
 #include "rotary.c" 			//rotary related code
@@ -41,8 +42,57 @@ void powerOff()
 	PORTD |= (1<<POWERCONTROL); //switch transistor off.
 	DDRB &= ~( (1<<LATCH)|(1<<CLOCK)|(1<<DATA_OUT)); //turn shifter pins high impedance.
 }
-
-void inputPinCode(){}
+//this function will get the current inputed pincode from left to right;
+void getInputPinCode()
+{
+	
+	static int digitPlace = 1000;
+	static int temp_pin = 0;
+	cli();
+	//send directional information for encoder animation.
+	//and to go to next digit.
+	if(direction != prev_direction)
+	{
+		//set correct pin.
+		if(direction)
+			temp_pin += ((ticks%10)+1)*digitPlace;
+		else
+			temp_pin += ((ticks%10)-1)*digitPlace;
+		digitPlace /= 10;
+		//if we go off the screen to the right
+		if(digitPlace <= 0)
+		{
+			pin = temp_pin+(ticks%10)*digitPlace;
+			temp_pin = 0;
+			digitPlace = 1000;
+		}
+		prev_direction = direction;
+		//this will send information for the rotary animation
+		if(direction)
+		{
+			uart_put(ROTARY_LEFT);
+			uart_put_str("\r\n");
+		}
+		else
+		{
+			uart_put(ROTARY_RIGHT);
+			uart_put_str("\r\n");
+		}
+	}
+	//also send once a while, to counter mis displays.
+	else if(!(time%(timeScale/2)) && isLoggedIn)
+	{
+		sendNumber(temp_pin+(ticks%10)*digitPlace);
+	}
+	sei();
+	//always display
+	displayedNum = temp_pin+(ticks%10)*digitPlace;
+	//if encoder is pressed clear current digit.
+	if(!(PIND & (1<<ENCODER_BUTTON))) // if encoder pin is pressed
+	{
+		//pin = (digitPlace*(ticks%10));
+	}
+}
 //this function will make the safe enter sleep mode.
 void sleep()
 {
@@ -104,11 +154,12 @@ void sendNumber(int num)
 	//	uart_put((num/p)%p);
 	//}
 	//uart_put(END_OF_TRANSMISSION);
+	//easy and dirty way .. 
 	uart_put(SEGMENT);
-	uart_put(1);
-	uart_put(3);
-	uart_put(3);
-	uart_put(8);
+	uart_put(num/1000);
+	uart_put((num/100)%10);
+	uart_put((num/10)%10);
+	uart_put(num%10);
 	uart_put(15);
 }
 void runSerialInputCommands(volatile unsigned char* inputStr)
@@ -140,6 +191,9 @@ void runSerialInputCommands(volatile unsigned char* inputStr)
 				case SETPIN:
 					pin = getPinParameter(inputStr);
 					uart_clear();
+					//uart_put(PASSWORD_CHANGED);
+					//uart_put_str("\r\n");
+					//uart_clear();
 					break;
 				case LOGOUT:
 					isLoggedIn = false;

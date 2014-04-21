@@ -1,0 +1,3 @@
+
+void initPower();
+void powerOn();

@@ -54,13 +54,13 @@ void uart_put_str(volatile char *str)
 	{
 		uart_put(*str++);
 	}
-	
+	uart_put(0x04);
 }
 //function for recieving data.
 unsigned char uart_getdata(void)
 {
 	//make sure that UDR is empty
-	//while ( !(UCSR0A & (1<<RXC0)) );
+	while ( !(UCSR0A & (1<<RXC0)) );
 	//return recieved data
 	return UDR0;
 }

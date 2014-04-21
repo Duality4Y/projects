@@ -67,6 +67,8 @@ Response commands:
 #define DISCONNECTED 4 								//Used to say to the client/android/pc that the user has been succesfully logged out
 #define OPENED 5 									//Used to say that the safe is currently open
 #define CLOSED 6									//Used to say that the safi is currently closed
+#define PASSWORD_CHANGED 7							//Password has changed with succes
+#define PASSWORD_FAILED 9							//Password failed to change
 
 usage of SEGMENT:
 When the client receiver this command, it will use the 4 least significant bytes, as the pin, which is then split

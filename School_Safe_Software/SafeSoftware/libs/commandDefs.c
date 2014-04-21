@@ -1,3 +1,21 @@
+/*
+login <4 digit number>: login with de 4 digit number as pin
+  when acces:
+    1: set 5v line to low, and all other pins to ground
+    0: tunrs 5v line HIGH and the other neccesary pins
+    open: change servo to open state
+    close: change servo to closed state
+    sread: read servo value
+    pread: read the pin code
+    pin <4 digit number>: set the pin
+    sleep: enter sleep mode
+    logout: logout, basically set a boolean to false
+    login <4 digit number>: login with de 4 digit number as pin
+  no acces:
+    message acces denied
+BT
+  send BTOK
+*/
 //rules for speaking to each other.
 #define OFF	 	42
 #define ON 		1
@@ -10,6 +28,32 @@
 #define SLEEP 	8
 #define LOGOUT 	9
 #define LOGIN 	10
+
+/*
+//action undertaken by safe firmware.
+if BT:
+	send BTOK
+if SREAD:
+	send servo_val
+if PREAD:
+	send pin
+if SETPIN:
+	read pin
+if LOGIN:
+	send "acces" if entered_pin == pin
+	else send "acces denied."
+
+login:
+10,pin,!0
+if pin 1234
+
+send 10
+send 1
+send 2
+send 3
+send 4
+send !0
+*/
 
 //Response commands:
 #define BTOK 121 									//Needs to be unique, 150 = 66(B) + 84(T)
@@ -24,6 +68,11 @@
 #define DISCONNECTED 4 								//Used to say to the client/android/pc that the user has been succesfully logged out
 #define OPENED 5 									//Used to say that the safe is currently open
 #define CLOSED 6									//Used to say that the safi is currently closed
-#define END_OF_TRANSMISSION 15						//used to say everything has been send.
+#define PASSWORD_CHANGED 70							//Password has changed with succes
+#define PASSWORD_FAILED 9							//Password failed to change
 
-//#define SEGMENT byte(1), byte(num0), byte(num1), byte(num2), byte(num3)
+/*
+usage of SEGMENT:
+When the client receiver this command, it will use the 4 least significant bytes, as the pin, which is then split
+in 4 separate digits to be shown on de seven segment displays on the GUI/android application
+*/

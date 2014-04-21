@@ -27,8 +27,22 @@ void enableServo()
 	isServoActive = true;
 	//also keep track of the current time.
 	previousServo = time;
-	TCCR2A |= (1<<CS22);
-	DDRB |= (1<<PB3);
+	TCCR2A |= (1<<CS22);//enable timer
+	//turn servo power transistor on.
+	SERVO_POWER_PORT &= ~(1<<SERVO_POWER_CONTROLE);
+	//enable pwm on pin
+	SERVO_PORT |= (1<<SERVO_PIN);
+}
+
+void disableServo()
+{
+	//set servo to inactive.
+	isServoActive = false;
+	TCCR2A &= ~(1<<CS22); //kill timer
+	//turn servo power transistor off.
+	SERVO_POWER_PORT |= (1<<SERVO_POWER_CONTROLE);
+	//kill signal on servo pin
+	SERVO_PORT &= ~(1<<SERVO_PIN);
 }
 
 //this function takes a value between 0 and 10. and sets the servo to the position accordingly.
@@ -44,13 +58,6 @@ void setServoPos(uint8_t position)
 	SERVOCONTROLEREG = position+SERVOMIN;
 }
 
-void disableServo()
-{
-	//set servo to inactive.
-	isServoActive = false;
-	TCCR2A &= ~(1<<CS22);
-	DDRB &= ~(1<<PB3);
-}
 
 uint8_t getCurrentServoState()
 {
@@ -62,7 +69,11 @@ void initServo()
 	TCCR2A |= (1<<COM2A1)|(1<<WGM20)|(1<<WGM21);//fast pwm on pb3 (oc2a)
 	TCCR2B |= (1<<CS20)|(1<<CS21)|(1<<CS22); //about ~50hz with 1024 prescaler.
 	//PB3 as output
-	DDRB |= (1<<PB3);
+	SERVO_DDR |= (1<<SERVO_PIN);
+	//powerpin for servo to output.
+	SERVO_POWER_DDR |= (1<<SERVO_POWER_CONTROLE);
+	//turn servo power transistor on.
+	SERVO_POWER_PORT &= ~(1<<SERVO_POWER_CONTROLE);
 	//enable and set servo to mid position.
 	setServoPos(SERVORANGE/2);
 	//make sure finalstate is mid state and then is disable.

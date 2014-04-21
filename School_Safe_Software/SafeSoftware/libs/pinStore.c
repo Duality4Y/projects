@@ -2,9 +2,10 @@
  * this code is related to storeing the pincode into eeprom.
  * */
 
-void initPin()
+void initPincode()
 {
-	pin = readPin();
+	//pin = readPin();
+	//well nothing happens here yet .. 
 }
 
 void storePin(int pin)

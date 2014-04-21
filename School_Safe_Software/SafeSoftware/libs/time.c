@@ -2,10 +2,10 @@
  * a way of keeping track of time.
  * by darrel 
  * */
- 
+#include "safeFunctions.h"
 //Time tracking related
-volatile uint16_t time = 0; //Stores the time in fifth of seconds
-volatile uint16_t timeinSeconds = 0; //stores the time in seconds
+volatile unsigned long time = 0; //Stores the time in fifth of seconds
+volatile unsigned long timeinSeconds = 0; //stores the time in seconds
 const uint8_t timeScale = 122;
 
 void initTime()
