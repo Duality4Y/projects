@@ -71,17 +71,17 @@ void getInputPinCode()
 		if(direction)
 		{
 			uart_put(ROTARY_LEFT);
-			uart_put_str("\r\n");
 		}
 		else
 		{
 			uart_put(ROTARY_RIGHT);
-			uart_put_str("\r\n");
 		}
+		ticks = 100;
 	}
 	//also send once a while, to counter mis displays.
 	else if(!(time%(timeScale/2)) && isLoggedIn)
-	{
+	{	
+		close();
 		sendNumber(temp_pin+(ticks%10)*digitPlace);
 	}
 	sei();
@@ -90,7 +90,7 @@ void getInputPinCode()
 	//if encoder is pressed clear current digit.
 	if(!(PIND & (1<<ENCODER_BUTTON))) // if encoder pin is pressed
 	{
-		//pin = (digitPlace*(ticks%10));
+		ticks = 100;//pin = (digitPlace*(ticks%10));
 	}
 }
 //this function will make the safe enter sleep mode.
@@ -113,7 +113,6 @@ void open()
 	
 	//signal the java program that we have done ar requested.
 	uart_put(OPENED);
-	uart_put_str("\r\n");
 }
 void close()
 {
@@ -122,7 +121,6 @@ void close()
 	
 	//signal the java program that we have closed or are closing the door.
 	uart_put(CLOSED);
-	uart_put_str("\r\n");
 }
 //could be used to get a pin after a command.
 int getPinParameter(volatile unsigned char* inputStr)
@@ -174,32 +172,22 @@ void runSerialInputCommands(volatile unsigned char* inputStr)
 			{
 				case OFF:
 					powerOff();
-					uart_clear();
 					break;
 				case ON:
 					powerOn();
-					uart_clear();
 					break;
 				case OPEN:
 					open();
-					uart_clear();
 					break;
 				case CLOSE:
 					close();
-					uart_clear();
 					break;
 				case SETPIN:
 					pin = getPinParameter(inputStr);
-					uart_clear();
-					//uart_put(PASSWORD_CHANGED);
-					//uart_put_str("\r\n");
-					//uart_clear();
 					break;
 				case LOGOUT:
 					isLoggedIn = false;
 					uart_put(DISCONNECTED);
-					uart_put_str("\r\n");
-					uart_clear();
 					break;
 				default:
 					uart_clear();
@@ -214,24 +202,21 @@ void runSerialInputCommands(volatile unsigned char* inputStr)
 				{
 					isLoggedIn = true;
 					uart_put(SERIAL_ACCES);
-					uart_put_str("\r\n");
 				}
 				else
 				{
 					isLoggedIn = false;
 					uart_put(SERIAL_DENIED);
-					uart_put_str("\r\n");
 				}
-				uart_clear();
 				break;
 			case BT:
 				uart_put(BTOK);
-				uart_put_str("\r\n");
-				uart_clear();
+				sendNumber(actual_pin);
 				break;
 			default:
-				uart_clear();
+				//uart_clear();
 				break;
 		}
+		uart_clear();
 	}
 }

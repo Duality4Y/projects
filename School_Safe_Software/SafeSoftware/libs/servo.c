@@ -27,7 +27,7 @@ void enableServo()
 	isServoActive = true;
 	//also keep track of the current time.
 	previousServo = time;
-	TCCR2A |= (1<<CS22);//enable timer
+	TCCR2B |= (1<<CS20)|(1<<CS21)|(1<<CS22); //about ~50hz with 1024 prescaler.
 	//turn servo power transistor on.
 	SERVO_POWER_PORT &= ~(1<<SERVO_POWER_CONTROLE);
 	//enable pwm on pin
@@ -38,7 +38,7 @@ void disableServo()
 {
 	//set servo to inactive.
 	isServoActive = false;
-	TCCR2A &= ~(1<<CS22); //kill timer
+	TCCR2A &= ~((1<<CS20)|(1<<CS21)|(1<<CS22)); //about ~50hz with 1024 prescaler.; //kill timer
 	//turn servo power transistor off.
 	SERVO_POWER_PORT |= (1<<SERVO_POWER_CONTROLE);
 	//kill signal on servo pin

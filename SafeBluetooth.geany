@@ -24,9 +24,9 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=2795;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FSafe_v_0.5%28Robert%29.c;0;4
+FILE_NAME_0=2844;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2FSafe_v_0.5%28Robert%29.c;0;4
 FILE_NAME_1=161;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FsafeVariables.c;0;4
-FILE_NAME_2=2342;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FsafeFunctions.c;0;4
+FILE_NAME_2=2159;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FsafeFunctions.c;0;4
 FILE_NAME_3=1176;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Frotary.c;0;4
 FILE_NAME_4=1277;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Fuart.c;0;4
 FILE_NAME_5=544;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FcommandDefs.c;0;4
@@ -36,10 +36,10 @@ FILE_NAME_8=249;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Softw
 FILE_NAME_9=0;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FDropbox%2FProject%20Kluis%2FSoftware%2Fcommands_VERANDER_DEZE_NIET_ROBERT.txt;0;4
 FILE_NAME_10=203;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FsafeConstants.c;0;4
 FILE_NAME_11=115;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2FpinStore.c;0;4
-FILE_NAME_12=1284;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Fdisplay.c;0;4
+FILE_NAME_12=1309;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FSchool_Safe_Software%2FSafeSoftware%2Flibs%2Fdisplay.c;0;4
 
 [VTE]
-last_dir=/home/robert/projects
+last_dir=/home/robert/projects/School_Safe_Software/SafeSoftware
 
 [build-menu]
 EX_00_LB=Upload

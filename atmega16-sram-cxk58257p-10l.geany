@@ -15,6 +15,8 @@ indent_mode=3
 [project]
 name=atmega16-sram-cxk58257p-10l
 base_path=/home/robert/projects/atmega16-sram-cxk58257p-10l/
+description=
+file_patterns=
 
 [long line marker]
 long_line_behaviour=1
@@ -22,7 +24,13 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Fmain.c;0;4
+FILE_NAME_0=38;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Fmain.c;0;4
 
 [VTE]
 last_dir=/home/robert/projects/ruby_turing
+
+[build-menu]
+CFT_00_LB=_Compile
+CFT_00_CM=avr-g++ -mmcu=atmega168 -Os -o build.elf "%f"
+CFT_00_WD=
+filetypes=C;

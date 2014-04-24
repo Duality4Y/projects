@@ -51,7 +51,7 @@ int interval = 2;
 int main(void)
 {
 	//some setup code
-	//storePin(1337); //only once needed
+	storePin(1337); //only once needed
 	initPincode();
 	//initizialize power controle pins
 	initPowerControle();
@@ -105,22 +105,30 @@ int main(void)
 			rotary_has_turned = 0;
 			sendNumber(pin);
 		}
-		//if pin is correctly set set green led, els red on.
-		if(pin == 1337)
+		
+		if(timeinSeconds >= 360)
 		{
+			powerOff();
+		}
+		else
+		{
+			powerOn();
+		}
+		
+		//if pin is correctly set set green led, else red on.
+		if(pin == actual_pin)
+		{
+			open();
 			PORTB |= (1<<PB5);
 			PORTB &= ~(1<<PB4);
 		}
 		else
 		{
+			if(!timeinSeconds%2)
+				close();
 			PORTB |= (1<<PB4);
 			PORTB &= ~(1<<PB5);
 		}
-		
-		//toggle pins for debug.
-		//if(!(time%timeScale))
-		//	PORTB ^= (1<<PB4)|(1<<PB5);
-		
 	}
 	
 	return 1;

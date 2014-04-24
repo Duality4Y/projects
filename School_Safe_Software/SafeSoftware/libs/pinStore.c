@@ -4,8 +4,7 @@
 
 void initPincode()
 {
-	//pin = readPin();
-	//well nothing happens here yet .. 
+	actual_pin = readPin();
 }
 
 void storePin(int pin)
