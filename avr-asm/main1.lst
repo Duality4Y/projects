@@ -3,7 +3,7 @@ gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 Source file: main1.asm
 Hex file:    main1.hex
 Eeprom file: main1.eep
-Compiled:    13.05.2014, 13:04:46
+Compiled:    13.05.2014, 21:57:41
 Pass:        2
      1: ;source by: Duality / Robert
      2: ;Edited 13 - 5 - 2014
@@ -12,122 +12,123 @@ Pass:        2
      5: ;	note a rjmp(relative jump) can't jump as far as a jmp (jump)
      6: ;	but is faster, where jmp is slower.
      7: ;	rjmp can only jump 2047 up or down.
-     8: ;	implementing timer interrupt and making it toggle a led. 
-     9: .include "m16def.inc"
- -> Warning 009: Include defs not necessary, using internal values!
-   File: main1.asm, Line: 9
-   Source line: .include "m16def.inc"
-    10: 
-    11: ;.def's are symbolic names for registers.
-    12: ;.equ's are symbolic names for constant value's.
-    13: 
-    14: .def temp = r16
-    15: 
-    16: ;interrupts have to be handled in line of priority.
-    17: ;for button interrupt routine
-    18: .org INT0addr
-    19: 000002   940E  call buttonInterruptRoutine
-        000003   0015
-    20: ;for interrupt handeling timer routine
-    21: .org OC1Aaddr
-    22: 00000C   940E  call timer1InterruptRoutine
-        00000D   0022
+     8: ;	implementing timer interrupt and making it toggle a led.
+     9: .nolist
+    12: ;.def's are symbolic names for registers.
+    13: ;.equ's are symbolic names for constant value's.
+    14: 
+    15: .def temp = r16
+    16: .def eorRegister = r17
+    17: 
+    18: ;data segment
+    19: .dseg
+    20: 	.org SRAM_START
+    21: 	;everything here is in ram. like lists and such.
+    22: 	val_count: .BYTE 1
     23: 
-    24: ;data segment
-    25: .dseg
-    26: 	.org SRAM_START
-    27: 	;everything here is in ram. like lists and such.
-    28: 	val_count: .BYTE 1
-    29: 
-    30: ;code segment
-    31: .cseg
-    32: .org 0x00
+    24: ;code segment
+    25: .cseg
+    26: 	.org 0x00
+    27: 000000   C013  rjmp start
+    28: 	;interrupts have to be handled in line of priority.
+    29: 	;for interrupt handeling timer routine
+    30: 	.org OVF0addr
+    31: 000012   940E  call timerInterruptRoutine
+        000013   0038
+    32: 	start:
     33: 	;initialize registers to zero if needed
-    34: 	;initialize status registers if needed
-    35: 000000   9478  sei ;enalbe interrupts
-    36: 	;initialize pins
-    37: 	
-    38: 	;initialize the stack
-    39: 000001   E50F  ldi r16, low(RAMEND)
-    40: 000002   BF0D  out SPL, r16
-    41: 000003   E004  ldi r16, high(RAMEND)
-    42: 000004   BF0E  out SPH, r16
-    43: 	
-    44: 	;setup timer
-    45: 000005   940E  call timerSetup
-        000006   0018
-    46: 	;setup led use
-    47: 000007   940E  call setupDebugLed
-        000008   000D
-    48: 	;setup button use
-    49: 000009   940E  call buttonSetup
-        00000A   000F
-    50: 	;jump to main routine.
-    51: 00000B   C000  rjmp main
-    52: 
-    53: main:
-    54: 00000C   CFFF  rjmp main
-    55: 
-    56: setupDebugLed:
-    57: 00000D   9508  ret
-    58: toggleLed:
-    59: 00000E   9508  ret
-    60: 
-    61: ;routing for setting up the button.
-    62: buttonSetup:
-    63: 	;use INT0
-    64: 00000F   E400  ldi temp, (1<<INT0);enable INT0
-    65: 000010   BF0B  out GICR, temp
-    66: 000011   E002  ldi temp, (1<<ISC01) ;trigger on falling edge
-    67: 000012   BF05  out MCUCR, temp
-    68: 000013   9478  sei
-    69: 000014   9508  ret
-    70: ;button interrupt service routine.
-    71: buttonInterruptRoutine:
-    72: 	;toggle led for debugging
-    73: 000015   940E  call toggleLed
-        000016   000E
-    74: 000017   9518  reti
-    75: 
-    76: ;routine for setting up timer use
-    77: ;using timer 1
-    78: timerSetup:
-    79: 	;interupt on compare value.
-    80: 000018   E00D  ldi temp, (1<<CS12)|(1<<CS10)|(1<<WGM12);prescaler of 1024 and ctc mode.
-    81: 000019   BD0E  out TCCR1B, temp
-    82: 00001A   E100  ldi temp, (1<<OCIE1A)
-    83: 00001B   BF09  out TIMSK, temp
-    84: 	;compare on value of 781 for a pulse a second.
-    85: 00001C   E00D  ldi temp, low(781)
-    86: 00001D   BD0A  out OCR1AL, temp
-    87: 00001E   E003  ldi temp, high(781)
-    88: 00001F   BD0B  out OCR1AH, temp
-    89: 000020   9478  sei
-    90: 000021   9508  ret
-    91: 	
-    92: ;timer interrupt service routine
-    93: timer1InterruptRoutine:
-    94: 	;toggle led for debugging
-    95: 000022   940E  call toggleLed
-        000023   000E
-    96: 	;load pointer to value
-    97: 000024   E6E0  ldi ZL, low(val_count)
-    98: 000025   E0F0  ldi ZH, high(val_count)
-    99: 	;load count value into temp
-   100: 000026   8100  ld temp, Z
-   101: 000027   9503  inc temp ;increment temp;
-   102: 000028   8300  st Z, temp;store value back in ram
-   103: 	;reset the timer
-   104: 000029   E000  ldi temp, 0x00
-   105: 00002A   BD0D  out TCNT1H, temp
-   106: 00002B   E000  ldi temp, 0x00
-   107: 00002C   BD0C  out TCNT1L, temp
-   108: 00002D   9518  reti
+    34: 000014   EF1F  ldi eorRegister, 0xFF
+    35: 	;initialize status registers if needed
+    36: 000015   9478  sei ;enalbe interrupts
+    37: 	;initialize pins
+    38: 	
+    39: 	;initialize the stack
+    40: 000016   E50F  ldi temp, low(RAMEND)
+    41: 000017   BF0D  out SPL, temp
+    42: 000018   E004  ldi temp, high(RAMEND)
+    43: 000019   BF0E  out SPH, temp
+    44: 	
+    45: 	;setup timer
+    46: 00001A   940E  call timerSetup
+        00001B   0032
+    47: 	;setup led use
+    48: 00001C   940E  call setupDebugLed
+        00001D   0021
+    49: 	;setup button use
+    50: 	;call buttonSetup
+    51: 	;jump to main routine.
+    52: 00001E   C000  rjmp main
+    53: 
+    54: main:
+    55: 00001F   0000  nop
+    56: 	;call toggleLed
+    57: 000020   CFFE  rjmp main
+    58: 
+    59: setupDebugLed:
+    60: 000021   EF0F  ldi temp, 0xFF
+    61: 000022   BB0A  out DDRA, temp
+    62: 000023   BB0B  out PORTA, temp
+    63: 000024   9508  ret
+    64: 	
+    65: toggleLed:
+    66: 000025   E10B  ldi temp, PORTA
+    67: 000026   2710  eor eorRegister, temp
+    68: 000027   BB1B  out PORTA, eorRegister
+    69: 000028   9508  ret
+    70: 
+    71: ;routing for setting up the button.
+    72: buttonSetup:
+    73: 	;use INT0
+    74: 000029   E400  ldi temp, (1<<INT0);enable INT0
+    75: 00002A   BF0B  out GICR, temp
+    76: 00002B   E002  ldi temp, (1<<ISC01) ;trigger on falling edge
+    77: 00002C   BF05  out MCUCR, temp
+    78: 00002D   9478  sei
+    79: 00002E   9508  ret
+    80: ;button interrupt service routine.
+    81: buttonInterruptRoutine:
+    82: 	;toggle led for debugging
+    83: 00002F   940E  call toggleLed
+        000030   0025
+    84: 000031   9518  reti
+    85: 
+    86: ;routine for setting up timer use
+    87: ;using timer 1
+    88: timerSetup:
+    89: 	;interupt on compare value.
+    90: 000032   E005  ldi temp, (1<<CS00)|(1<<CS02);prescaler of 1024 and ctc mode.
+    91: 000033   BF03  out TCCR0, temp
+    92: 000034   E001  ldi temp, (1<<TOIE0)
+    93: 000035   BF09  out TIMSK, temp
+    94: 000036   9478  sei
+    95: 000037   9508  ret
+    96: 	
+    97: ;timer interrupt service routine
+    98: timerInterruptRoutine:
+    99: 	;toggle led for debugging
+   100: 000038   940E  call toggleLed
+        000039   0025
+   101: 00003A   EF0F  ldi temp, 0xFF
+   102: 00003B   BF02  out TCNT0, temp
+   103: 	;load pointer to value
+   104: 	;ldi ZL, low(val_count)
+   105: 	;ldi ZH, high(val_count)
+   106: 	;load count value into temp
+   107: 	;ld temp, Z
+   108: 	;inc temp ;increment temp;
+   109: 	;st Z, temp;store value back in ram
+   110: 	;reset the timer
+   111: 	;ldi temp, 0x00
+   112: 	;out TCNT1H, temp
+   113: 	;ldi temp, 0x00
+   114: 	;out TCNT1L, temp
+   115: 00003C   9518  reti
+ -> Warning 001: 3 symbol(s) defined, but not used!
 
-Program             :       50 words.
+Program             :       44 words.
 Constants           :        0 words.
-Total program memory:       50 words.
+Total program memory:       44 words.
 Eeprom space        :        0 bytes.
 Data segment        :        1 bytes.
 Compilation completed, no errors.
-Compilation endet 13.05.2014, 13:04:46
+Compilation endet 13.05.2014, 21:57:41

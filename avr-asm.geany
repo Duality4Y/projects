@@ -24,14 +24,14 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=727;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-asm%2Fmain1.asm;0;4
+FILE_NAME_0=1357;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-asm%2Fmain1.asm;0;4
 
 [VTE]
-last_dir=/home/robert/projects/avr-attiny84-dice-asm
+last_dir=/home/robert/projects/avr-asm
 
 [build-menu]
 EX_00_LB=_Execute
-EX_00_CM=avrdude -c usbtiny-p atmega16 -U flash:w:%e.hex
+EX_00_CM=avrdude -c usbtiny -p atmega16 -U flash:w:%e.hex
 EX_00_WD=
 ASMFT_00_LB=_Compile
 ASMFT_00_CM=./gavrasm "%f"

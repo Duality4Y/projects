@@ -24,12 +24,13 @@
 
 ;code segment
 .cseg
-	.org 0x00
-		rjmp start
+.org 0x00
+	rjmp start
 	;interrupts have to be handled in line of priority.
 	;for interrupt handeling timer routine
-	.org OVF0addr
+	.org OVF1addr
 		call timerInterruptRoutine
+	
 	start:
 	;initialize registers to zero if needed
 	ldi eorRegister, 0xFF
@@ -50,7 +51,7 @@
 	;setup button use
 	;call buttonSetup
 	;jump to main routine.
-	rjmp main
+	;rjmp main
 
 main:
 	nop
@@ -64,9 +65,10 @@ setupDebugLed:
 	ret
 	
 toggleLed:
-	ldi temp, PORTA
-	eor eorRegister, temp
-	out PORTA, eorRegister
+	in temp, PORTA
+	ldi eorRegister, 0xFF
+	eor temp, eorRegister
+	out PORTA, temp
 	ret
 
 ;routing for setting up the button.
@@ -88,19 +90,22 @@ buttonInterruptRoutine:
 ;using timer 1
 timerSetup:
 	;interupt on compare value.
-	ldi temp, (1<<CS00)|(1<<CS02);prescaler of 1024 and ctc mode.
-	out TCCR0, temp
-	ldi temp, (1<<TOIE0)
+	ldi temp, (1<<CS10);
+	out TCCR1B, temp
+	ldi temp, (1<<TOIE1)
 	out TIMSK, temp
 	sei
 	ret
 	
 ;timer interrupt service routine
 timerInterruptRoutine:
+	cli
+	push eorRegister
+	push temp
+	in temp, sreg
+	push temp
 	;toggle led for debugging
 	call toggleLed
-	ldi temp, 0xFF
-	out TCNT0, temp
 	;load pointer to value
 	;ldi ZL, low(val_count)
 	;ldi ZH, high(val_count)
@@ -113,4 +118,9 @@ timerInterruptRoutine:
 	;out TCNT1H, temp
 	;ldi temp, 0x00
 	;out TCNT1L, temp
+	pop temp
+	out sreg,r16
+	pop temp 
+	pop eorRegister
+	sei
 	reti
