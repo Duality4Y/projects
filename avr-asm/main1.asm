@@ -100,4 +100,9 @@ timer1InterruptRoutine:
 	ld temp, Z
 	inc temp ;increment temp;
 	st Z, temp;store value back in ram
+	;reset the timer
+	ldi temp, 0x00
+	out TCNT1H, temp
+	ldi temp, 0x00
+	out TCNT1L, temp
 	reti

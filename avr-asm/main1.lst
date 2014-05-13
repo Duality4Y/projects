@@ -3,7 +3,7 @@ gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 Source file: main1.asm
 Hex file:    main1.hex
 Eeprom file: main1.eep
-Compiled:    13.05.2014, 13:01:06
+Compiled:    13.05.2014, 13:04:46
 Pass:        2
      1: ;source by: Duality / Robert
      2: ;Edited 13 - 5 - 2014
@@ -31,7 +31,7 @@ Pass:        2
     20: ;for interrupt handeling timer routine
     21: .org OC1Aaddr
     22: 00000C   940E  call timer1InterruptRoutine
-        00000D   0021
+        00000D   0022
     23: 
     24: ;data segment
     25: .dseg
@@ -55,7 +55,7 @@ Pass:        2
     43: 	
     44: 	;setup timer
     45: 000005   940E  call timerSetup
-        000006   0017
+        000006   0018
     46: 	;setup led use
     47: 000007   940E  call setupDebugLed
         000008   000D
@@ -85,42 +85,49 @@ Pass:        2
     70: ;button interrupt service routine.
     71: buttonInterruptRoutine:
     72: 	;toggle led for debugging
-    73: 000015   DFF8  rcall toggleLed
-    74: 000016   9518  reti
+    73: 000015   940E  call toggleLed
+        000016   000E
+    74: 000017   9518  reti
     75: 
     76: ;routine for setting up timer use
     77: ;using timer 1
     78: timerSetup:
     79: 	;interupt on compare value.
-    80: 000017   E00D  ldi temp, (1<<CS12)|(1<<CS10)|(1<<WGM12);prescaler of 1024 and ctc mode.
-    81: 000018   BD0E  out TCCR1B, temp
-    82: 000019   E100  ldi temp, (1<<OCIE1A)
-    83: 00001A   BF09  out TIMSK, temp
+    80: 000018   E00D  ldi temp, (1<<CS12)|(1<<CS10)|(1<<WGM12);prescaler of 1024 and ctc mode.
+    81: 000019   BD0E  out TCCR1B, temp
+    82: 00001A   E100  ldi temp, (1<<OCIE1A)
+    83: 00001B   BF09  out TIMSK, temp
     84: 	;compare on value of 781 for a pulse a second.
-    85: 00001B   E00D  ldi temp, low(781)
-    86: 00001C   BD0A  out OCR1AL, temp
-    87: 00001D   E003  ldi temp, high(781)
-    88: 00001E   BD0B  out OCR1AH, temp
-    89: 00001F   9478  sei
-    90: 000020   9508  ret
+    85: 00001C   E00D  ldi temp, low(781)
+    86: 00001D   BD0A  out OCR1AL, temp
+    87: 00001E   E003  ldi temp, high(781)
+    88: 00001F   BD0B  out OCR1AH, temp
+    89: 000020   9478  sei
+    90: 000021   9508  ret
     91: 	
     92: ;timer interrupt service routine
     93: timer1InterruptRoutine:
     94: 	;toggle led for debugging
-    95: 000021   DFEC  rcall toggleLed
+    95: 000022   940E  call toggleLed
+        000023   000E
     96: 	;load pointer to value
-    97: 000022   E6E0  ldi ZL, low(val_count)
-    98: 000023   E0F0  ldi ZH, high(val_count)
+    97: 000024   E6E0  ldi ZL, low(val_count)
+    98: 000025   E0F0  ldi ZH, high(val_count)
     99: 	;load count value into temp
-   100: 000024   8100  ld temp, Z
-   101: 000025   9503  inc temp ;increment temp;
-   102: 000026   8300  st Z, temp;store value back in ram
-   103: 000027   9518  reti
+   100: 000026   8100  ld temp, Z
+   101: 000027   9503  inc temp ;increment temp;
+   102: 000028   8300  st Z, temp;store value back in ram
+   103: 	;reset the timer
+   104: 000029   E000  ldi temp, 0x00
+   105: 00002A   BD0D  out TCNT1H, temp
+   106: 00002B   E000  ldi temp, 0x00
+   107: 00002C   BD0C  out TCNT1L, temp
+   108: 00002D   9518  reti
 
-Program             :       44 words.
+Program             :       50 words.
 Constants           :        0 words.
-Total program memory:       44 words.
+Total program memory:       50 words.
 Eeprom space        :        0 bytes.
 Data segment        :        1 bytes.
 Compilation completed, no errors.
-Compilation endet 13.05.2014, 13:01:06
+Compilation endet 13.05.2014, 13:04:46
