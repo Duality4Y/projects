@@ -16,10 +16,10 @@
 ;interrupts have to be handled in line of priority.
 ;for button interrupt routine
 .org INT0addr
-	jmp buttonInterruptRoutine
+	call buttonInterruptRoutine
 ;for interrupt handeling timer routine
 .org OC1Aaddr
-	jmp timer1InterruptRoutine
+	call timer1InterruptRoutine
 
 ;data segment
 .dseg
@@ -42,11 +42,11 @@
 	out SPH, r16
 	
 	;setup timer
-	rjmp timerSetup
+	call timerSetup
 	;setup led use
-	rjmp setupDebugLed
+	call setupDebugLed
 	;setup button use
-	rjmp buttonSetup
+	call buttonSetup
 	;jump to main routine.
 	rjmp main
 
@@ -60,9 +60,17 @@ toggleLed:
 
 ;routing for setting up the button.
 buttonSetup:
+	;use INT0
+	ldi temp, (1<<INT0);enable INT0
+	out GICR, temp
+	ldi temp, (1<<ISC01) ;trigger on falling edge
+	out MCUCR, temp
+	sei
 	ret
 ;button interrupt service routine.
 buttonInterruptRoutine:
+	;toggle led for debugging
+	call toggleLed
 	reti
 
 ;routine for setting up timer use
@@ -84,7 +92,7 @@ timerSetup:
 ;timer interrupt service routine
 timer1InterruptRoutine:
 	;toggle led for debugging
-	jmp toggleLed
+	call toggleLed
 	;load pointer to value
 	ldi ZL, low(val_count)
 	ldi ZH, high(val_count)
