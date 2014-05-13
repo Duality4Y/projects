@@ -1,3 +1,6 @@
+#include <avr/interrupt.h>
+#include <avr/io.h>
+
 void init_uart()
 {
 	//init serial.

@@ -7,7 +7,6 @@
 ;working to get symbols stored in ram, and used to be displayed.
 
 .include "tn84def.inc"
->>>>>>> 0802d11035598198c55ef7083f0138df5ef2ba2e
 
 ;holds the pin to symbol values.
 .equ one 				= (1<<PA3);

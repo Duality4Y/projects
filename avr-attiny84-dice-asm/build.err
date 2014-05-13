@@ -3,7 +3,7 @@ gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 Source file: build.asm
 Hex file:    build.hex
 Eeprom file: build.eep
-Compiled:    08.02.2014, 14:29:44
+Compiled:    13.05.2014, 10:02:04
 Pass:        1
 Error ==> build.hex:     file format ihex
 [build.asm,2] 070: Unknown instruction or macro!

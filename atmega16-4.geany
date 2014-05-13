@@ -23,23 +23,24 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=5
-FILE_NAME_0=886;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/serial_commanding.cpp;0;4
-FILE_NAME_1=18;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/blink.cpp;0;4
-FILE_NAME_2=66;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/i2c.cpp;0;4
-FILE_NAME_3=439;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/i2c-ds1621.cpp;0;4
-FILE_NAME_4=0;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/uart.cpp;0;4
-FILE_NAME_5=128;C++;0;16;1;1;0;/home/robert/projects/atmega16-4/ledPwm.cpp;0;4
+current_page=6
+FILE_NAME_0=886;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-4%2Fserial_commanding.cpp;0;4
+FILE_NAME_1=18;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-4%2Fblink.cpp;0;4
+FILE_NAME_2=66;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-4%2Fi2c.cpp;0;4
+FILE_NAME_3=439;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-4%2Fi2c-ds1621.cpp;0;4
+FILE_NAME_4=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-4%2Fuart.cpp;0;4
+FILE_NAME_5=424;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-4%2FledPwm.cpp;0;4
+FILE_NAME_6=3916;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-3%2FGameOfLife3.cpp;0;4
 
 [VTE]
 last_dir=/home/robert/projects/atmega16-4
 
 [build-menu]
 EX_00_LB=_Upload
-EX_00_CM=avrdude -p atmega16 -c usbasp -e -U flash:w:build.hex -B 3
+EX_00_CM=avrdude -p atmega16 -c usbtiny -e -U flash:w:build.hex -B 3
 EX_00_WD=/home/robert/projects/atmega16-4/
 C++FT_00_LB=_Compile
-C++FT_00_CM=avr-gcc -fno-split-wide-types -fno-tree-scev-cprop --combine -fwhole-program -mcall-prologues -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -finline-limit=3 -fno-inline-small-functions -mmcu=atmega16 -Wall -Os -o build.elf "%f"
+C++FT_00_CM=avr-gcc -fno-split-wide-types -fno-tree-scev-cprop -fwhole-program -mcall-prologues -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -finline-limit=3 -fno-inline-small-functions -mmcu=atmega16 -Wall -Os -o build.elf "%f"
 C++FT_00_WD=/home/robert/projects/atmega16-4/
 C++FT_01_LB=_Build
 C++FT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex

@@ -36,7 +36,7 @@
 	
 .cseg
 .org 0x00
-	;keep symbols in memory.
+	;keep symbols in flash memory.
 	numbers: .db one,two,two_two,three,three_two,four,five,six
 	;setup the pins.
 	ldi temp, 0xFF

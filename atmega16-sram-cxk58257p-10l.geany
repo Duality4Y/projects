@@ -24,13 +24,23 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=38;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Fmain.c;0;4
+FILE_NAME_0=150;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Fmain.c;0;4
+FILE_NAME_1=944;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Flibs%2Fcxk58257.c;0;4
+FILE_NAME_2=228;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Flibs%2Fcxk58257.h;0;4
+FILE_NAME_3=1605;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Flibs%2FpinDefs.h;0;4
+FILE_NAME_4=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Favr-gameboy%2Fmain.c;0;4
 
 [VTE]
-last_dir=/home/robert/projects/ruby_turing
+last_dir=/home/robert/projects/atmega16-sram-cxk58257p-10l
 
 [build-menu]
 CFT_00_LB=_Compile
-CFT_00_CM=avr-g++ -mmcu=atmega168 -Os -o build.elf "%f"
+CFT_00_CM=avr-gcc -fno-split-wide-types -fno-tree-scev-cprop -fwhole-program -mcall-prologues -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -finline-limit=3 -fno-inline-small-functions -mmcu=atmega16 -Wall -O2 -o build.elf "%f" 
 CFT_00_WD=
 filetypes=C;
+EX_00_LB=_Execute
+EX_00_CM=avrdude -p atmega16 -c usbtiny -U flash:w:build.hex
+EX_00_WD=
+CFT_01_LB=_Build
+CFT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
+CFT_01_WD=

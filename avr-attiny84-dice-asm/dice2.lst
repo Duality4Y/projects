@@ -1,9 +1,9 @@
 gavrasm Gerd's AVR assembler version 3.3 (C)2012 by DG4FAC
 ----------------------------------------------------------
-Source file: /home/robert/projects/avr-attiny84-dice-asm/dice2.asm
-Hex file:    /home/robert/projects/avr-attiny84-dice-asm/dice2.hex
-Eeprom file: /home/robert/projects/avr-attiny84-dice-asm/dice2.eep
-Compiled:    20.01.2014, 22:55:48
+Source file: dice2.asm
+Hex file:    dice2.hex
+Eeprom file: dice2.eep
+Compiled:    13.05.2014, 10:04:30
 Pass:        2
      1: ;source by: Dualit / Robert
      2: ;Edited 18 - 1 - 2014
@@ -15,7 +15,7 @@ Pass:        2
      8: 
      9: .include "tn84def.inc"
  -> Warning 009: Include defs not necessary, using internal values!
-   File: /home/robert/projects/avr-attiny84-dice-asm/dice2.asm, Line: 9
+   File: dice2.asm, Line: 9
    Source line: .include "tn84def.inc"
     10: 
     11: ;holds the pin to symbol values.
@@ -116,4 +116,4 @@ Total program memory:       49 words.
 Eeprom space        :        0 bytes.
 Data segment        :        8 bytes.
 Compilation completed, no errors.
-Compilation endet 20.01.2014, 22:55:48
+Compilation endet 13.05.2014, 10:04:30

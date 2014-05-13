@@ -52,6 +52,7 @@
 loadSymbols:
     ldi ZH,HIGH(numbers) ; Set the MSB
     ldi ZL,LOW(numbers) ; Set the LSB
+    
     ;load symbols one for one into ram.
     ldi temp, one
     st Z+, temp

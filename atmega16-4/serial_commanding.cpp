@@ -13,19 +13,13 @@ char buffer[BUFFERSIZE];
 
 int main(void)
 {
-	//set rx as input (PD0)
-	DDRD &= ~(1<<PD0);
-	//set tx as output (PD1)
-	DDRD |= (1<<PD1);
-	//enable global interrupts
-	sei();
-	//enable uart recieve interupt.
-	UCSRB |= (1<<RXCIE);
 	//init the uart
 	init_uart();
 	//led pin as output
-	DDRD |= (1<<PD7);
+	//DDRD |= (1<<PD7);
 	
+	//enable global interrupts
+	sei();
 	while(!0)
 	{
 		//set zero to get new commands?

@@ -17,17 +17,24 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=370;ASM;0;16;1;1;0;/home/robert/projects/avr-attiny84-dice-asm/dice.asm;0;4
+current_page=1
+FILE_NAME_0=1203;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2Fdice2.asm;0;4
+FILE_NAME_1=628;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2Fdice3.asm;0;4
 
 [VTE]
 last_dir=/home/robert/projects/avr-attiny84-dice-asm
 
 [build-menu]
 EX_00_LB=_Upload
-EX_00_CM=avrdude -c usbasp -p attiny84 -U flash:w:%e.hex
+EX_00_CM=avrdude -c usbtiny-p attiny84 -U flash:w:%e.hex
 EX_00_WD=
 ASMFT_00_LB=_Compile
 ASMFT_00_CM=./gavrasm "%f"
 ASMFT_00_WD=
 filetypes=ASM;
+
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false

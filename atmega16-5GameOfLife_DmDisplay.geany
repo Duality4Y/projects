@@ -23,12 +23,12 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=7
+current_page=4
 FILE_NAME_0=11259;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FDmDisplay%2FDmDisplay.cpp;0;4
 FILE_NAME_1=1529;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FDmDisplay%2FDmDisplay.h;0;4
 FILE_NAME_2=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FDmDisplay%2Ffont5x7.h;0;4
-FILE_NAME_3=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FDmDisplay%2FpinDefs.h;0;4
-FILE_NAME_4=8585;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FGameOfLife_V4.cpp;0;4
+FILE_NAME_3=275;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FDmDisplay%2FpinDefs.h;0;4
+FILE_NAME_4=9128;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FGameOfLife_V4.cpp;0;4
 FILE_NAME_5=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FlifeForms.h;0;4
 FILE_NAME_6=1465;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FGameOfLife_V5.cpp;0;4
 FILE_NAME_7=3483;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-5GameOfLife_DmDisplay%2FGameOfLife.cpp;0;4
@@ -41,10 +41,10 @@ last_dir=/home/robert/projects/atmega16-5GameOfLife_DmDisplay
 
 [build-menu]
 EX_00_LB=_Upload
-EX_00_CM=avrdude -p atmega16 -c usbtiny -U flash:w:build.hex
+EX_00_CM=avrdude -p atmega16 -c usbasp -U flash:w:build.hex
 EX_00_WD=/home/robert/projects/atmega16-5GameOfLife_DmDisplay/
 C++FT_00_LB=_Compile
-C++FT_00_CM=avr-g++ -fno-split-wide-types -fno-tree-scev-cprop -fwhole-program -mcall-prologues -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -finline-limit=3 -fno-inline-small-functions -mmcu=atmega16 -Wall -Os -o build.elf "%f" 
+C++FT_00_CM=avr-gcc -fno-split-wide-types -fno-tree-scev-cprop -fwhole-program -mcall-prologues -ffunction-sections -fdata-sections -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -finline-limit=3 -fno-inline-small-functions -mmcu=atmega16 -Wall -Os -o build.elf "%f" 
 C++FT_00_WD=/home/robert/projects/atmega16-5GameOfLife_DmDisplay/
 C++FT_01_LB=_Build
 C++FT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
@@ -56,3 +56,6 @@ NoneFT_00_WD=/home/robert/projects/atmega16-5GameOfLife_DmDisplay/
 NoneFT_01_LB=_Build
 NoneFT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
 NoneFT_01_WD=/home/robert/projects/atmega16-5GameOfLife_DmDisplay/
+EX_01_LB=
+EX_01_CM=
+EX_01_WD=

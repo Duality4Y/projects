@@ -1,14 +1,16 @@
-#include <avr/io.h>
-#include "cxk58257"
+#define F_CPU 8000000UL
 
-/*
- * note:
- * black wire is CE  (Chip Enable aka clock)
- * brown wire is OE  (Output Enable)
- * yellow wire is WE (Write Enable)
- * */
+#include <avr/io.h>
+#include <util/delay.h>
 
 int main()
 {
-	return 0;
+	DDRA = 0xff;
+	while(1)
+	{
+		PORTA = 0;
+		_delay_ms(100);
+		PORTA = 0xFF;
+		_delay_ms(100);
+	}
 }
