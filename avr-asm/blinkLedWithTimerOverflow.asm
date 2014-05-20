@@ -21,12 +21,9 @@
 ;	(2^16)/2 tcnt1 = 32768
 ;	and now the timer will tick once every second.
 
-;	and instead of preloading we compare on the value 32768. 
-;	and reset the count by loading 0 into tcnt1
-
-.nolist
+;.nolist
 .include "m16def.inc"
-.list
+;.list
 ;.def's are symbolic names for registers.
 ;.equ's are symbolic names for constant value's.
 
@@ -44,10 +41,10 @@
 		rjmp start
 	;interrupts have to be handled in line of priority.
 	;for interrupt handeling timer routine
-	.org OC1Aaddr
-		call timerInterruptRoutine
+	.org OVF1addr-1
+		reti
 	.org OVF1addr
-		;call timerInterruptRoutine
+		call timerInterruptRoutine
 	start:
 	cli
 	;initialize registers to zero if needed
@@ -108,13 +105,8 @@ timerSetup:
 	;interupt on compare value.
 	ldi temp, (1<<CS12)
 	out TCCR1B, temp
-	ldi temp, (1<<OCIE1A)
+	ldi temp, (1<<TOIE1)
 	out TIMSK, temp
-	;load compare register with a value so the timer ticks once a second.
-	ldi temp, high(65536/2)
-	out OCR1AH, temp
-	ldi temp, low(65536/2)
-	out OCR1AL, temp
 	sei
 	ret
 	
@@ -123,9 +115,9 @@ timerInterruptRoutine:
 	push temp
 	;toggle led for debugging
 	call toggleLed
-	;reset timer
-	ldi temp, 0
+	ldi temp, high(32768)
 	out TCNT1H, temp
+	ldi temp, low(32768)
 	out TCNT1L, temp
 	pop temp
 	reti

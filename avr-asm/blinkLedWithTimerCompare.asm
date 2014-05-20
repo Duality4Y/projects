@@ -95,6 +95,7 @@ buttonSetup:
 	ldi temp, (1<<ISC01) ;trigger on falling edge
 	out MCUCR, temp
 	ret
+
 ;button interrupt service routine.
 buttonInterruptRoutine:
 	;toggle led for debugging
@@ -111,9 +112,9 @@ timerSetup:
 	ldi temp, (1<<OCIE1A)
 	out TIMSK, temp
 	;load compare register with a value so the timer ticks once a second.
-	ldi temp, high(65536/2)
+	ldi temp, high(32768)
 	out OCR1AH, temp
-	ldi temp, low(65536/2)
+	ldi temp, low(32768)
 	out OCR1AL, temp
 	sei
 	ret
