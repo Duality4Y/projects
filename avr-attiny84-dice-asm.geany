@@ -17,13 +17,13 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=3
+current_page=5
 FILE_NAME_0=0;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2FtestBlink.asm;0;4
 FILE_NAME_1=0;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2Ffirst.asm;0;4
 FILE_NAME_2=0;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2Fdice4.asm;0;4
 FILE_NAME_3=11119;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2Fbuild.asm;0;4
 FILE_NAME_4=0;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2Fdice.asm;0;4
-FILE_NAME_5=928;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2Fdice2.asm;0;4
+FILE_NAME_5=1695;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2Fdice2.asm;0;4
 FILE_NAME_6=0;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Favr-attiny84-dice-asm%2Fdice3.asm;0;4
 
 [VTE]

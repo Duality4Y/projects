@@ -21,9 +21,12 @@
 ;	(2^16)/2 tcnt1 = 32768
 ;	and now the timer will tick once every second.
 
-;.nolist
+.nolist
 .include "m16def.inc"
-;.list
+.include "Led.asm"
+.include "TimerOVF.asm"
+.include "ButtonUse.asm"
+
 ;.def's are symbolic names for registers.
 ;.equ's are symbolic names for constant value's.
 
@@ -72,52 +75,3 @@ main:
 	nop
 	;call toggleLed
 	jmp main
-
-setupDebugLed:
-	ldi temp, 0xFF
-	out DDRA, temp
-	ret
-	
-toggleLed:
-	in temp, PORTA
-	eor eorRegister, temp
-	out PORTA, eorRegister
-	ret
-
-;routing for setting up the button.
-buttonSetup:
-	;use INT0
-	ldi temp, (1<<INT0);enable INT0
-	out GICR, temp
-	ldi temp, (1<<ISC01) ;trigger on falling edge
-	out MCUCR, temp
-	ret
-;button interrupt service routine.
-buttonInterruptRoutine:
-	;toggle led for debugging
-	call toggleLed
-	reti
-
-;routine for setting up timer use
-;using timer 1
-timerSetup:
-	cli
-	;interupt on compare value.
-	ldi temp, (1<<CS12)
-	out TCCR1B, temp
-	ldi temp, (1<<TOIE1)
-	out TIMSK, temp
-	sei
-	ret
-	
-;timer interrupt service routine
-timerInterruptRoutine:
-	push temp
-	;toggle led for debugging
-	call toggleLed
-	ldi temp, high(32768)
-	out TCNT1H, temp
-	ldi temp, low(32768)
-	out TCNT1L, temp
-	pop temp
-	reti
