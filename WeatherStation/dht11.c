@@ -1,4 +1,4 @@
-#define BCM2708_PERI_BASE 0x20000000
+#define BCM2708_PERI_BASE 	0x20000000
 #define GPIO_BASE 			(BCM2708_PERI_BASE + 0x200000)
 
 #include <stdio.h>
@@ -6,10 +6,7 @@
 #include <bcm2835.h>
 
 
-#define MAXTIMINGS 1e9
-
-int bits[250], data[100];
-int bitidx = 0;
+#define MAXTIMINGS 1e3
 
 int readDHT(int pin);
 
@@ -17,6 +14,9 @@ int readDHT(int pin)
 {
 	int counter = 0;
 	int laststate = HIGH;
+	int bits[250];
+	int data[100];
+	int bitidx = 0;
 	int j = 0;
 	
 	//set gpio to output
