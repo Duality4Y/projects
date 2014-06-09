@@ -8,15 +8,15 @@
 
 #define MAXTIMINGS 1e3
 
-int readDHT(int pin);
+int readDHT(int pin, int *readbuff);
 
-int readDHT(int pin)
+int readDHT(int pin, int *readbuff)
 {
 	int counter = 0;
 	int laststate = HIGH;
-	int bits[250];
+	//int bits[250];
 	int data[100];
-	int bitidx = 0;
+	//int bitidx = 0;
 	int j = 0;
 	
 	//set gpio to output
@@ -47,8 +47,8 @@ int readDHT(int pin)
 			if(counter == 1000) break;
 		}
 		laststate = bcm2835_gpio_lev(pin);
-		if(counter == 1000) break;
-		bits[bitidx++] = counter;
+		//if(counter == 1000) break;
+		//bits[bitidx++] = counter;
 		//for every other bit.
 		if((i>3) && (i%2 == 0))
 		{
@@ -62,9 +62,12 @@ int readDHT(int pin)
 	//printf("Data (%d): 0x%x, 0x%x, 0x%x, 0x%x, 0x%x\n", j, data[0], data[1], data[2], data[3], data[4]);
 	if((j>= 39) && (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF)) )
 	{
-		printf("Temp = %d *C, Hum = %d %%\n", data[2], data[0]);
+		//printf("Temp = %d *C, Hum = %d %%\n", data[2], data[0]);
+		readbuff[0] = data[2];
+		readbuff[1] = data[0];
 		return 1;
 	}
-	
-	return 0;
+	//return -1 for error. we get no negative values anyway
+	//so this is suited for that :)
+	return -1;
 }

@@ -23,13 +23,13 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=320;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fweatherstation.c;0;4
-FILE_NAME_1=474;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fdht11.c;0;4
-FILE_NAME_2=910;C;0;16;1;1;0;%2Fhome%2Fpi%2FAdafruit-Raspberry-Pi-Python-Code%2FAdafruit_DHT_Driver%2FAdafruit_DHT.c;0;4
+current_page=0
+FILE_NAME_0=473;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fweatherstation.c;0;4
+FILE_NAME_1=1556;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fdht11.c;0;4
+FILE_NAME_2=1370;C;0;16;1;1;0;%2Fhome%2Fpi%2FAdafruit-Raspberry-Pi-Python-Code%2FAdafruit_DHT_Driver%2FAdafruit_DHT.c;0;4
 
 [VTE]
-last_dir=/home/pi/Adafruit-Raspberry-Pi-Python-Code/Adafruit_DHT_Driver
+last_dir=/home/pi/projects/WeatherStation
 
 [build-menu]
 CFT_01_LB=_Build
