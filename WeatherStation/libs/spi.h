@@ -10,6 +10,7 @@
  * 
  * a rewrite to make it more like a "library"
  * for easier use.
+ * although by now it is heavely modified.
  * 
  * this source is for communicating over the spi. that the raspberrypi offers.
  * 
