@@ -8,13 +8,32 @@
  * also verry usefull little document:
  * http://lxr.free-electrons.com/source/include/uapi/linux/spi/spidev.h#L52
  * 
+ * this source is for communicating over the spi. that the raspberrypi offers.
+ * 
+ * 
  * a rewrite to make it more like a "library"
  * for easier use.
  * although by now it is heavely modified.
  * 
- * this source is for communicating over the spi. that the raspberrypi offers.
- * 
- * 
+ * spi.h
+ *
+ * Copyright (C) 2014 Duality
+ *      Robert van der Tuuk <201292@live.nl>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
  * 
  * */
 
