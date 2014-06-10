@@ -23,10 +23,12 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=473;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fweatherstation.c;0;4
-FILE_NAME_1=1556;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fdht11.c;0;4
-FILE_NAME_2=1370;C;0;16;1;1;0;%2Fhome%2Fpi%2FAdafruit-Raspberry-Pi-Python-Code%2FAdafruit_DHT_Driver%2FAdafruit_DHT.c;0;4
+current_page=3
+FILE_NAME_0=2412;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fweatherstation.c;0;4
+FILE_NAME_1=3484;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.c;0;4
+FILE_NAME_2=1438;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.h;0;4
+FILE_NAME_3=20;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2FtestReadAdc.c;0;4
+FILE_NAME_4=17;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fadc_spi.c;0;4
 
 [VTE]
 last_dir=/home/pi/projects/WeatherStation
@@ -39,3 +41,6 @@ filetypes=C;
 EX_00_LB=_Execute
 EX_00_CM=sudo "./%e"
 EX_00_WD=
+CFT_00_LB=_Compile
+CFT_00_CM=gcc -Wall -c "%f"
+CFT_00_WD=

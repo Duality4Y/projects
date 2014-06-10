@@ -7,17 +7,24 @@
  * into csv files. with date for title.
  * and a time stamp in the file.
  * */
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <linux/spi/spidev.h>
 
-#include "dht11.c"
+#include "libs/dht11.c"
+#include "libs/adc_spi.c"
 #include <bcm2835.h>
 int main(void)
 {
 	bcm2835_init();
+	
+	int *spiDevice = 0;
+	//mode=msbfirst and spi mode = 0.0
+	spi_init(spiDevice, 0);
 	
 	//database directory.
 	char database_dir[] = "databases";
@@ -40,7 +47,7 @@ int main(void)
 	char* c_time_string;
 	
 	//file operation variables.
-	FILE *fp;
+	FILE *csvFile;
 	
 	//obtain current time as seconds elapsed since epoch.
 	current_time = time(NULL);
@@ -72,7 +79,8 @@ int main(void)
 	sprintf(fullPath, "%s/%s.%s", database_dir, "Thursday_october_2014", database_ext);
 	//debug path printing it.
 	printf("%s\n", fullPath);
-	fp = fopen(fullPath,"a+");
+	//create a new file if it's not there. else we can append to it.
+	csvFile = fopen(fullPath,"a+");
 	while(1)
 	{
 		//if the read returns -1, then we don't have valid data.
@@ -81,15 +89,14 @@ int main(void)
 		printf("Temp = %d *C, Hum = %d %%\n", dhtReads[0], dhtReads[1]);
 		sprintf(csvLine, "%s, %d, %d \n", date_time_info[3], dhtReads[0], dhtReads[1]);
 		
-		if(!fputs(csvLine, fp))
+		if(!fputs(csvLine, csvFile))
 		{
 			printf("failed to write string to file \n");
 		}
-		
+		//always close file
+		fclose(csvFile);
 		printf("line written in .%s: %s\n", database_ext, csvLine);
 		break;
 	}
-	//always close file
-	fclose(fp);
 	return 0;
 }
