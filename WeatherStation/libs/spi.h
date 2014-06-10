@@ -11,22 +11,9 @@
  * a rewrite to make it more like a "library"
  * for easier use.
  * 
- * this source is for communicating of the spi. that the raspberrypi offers.
+ * this source is for communicating over the spi. that the raspberrypi offers.
  * 
- * for a test you could run this for example:
- * int main(int argc, char *argv[])
- *{
- *	int spid;
- *	spid = spiOpen(device);
- *	spi_init(spid);
- *	printSpiDetails();
- *	loopbackTest(spid);
- *	transfer(spid,0x13);
- *	transfer(spid,0x37);
- *	spiClose(spid);
- *	return 0;
- *}
- *
+ * 
  * 
  * */
 
@@ -41,6 +28,12 @@
 #include <linux/spi/spidev.h>
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
+//default spi buffer transmist/receive size.
+#ifndef SPI_BUFFER_SIZE
+	#define SPI_BUFFER_SIZE 100
+#endif
+//for debugging purposes.
+#define DEBUG
 
 //static const char *spi_device = "/dev/spidev0.0";
 static uint8_t spi_mode = 0;
@@ -49,15 +42,17 @@ static uint32_t spi_speed = 500000;
 static uint16_t spi_delay = 0;
 
 static void pabort(const char *s);
-static uint8_t transfer(int, uint8_t);
+static int transfer(int, uint8_t *, uint8_t *);
 static int spi_set_mode(int, int);
 static int spi_set_word(int, int);
 static int spi_set_speed(int, int);
 static void spi_set_delay(int);
-static void loopbackTest(int);
 static int spiOpen(const char*);
-static void spiClose(int);
+static int spiClose(int);
 static void spi_init(int);
+#ifdef DEBUG
+static void loopbackTest(int);
 static void printSpiDetails();
+#endif
 
 

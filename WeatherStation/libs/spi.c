@@ -6,36 +6,6 @@ static void pabort(const char *s)
 	abort();
 }
 
-//sends/recieves single byte.
-static uint8_t transfer(int fd, uint8_t data)
-{
-	int ret;
-	int valueIndex = 0;
-	uint8_t tx[1] = {data};
-	uint8_t rx[1] = {0,};
-	
-	struct spi_ioc_transfer tr = 
-	{
-		.tx_buf = (unsigned long)tx,
-		.rx_buf = (unsigned long)rx,
-		.len = ARRAY_SIZE(tx),
-		.delay_usecs = spi_delay,
-		.speed_hz = spi_speed,
-		.bits_per_word = spi_bits,
-	};
-	
-	ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
-	if (ret < 1)
-		pabort("can't send spi message");
-		/*
-	for (ret = 0; ret < ARRAY_SIZE(tx); ret++)
-	{
-		if (!(ret % 6))
-			puts("");
-		printf("%.2X ", rx[ret]);
-	}*/
-	return rx[1];
-}
 //this function sets spi mode
 static int spi_set_mode(int fd, int mode)
 {
@@ -94,7 +64,46 @@ static void spi_set_delay(int delay)
 	spi_delay = delay;
 }
 
+//send and recieve data.
+static int transfer(int fd, uint8_t *data, uint8_t *receive)
+{
+	int ret,i;
+	uint8_t tx[SPI_BUFFER_SIZE];
+	static uint8_t rx[SPI_BUFFER_SIZE] = {0, };
+	//fill tx with data to be send.
+	for(i = 0;i<SPI_BUFFER_SIZE;i++)
+	{
+		tx[i] = data[i];
+	}
+	struct spi_ioc_transfer tr = 
+	{
+		.tx_buf = (unsigned long)tx,
+		.rx_buf = (unsigned long)rx,
+		.len = SPI_BUFFER_SIZE,
+		.delay_usecs = spi_delay,
+		.speed_hz = spi_speed,
+		.bits_per_word = spi_bits,
+	};
+	ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
+	if(ret < 1)
+		pabort("can't send spi message");
+		
+	#ifdef DEBUG
+	printf("Received: ");
+	for(i = 0;i<SPI_BUFFER_SIZE;i++)
+		printf("%02X ", rx[i]);
+	printf("\n");
+	#endif
+	//put received data back in to the specified return buffer.
+	for(i = 0;i<SPI_BUFFER_SIZE;i++)
+	{
+		receive[i] = rx[i];
+	}
+	return ret;
+}
+
 //a loopback test. to see if your spi works 
+#ifdef DEBUG
 static void loopbackTest(int fd)
 {
 	int ret;
@@ -128,6 +137,7 @@ static void loopbackTest(int fd)
 	}
 	puts("");
 }
+#endif
 //opens a device to do read/write on. returns a descriptor.
 static int spiOpen(const char *spidevice)
 {
@@ -150,15 +160,18 @@ static void spi_init(int fd)
 /*
  * prints detail on mode. speed and word size.
  * */
+#ifdef DEBUG
 static void printSpiDetails()
 {
 	printf("spi mode: %d\n", spi_mode);
 	printf("bits per word: %d\n", spi_bits);
 	printf("max speed: %d Hz (%d KHz)\n", spi_speed, spi_speed/1000);
 }
+#endif
 //closes device with descriptor fd.
-static void spiClose(int fd)
+static int spiClose(int fd)
 {
 	//error checking?
-	close(fd);
+	int ret = close(fd);
+	return ret;
 }
