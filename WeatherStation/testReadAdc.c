@@ -24,7 +24,7 @@
 // Configuration bits for single-ended channel selection
 //16 shift represent first byte out. 8 shifts is second byte out no shifts first byte out.
 #define CHANNEL0 			((START_BIT|MODE_SEL)<<16);
-#define CHANNEL1	
+#define CHANNEL1			((START_BIT|MODE_SEL|CHAN1_SEL)<<16);
 #define CHANNEL2
 #define CHANNEL3
 #define CHANNEL4
@@ -45,7 +45,7 @@ int main(void)
 	int spid;
 	int ret = 0,i;
 	uint16_t adcValue;
-	uint32_t channel = CHANNEL0;
+	uint32_t channel = CHANNEL1;
 	//we will be sending and receiving 3 bytes.
 	uint8_t adc_receive[3];
 	uint8_t adc_transmit[3];

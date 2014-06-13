@@ -56,10 +56,10 @@
 //#define DEBUG
 
 //static const char *spi_device = "/dev/spidev0.0";
-static uint8_t spi_mode = 0;
-static uint8_t spi_bits = 8;
-static uint32_t spi_speed = 500000;
-static uint16_t spi_delay = 0;
+uint8_t spi_mode = 0;
+uint8_t spi_bits = 8;
+uint32_t spi_speed = 500000;
+uint16_t spi_delay = 0;
 
 void pabort(const char *s);
 int transfer(int, uint8_t *, uint8_t *);
