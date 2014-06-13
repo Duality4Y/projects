@@ -1,13 +1,13 @@
 #include "spi.h"
 //prints error message and aborts. (exits)
-static void pabort(const char *s)
+void pabort(const char *s)
 {
 	perror(s);
 	abort();
 }
 
 //this function sets spi mode
-static int spi_set_mode(int fd, int mode)
+int spi_set_mode(int fd, int mode)
 {
 	int ret;
 	/*
@@ -23,7 +23,7 @@ static int spi_set_mode(int fd, int mode)
 	return ret;
 }
 //this function sets word length (bits per word)
-static int spi_set_word(int fd, int bits)
+int spi_set_word(int fd, int bits)
 {
 	int ret;
 	/*
@@ -40,7 +40,7 @@ static int spi_set_word(int fd, int bits)
 
 }
 //this function sets communication speed.
-static int spi_set_speed(int fd, int speed)
+int spi_set_speed(int fd, int speed)
 {
 	int ret = 0;
 	/*
@@ -59,13 +59,13 @@ static int spi_set_speed(int fd, int speed)
  * how long to delay after the last bit transfer
  * before optionally deselecting the device before the next transfer.
  * */
-static void spi_set_delay(int delay)
+void spi_set_delay(int delay)
 {
 	spi_delay = delay;
 }
 
 //send and recieve data.
-static int transfer(int fd, uint8_t *data, uint8_t *receive)
+int transfer(int fd, uint8_t *data, uint8_t *receive)
 {
 	int ret,i;
 	uint8_t tx[SPI_BUFFER_SIZE];
@@ -104,7 +104,7 @@ static int transfer(int fd, uint8_t *data, uint8_t *receive)
 
 //a loopback test. to see if your spi works 
 #ifdef DEBUG
-static void loopbackTest(int fd)
+void loopbackTest(int fd)
 {
 	int ret;
 	uint8_t tx[] = {
@@ -139,7 +139,7 @@ static void loopbackTest(int fd)
 }
 #endif
 //opens a device to do read/write on. returns a descriptor.
-static int spiOpen(const char *spidevice)
+int spiOpen(const char *spidevice)
 {
 	int filedescriptor = open(spidevice, O_RDWR);
 	if (filedescriptor < 0)
@@ -150,7 +150,7 @@ static int spiOpen(const char *spidevice)
  * and bit length 8.
  * with 0 delay.
  * */
-static void spi_init(int fd)
+void spi_init(int fd)
 {
 	spi_set_mode(fd, spi_mode);
 	spi_set_word(fd, spi_bits);
@@ -161,7 +161,7 @@ static void spi_init(int fd)
  * prints detail on mode. speed and word size.
  * */
 #ifdef DEBUG
-static void printSpiDetails()
+void printSpiDetails()
 {
 	printf("spi mode: %d\n", spi_mode);
 	printf("bits per word: %d\n", spi_bits);
@@ -169,7 +169,7 @@ static void printSpiDetails()
 }
 #endif
 //closes device with descriptor fd.
-static int spiClose(int fd)
+int spiClose(int fd)
 {
 	//error checking?
 	int ret = close(fd);

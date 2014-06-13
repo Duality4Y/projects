@@ -30,12 +30,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * 
  * */
+
+#ifndef SPI_H
+#define SPI_H
 
 #include <stdint.h>
 #include <unistd.h>
@@ -53,7 +53,7 @@
 	#define SPI_BUFFER_SIZE 100
 #endif
 //for debugging purposes.
-#define DEBUG
+//#define DEBUG
 
 //static const char *spi_device = "/dev/spidev0.0";
 static uint8_t spi_mode = 0;
@@ -61,18 +61,19 @@ static uint8_t spi_bits = 8;
 static uint32_t spi_speed = 500000;
 static uint16_t spi_delay = 0;
 
-static void pabort(const char *s);
-static int transfer(int, uint8_t *, uint8_t *);
-static int spi_set_mode(int, int);
-static int spi_set_word(int, int);
-static int spi_set_speed(int, int);
-static void spi_set_delay(int);
-static int spiOpen(const char*);
-static int spiClose(int);
-static void spi_init(int);
+void pabort(const char *s);
+int transfer(int, uint8_t *, uint8_t *);
+int spi_set_mode(int, int);
+int spi_set_word(int, int);
+int spi_set_speed(int, int);
+void spi_set_delay(int);
+int spiOpen(const char*);
+int spiClose(int);
+void spi_init(int);
 #ifdef DEBUG
-static void loopbackTest(int);
-static void printSpiDetails();
+void loopbackTest(int);
+void printSpiDetails();
 #endif
 
+#endif
 

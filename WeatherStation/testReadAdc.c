@@ -1,28 +1,58 @@
+/*
+ * this is testing code for reading out a adc (mcp3208 12bit adc)
+ * */
+
+//we will only be sending and receiving 3 bytes.
 #define SPI_BUFFER_SIZE 3
 
-#include "libs/spi.c"
+#include "libs/spi.h"
 #include <stdio.h>
+
+#define START_BIT			(1<<2)
+#define SINGLE_ENDED_SEL	(1<<1)
+#define DIFFRENTIAL_SEL		(0<<1)
+#define CHAN0_SEL			(0<<0)
+#define CHAN1_SEL			(1<<0)
+#define CHAN2_SEL			(1<<1)
+#define CHAN3_SEL			((1<<1)|(1<<0))
+#define CHAN4_SEL			(1<<2)
+#define CHAN5_SEL			((1<<2)|(1<<0))
+#define CHAN6_SEL			((1<<2)|(1<<1))
+
+#define MODE_SEL SINGLE_ENDED_SEL
+
 // Configuration bits for single-ended channel selection
-#define CHANNEL0 0x060000   // Channel 0
-#define CHANNEL1 0x064000   // Channel 1
-#define CHANNEL2 0x068000   // Channel 2
-#define CHANNEL3 0x06C000   // Channel 3
-#define CHANNEL4 0x070000   // Channel 4
-#define CHANNEL5 0x074000   // Channel 5
-#define CHANNEL6 0x078000   // Channel 6
-#define CHANNEL7 0x07C000   // Channel 7
+//16 shift represent first byte out. 8 shifts is second byte out no shifts first byte out.
+#define CHANNEL0 			((START_BIT|MODE_SEL)<<16);
+#define CHANNEL1	
+#define CHANNEL2
+#define CHANNEL3
+#define CHANNEL4
+#define CHANNEL5
+#define CHANNEL6
+#define CHANNEL7
+//#define CHANNEL0 0x060000   // Channel 0
+//#define CHANNEL1 0x064000   // Channel 1
+//#define CHANNEL2 0x068000   // Channel 2
+//#define CHANNEL3 0x06C000   // Channel 3
+//#define CHANNEL4 0x070000   // Channel 4
+//#define CHANNEL5 0x074000   // Channel 5
+//#define CHANNEL6 0x078000   // Channel 6
+//#define CHANNEL7 0x07C000   // Channel 7
+
 int main(void)
 {
 	int spid;
 	int ret = 0,i;
 	uint16_t adcValue;
 	uint32_t channel = CHANNEL0;
-	uint8_t adc_receive[SPI_BUFFER_SIZE];
-	uint8_t adc_transmit[SPI_BUFFER_SIZE];
+	//we will be sending and receiving 3 bytes.
+	uint8_t adc_receive[3];
+	uint8_t adc_transmit[3];
 	
-	for(i = 0;i<SPI_BUFFER_SIZE;i++)
+	for(i = 0;i<3;i++)
 	{
-		adc_transmit[SPI_BUFFER_SIZE-i-1] = channel%256;
+		adc_transmit[3-i-1] = channel%256;
 		channel >>= 8;
 	}
 	while(1)

@@ -25,9 +25,9 @@ long_line_column=72
 [files]
 current_page=3
 FILE_NAME_0=2412;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fweatherstation.c;0;4
-FILE_NAME_1=3484;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.c;0;4
-FILE_NAME_2=1438;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.h;0;4
-FILE_NAME_3=20;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2FtestReadAdc.c;0;4
+FILE_NAME_1=1638;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.c;0;4
+FILE_NAME_2=1416;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.h;0;4
+FILE_NAME_3=589;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2FtestReadAdc.c;0;4
 FILE_NAME_4=17;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fadc_spi.c;0;4
 
 [VTE]
@@ -35,7 +35,7 @@ last_dir=/home/pi/projects/WeatherStation
 
 [build-menu]
 CFT_01_LB=_Build
-CFT_01_CM=gcc -Wall -o "%e" "%f" -l bcm2835
+CFT_01_CM=gcc  -Wall libs/*.c "%f" -o "%e" -l bcm2835 
 CFT_01_WD=
 filetypes=C;
 EX_00_LB=_Execute
