@@ -1,14 +1,4 @@
-#define BCM2708_PERI_BASE 	0x20000000
-#define GPIO_BASE 			(BCM2708_PERI_BASE + 0x200000)
-
-#include <stdio.h>
-#include <unistd.h>
-#include <bcm2835.h>
-
-
-#define MAXTIMINGS 1e3
-
-int readDHT(int pin, int *readbuff);
+#include "dht11.h"
 
 int readDHT(int pin, int *readbuff)
 {

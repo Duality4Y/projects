@@ -15,20 +15,23 @@
 #include <unistd.h>
 #include <linux/spi/spidev.h>
 
-#include "libs/dht11.c"
-#include "libs/adc_spi.c"
+#include "libs/dht11.h"
+#include "libs/adc_spi.h"
 #include <bcm2835.h>
+
+enum 
+{
+	DAYS=0,MONTHS,DATES,TIMES,YEARS
+};
+
 int main(void)
 {
 	bcm2835_init();
 	
-	int *spiDevice = 0;
-	//mode=msbfirst and spi mode = 0.0
-	spi_init(spiDevice, 0);
-	
 	//database directory.
 	char database_dir[] = "databases";
 	char database_ext[] = "csv";
+	char database_filename[40];
 	
 	//date_time_info[0] = day. 1 = month. 2 = date. 3 = time. 4 = year.
 	char *date_time_info[100]; 	
@@ -63,6 +66,8 @@ int main(void)
 		fprintf(stderr, "Failure to convert the current time.");
 		return EXIT_FAILURE;
 	}
+	//print to see what w've got here.
+	printf("Current time is: %s \n", c_time_string);
 	//get individual time and dates.
 	int i = 0;
 	tok = strtok(c_time_string, " ");
@@ -71,14 +76,17 @@ int main(void)
 		date_time_info[i++] = tok;
 		tok = strtok(NULL, " ");
 	}
-	
+	//there is a new line on the last item we don't want that so we change it to a '\0';
+	date_time_info[YEARS][4] = '\0';
+	//desplay items for debugging.
 	for(i = 0;i < date_info_size;i++)
 		printf("%s\n", date_time_info[i]);
 	
-	printf("Current time is: %s \n", c_time_string);
-	sprintf(fullPath, "%s/%s.%s", database_dir, "Thursday_october_2014", database_ext);
+	//create filename
+	sprintf(database_filename, "%s_%s_%s_%s", date_time_info[DAYS], date_time_info[MONTHS], date_time_info[DATES], date_time_info[YEARS]);
+	sprintf(fullPath, "%s/%s.%s", database_dir, database_filename, database_ext);
 	//debug path printing it.
-	printf("%s\n", fullPath);
+	printf("debugpath: %s\n", fullPath);
 	//create a new file if it's not there. else we can append to it.
 	csvFile = fopen(fullPath,"a+");
 	while(1)
@@ -87,7 +95,7 @@ int main(void)
 		while(readDHT(4,dhtReads)==-1);//wait while there is no valid data.
 		
 		printf("Temp = %d *C, Hum = %d %%\n", dhtReads[0], dhtReads[1]);
-		sprintf(csvLine, "%s, %d, %d \n", date_time_info[3], dhtReads[0], dhtReads[1]);
+		sprintf(csvLine, "%s, %d, %d \n", date_time_info[TIMES], dhtReads[0], dhtReads[1]);
 		
 		if(!fputs(csvLine, csvFile))
 		{
