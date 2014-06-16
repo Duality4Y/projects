@@ -52,14 +52,15 @@
 #ifndef SPI_BUFFER_SIZE
 	#define SPI_BUFFER_SIZE 100
 #endif
+
 //for debugging purposes.
 //#define DEBUG
 
 //static const char *spi_device = "/dev/spidev0.0";
-uint8_t spi_mode = 0;
-uint8_t spi_bits = 8;
-uint32_t spi_speed = 500000;
-uint16_t spi_delay = 0;
+extern uint8_t spi_mode;
+extern uint8_t spi_bits;
+extern uint32_t spi_speed;
+extern uint16_t spi_delay;
 
 void pabort(const char *s);
 int transfer(int, uint8_t *, uint8_t *);
@@ -70,6 +71,7 @@ void spi_set_delay(int);
 int spiOpen(const char*);
 int spiClose(int);
 void spi_init(int);
+
 #ifdef DEBUG
 void loopbackTest(int);
 void printSpiDetails();
