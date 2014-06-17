@@ -87,24 +87,26 @@ int main(void)
 	sprintf(fullPath, "%s/%s.%s", database_dir, database_filename, database_ext);
 	//debug path printing it.
 	printf("debugpath: %s\n", fullPath);
-	//create a new file if it's not there. else we can append to it.
-	csvFile = fopen(fullPath,"a+");
+	
 	while(1)
-	{
+	{	
+		//create a new file if it's not there. else we can append to it.
+		csvFile = fopen(fullPath,"a+");
 		//if the read returns -1, then we don't have valid data.
 		while(readDHT(4,dhtReads)==-1);//wait while there is no valid data.
 		
 		printf("Temp = %d *C, Hum = %d %%\n", dhtReads[0], dhtReads[1]);
-		sprintf(csvLine, "%s, %d, %d, %d, %d\n", date_time_info[TIMES], dhtReads[0], 0, dhtReads[1], 0);
+		sprintf(csvLine, "%s, %d, %d, %d, %d\n", date_time_info[TIMES], dhtReads[0], 0, dhtReads[1],0);
 		
 		if(!fputs(csvLine, csvFile))
 		{
 			printf("failed to write string to file \n");
 		}
 		printf("line written in .%s: \n%s\n%s\n", database_ext, csvLine,"time,temp,druk,humi,adc");
-		//always close file
+		//always close file, to write out the changes.
 		fclose(csvFile);
-		break;
+		sleep(600);
+		//break;
 	}
 	return 0;
 }
