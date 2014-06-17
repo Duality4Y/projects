@@ -95,15 +95,15 @@ int main(void)
 		while(readDHT(4,dhtReads)==-1);//wait while there is no valid data.
 		
 		printf("Temp = %d *C, Hum = %d %%\n", dhtReads[0], dhtReads[1]);
-		sprintf(csvLine, "%s, %d, %d \n", date_time_info[TIMES], dhtReads[0], dhtReads[1]);
+		sprintf(csvLine, "%s, %d, %d, %d, %d\n", date_time_info[TIMES], dhtReads[0], 0, dhtReads[1], 0);
 		
 		if(!fputs(csvLine, csvFile))
 		{
 			printf("failed to write string to file \n");
 		}
+		printf("line written in .%s: \n%s\n%s\n", database_ext, csvLine,"time,temp,druk,humi,adc");
 		//always close file
 		fclose(csvFile);
-		printf("line written in .%s: %s\n", database_ext, csvLine);
 		break;
 	}
 	return 0;
