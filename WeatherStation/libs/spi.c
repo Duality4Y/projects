@@ -80,8 +80,8 @@ void spi_set_delay(int delay)
 int transfer(int fd, uint8_t *data, uint8_t *receive)
 {
 	int ret,i;
-	uint8_t tx[SPI_BUFFER_SIZE];
-	static uint8_t rx[SPI_BUFFER_SIZE] = {0, };
+	uint8_t tx[SPI_BUFFER_SIZE] = {0,0,0};
+	static uint8_t rx[SPI_BUFFER_SIZE] = {0,0,0};
 	//fill tx with data to be send.
 	for(i = 0;i<SPI_BUFFER_SIZE;i++)
 	{
