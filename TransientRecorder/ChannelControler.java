@@ -3,9 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+
 //import 
 
-class ChannelControler extends JPanel implements DummySerialPortEventListener
+class ChannelControler extends JPanel implements DummySerialPort.DummySerialPortEventListener
 {
 	//class variables
 	private Color color;
@@ -16,10 +17,9 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 	private char chanSel = 'A';
 	private int value = 1;
 	
+	private TransientSource source = new TransientSource();
+	
 	//for getting the data.
-	private DummySerialPort port;
-	private InputStream input;
-	private boolean channel;
 	private ArrayList<Integer> values;
 	
 	//buttons for selecting amplitude and turning it on or off.
@@ -36,14 +36,6 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 		this.sensitivity = 1;
 		
 		values = new ArrayList<Integer>();
-		
-		this.port = new DummySerialPort(1);
-		try
-		{
-			port.addEventListener(this);
-		}catch(TooManyListenersException e){}
-		port.notifyOnDataAvailable(true);
-		input = port.getInputStream();
 		
 		//handlers and buttons and model link
 		this.model = model;
@@ -68,25 +60,27 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 			sensitivity += 5;
 		}
 	}
+	
+	public void serialEvent(DummySerialPort.DummySerialPortEvent event)
+	{
+		java.io.InputStream = event.getSource().getInputStream();
+		int[]input = new int[4];
+		try
+		{
+			while(inputStream.available() >= 4)
+			{
+				for(int i =0;i<4;i++)
+				{
+					input[i] = inputStream.read();
+				}
+			}
+		}catch(IOExeption e){}
+	}
+	
 	public boolean newValues()
 	{
 		return this.isNewData;
-	}
-	public void serialEvent(DummySerialPortEvent event)
-	{
-		isNewData = true;
-		if ( event.getEventType() == DummySerialPortEvent.DATA_AVAILABLE ) {
-			try {
-				// read data
-				channel = true;
-				if(input.available() > 0) {
-					values.add((int)input.read());
-				} 
-			} catch (IOException e) {
-			}
-		}
-	}
-	
+	}	
 	/*
 	 * Setters and Getters down here.
 	 * */
@@ -102,8 +96,15 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 	public static void main(String[] args)
 	{
 		Channel channel1 = new Channel(Color.GRAY, 1, new TransientModel());
-		Channel channel2 = new Channel(Color.GRAY, 2, new TransientModel());
-		while(channel1.newValues() && channel2.newValues())
+		
+		DummySerialPort serialPort = new DummySerialPort();
+		serialPort.notifyOnDataAvailable(true);
+		try
+		{
+			serialPort.addEventListener(ChannelControler.this);
+		}catch(IOException e){}
+		//Channel channel2 = new Channel(Color.GRAY, 2, new TransientModel());
+		while(channel1.newValues())
 		{
 			//channel1.readValues();
 			//channel2.readValues();
@@ -117,6 +118,7 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 	}
 	public ArrayList<Integer> getValues()
 	{
+		values.add((int)source.getValue());
 		return values;
 	}
 	public void setSensitivity(int sensitivity)
@@ -147,4 +149,12 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 	{
 		return (selected);
 	}
+	/*
+	DummySerialPort = new DummySerialPort();
+	serialPort.notifyOnDataAvailable(true);
+	try
+	{
+		serialPort.addEventListener(new eu.elfring.whd.saxion.transientrecorder.control.MeetwaardenInput(model));
+	}catch	{}
+	* */
 }
