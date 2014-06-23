@@ -101,7 +101,7 @@ class ChannelControler extends JPanel implements DummySerialPort.DummySerialPort
 		serialPort.notifyOnDataAvailable(true);
 		try
 		{
-			serialPort.addEventListener(ChannelControler.this);
+			serialPort.addEventListener(ChannelControler);
 		}catch(IOException e){}
 		//Channel channel2 = new Channel(Color.GRAY, 2, new TransientModel());
 		while(channel1.newValues())

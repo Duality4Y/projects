@@ -24,10 +24,12 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=447;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FChannelControler.java;0;4
-FILE_NAME_1=1458;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FTransientSource.java;0;4
+FILE_NAME_0=2401;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FChannelControler.java;0;4
+FILE_NAME_1=2179;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FTransientSource.java;0;4
 FILE_NAME_2=44;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FTransientModel.java;0;4
-FILE_NAME_3=313;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FdobbelSteenTester.java;0;4
+FILE_NAME_3=738;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FJava-Calculator%2FdobbelSteenTester.java;0;4
+FILE_NAME_4=0;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FChannel.java;0;4
+FILE_NAME_5=0;Java;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FTransientRecorder%2FDummySerialPort.java;0;4
 
 [VTE]
 last_dir=/home/robert/projects/TransientRecorder
