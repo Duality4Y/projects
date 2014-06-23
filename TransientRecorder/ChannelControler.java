@@ -81,7 +81,7 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 			try {
 				// read data
 				channel = true;
-				while(input.available() > 0) {
+				if(input.available() > 0) {
 					if(channel)
 					{
 						chanSel = (char) input.read();
