@@ -20,8 +20,7 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 	private DummySerialPort port;
 	private InputStream input;
 	private boolean channel;
-	private ArrayList<Integer> A_values;
-	private ArrayList<Integer> B_values;
+	private ArrayList<Integer> values;
 	
 	//buttons for selecting amplitude and turning it on or off.
 	private JButton selectButton;
@@ -36,8 +35,7 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 		this.selected = false;
 		this.sensitivity = 1;
 		
-		A_values = new ArrayList<Integer>();
-		B_values = new ArrayList<Integer>();
+		values = new ArrayList<Integer>();
 		
 		this.port = new DummySerialPort(1);
 		try
@@ -82,25 +80,7 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 				// read data
 				channel = true;
 				if(input.available() > 0) {
-					if(channel)
-					{
-						chanSel = (char) input.read();
-					}
-					else
-					{
-						value = (int) input.read();
-					}
-					channel = !channel;
-					if(chanSel == 'A' && input.available() > 0)
-					{
-						A_values.add(value);
-					}
-					else if(chanSel == 'B' && input.available() > 0)
-					{
-						B_values.add(value);
-					}
-					//System.out.println(A_values);
-					//System.out.println(B_values);
+					values.add((int)input.read());
 				} 
 			} catch (IOException e) {
 			}
@@ -137,21 +117,7 @@ class ChannelControler extends JPanel implements DummySerialPortEventListener
 	}
 	public ArrayList<Integer> getValues()
 	{
-		if(this.channelNumber == 1)
-		{
-			if(A_values.size() != 0)
-			{
-				return A_values;
-			}
-		}
-		else if(this.channelNumber == 2)
-		{
-			if(B_values.size() != 0)
-			{
-				return B_values;
-			}
-		}
-		return null;
+		return values;
 	}
 	public void setSensitivity(int sensitivity)
 	{
