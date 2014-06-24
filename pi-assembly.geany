@@ -24,15 +24,26 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=33;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpi-assembly%2Ftemplate%2Fsource%2Fmain.s;0;4
+FILE_NAME_0=2178;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpi-assembly%2Fmain1.s;0;4
+FILE_NAME_1=0;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpi-assembly%2Fok02%2Fsource%2Fmain.s;0;4
 
 [VTE]
-last_dir=/home/robert/projects/pi-assembly/template/build
+last_dir=/home/robert/projects/pi-assembly
 
 [build-menu]
 NF_00_LB=_Make
-NF_00_CM=../make
+NF_00_CM=cd /home/robert/projects/pi-assembly/template/ ;make
 NF_00_WD=
 NF_01_LB=Make Custom _Target
 NF_01_CM=../make 
 NF_01_WD=
+EX_01_LB=_Upload
+EX_01_CM=pi-upload /dev/ttyUSB0 kernel.img
+EX_01_WD=
+ASMFT_00_LB=_Compile
+ASMFT_00_CM=cd /home/robert/projects/pi-assembly/template/ ;make
+ASMFT_00_WD=
+filetypes=ASM;
+EX_00_LB=_Execute
+EX_00_CM=pi-upload /dev/ttyUSB0 /home/robert/project/pi-assembly/template/kernel.img
+EX_00_WD=

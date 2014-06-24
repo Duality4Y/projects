@@ -15,7 +15,7 @@ import java.util.*;
 public class TransientSource implements DummySerialPortEventListener {
 	private DummySerialPort port;
 	private InputStream input;
-	
+	public int waarde;
 	public TransientSource() {
 		port = new DummySerialPort(100);
 		try {
@@ -29,6 +29,10 @@ public class TransientSource implements DummySerialPortEventListener {
 	/**
 	 * event handling, according to DummySerialPortEventListener.
 	 */
+	public int getValue()
+	{
+		return waarde;
+	}
 	public void serialEvent( DummySerialPortEvent event ) {		
 		if ( event.getEventType() == DummySerialPortEvent.DATA_AVAILABLE ) {
 			try {
@@ -38,7 +42,10 @@ public class TransientSource implements DummySerialPortEventListener {
 					if(channel)
 						System.out.print((char) input.read());
 					else
-						System.out.println((int) input.read());
+					{
+						waarde = (int)input.read();
+						System.out.println(waarde);
+					}
 					
 					channel = !channel;
 				} 
@@ -61,10 +68,10 @@ public class TransientSource implements DummySerialPortEventListener {
 	/**
 	 * does a simple test... read the port for 10 seconds
 	 */
-	//public static void main( String[] args ) {
-	//	System.out.println("Starting");
-	//	TransientSource tester = new TransientSource();
-	//	tester.monitor( 10000 ); // see what happens during 10 secs
-	//	System.out.println("Done");
-	//}
+	public static void main( String[] args ) {
+		System.out.println("Starting");
+		TransientSource tester = new TransientSource();
+		tester.monitor( 10000 ); // see what happens during 10 secs
+		System.out.println("Done");
+	}
 }
