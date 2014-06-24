@@ -24,7 +24,7 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=3785;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fweatherstation.c;0;4
+FILE_NAME_0=1562;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fweatherstation.c;0;4
 FILE_NAME_1=3375;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.c;0;4
 FILE_NAME_2=1123;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.h;0;4
 FILE_NAME_3=902;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fadc_spi.c;0;4
