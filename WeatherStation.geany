@@ -24,18 +24,9 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=1562;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Fweatherstation.c;0;4
-FILE_NAME_1=3375;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.c;0;4
-FILE_NAME_2=1123;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fspi.h;0;4
-FILE_NAME_3=902;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fadc_spi.c;0;4
-FILE_NAME_4=1586;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fadc_spi.h;0;4
-FILE_NAME_5=267;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fdht11.c;0;4
-FILE_NAME_6=385;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fdht11.h;0;4
-FILE_NAME_7=1213;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fbmp085.c;0;4
-FILE_NAME_8=1969;C;0;16;1;1;0;%2Fhome%2Fpi%2Fprojects%2FWeatherStation%2Flibs%2Fbmp085.h;0;4
 
 [VTE]
-last_dir=/home/pi/projects/WeatherStation/databases
+last_dir=/home/robert/projects/TransientRecorder
 
 [build-menu]
 CFT_01_LB=_Build

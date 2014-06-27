@@ -16,9 +16,8 @@
 ; it now works!
 ; shake it ! throw it! 
 ; if you shake it it throws a random number :)
-.nolist
+
 .include "tn84def.inc"
-.list
 
 ;holds the pin to symbol values.
 .equ one 				= (1<<PA3);

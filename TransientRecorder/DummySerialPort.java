@@ -1,4 +1,4 @@
- 
+//package DummySerialPort;
 
 //import gnu.io.*;
 import java.io.*;
@@ -190,3 +190,4 @@ public class DummySerialPort implements Runnable {
 	}
 	
 }
+
