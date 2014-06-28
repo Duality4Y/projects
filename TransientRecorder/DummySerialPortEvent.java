@@ -1,4 +1,4 @@
- 
+//package DummySerialPort;
 
 /**
  * Dummy implementation for testing purposed
@@ -37,3 +37,4 @@ public class DummySerialPortEvent  {
 		return newStatus;
 	}
 }
+

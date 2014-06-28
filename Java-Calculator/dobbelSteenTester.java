@@ -49,22 +49,28 @@ class View extends JPanel implements Observer
 	{
 		super.paintComponent(g);
 		int collomWidth = 50;
+		int offset = 5;
+		int leftOffset = 100;
 		if(model.getGraph() == model.TABLE)
 		{
 			//g.fillRect(
-			for(int i = 0;i<7;i++)
+			for(int i = 1;i<7;i++)
 			{
 				g.setColor(Color.BLACK);
 				g.drawString(""+i, 100+(i*collomWidth), 370);
 				g.drawString(""+model.getNumThrown(i), 100+(i*collomWidth), 400);
 			}
 		}
-		else if(model.getGraph() == model.BARGRAPH)
+		//else if(model.getGraph() == model.BARGRAPH)
+		else
 		{
-			for(int i = 0;i<7;i++)
+			for(int i = 1;i<7;i++)
 			{
 				g.setColor(Color.BLACK);
-				g.setColor(Color.BLUE);
+				/*drawRect(int x, int y, int width, int height)*/
+				g.drawRect(i*40+leftOffset+offset*i, 340-(model.getTotalNumThrown(i)*10), 10, (model.getTotalNumThrown(i)*10));
+				//g.drawRect(i*10+leftOffset+offset*i,340,10,(340-model.getNumThrown(i)*10));
+				//g.setColor(Color.BLUE);
 			}
 		}
 	}
@@ -158,6 +164,7 @@ class Model extends Observable
 		}
 		return total;
 	}
+	//gives average
 	public int getTotalNumThrown(int num)
 	{
 		int total = 1;
@@ -212,7 +219,7 @@ class Control extends JPanel
 			if(model.getGraph() == model.BARGRAPH)
 			{
 				model.selectGraph(model.TABLE);
-				graphSwitchbutton.setText("Bargraph");
+				graphSwitchbutton.setText("graph");
 			}
 			else
 			{
