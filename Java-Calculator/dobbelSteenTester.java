@@ -68,7 +68,7 @@ class View extends JPanel implements Observer
 			{
 				g.setColor(Color.BLACK);
 				/*drawRect(int x, int y, int width, int height)*/
-				g.drawRect(i*10+leftOffset+offset*i, 300, 10, -(model.getNumThrown(i)*10));
+				g.drawRect(i*40+leftOffset+offset*i, 340-(model.getTotalNumThrown(i)*10), 10, (model.getTotalNumThrown(i)*10));
 				//g.drawRect(i*10+leftOffset+offset*i,340,10,(340-model.getNumThrown(i)*10));
 				//g.setColor(Color.BLUE);
 			}
@@ -164,6 +164,7 @@ class Model extends Observable
 		}
 		return total;
 	}
+	//gives average
 	public int getTotalNumThrown(int num)
 	{
 		int total = 1;
