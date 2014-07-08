@@ -23,9 +23,10 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=33;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2Finterperter.ino;0;4
-FILE_NAME_1=103;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2FExampleUsage.cpp;0;4
+current_page=0
+FILE_NAME_0=908;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2Finterperter.ino;0;4
+FILE_NAME_1=366;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2Fsend.py;0;4
+FILE_NAME_2=4314;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2FDmDisplay%2FDmDisplay.cpp;0;4
 
 [VTE]
 last_dir=/home/robert/projects/arduino-cc-interpreter
@@ -40,10 +41,13 @@ EX_00_WD=
 CFT_00_LB=_Compile
 CFT_00_CM=make clean;make;
 CFT_00_WD=
-filetypes=C;C++;
+filetypes=C;C++;Python;
 CFT_02_LB=Clean
 CFT_02_CM=
 CFT_02_WD=
 C++FT_00_LB=_Compile
 C++FT_00_CM=make clean;make;
 C++FT_00_WD=
+PythonFT_00_LB=_Compile
+PythonFT_00_CM=python "%f"
+PythonFT_00_WD=
