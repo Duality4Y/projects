@@ -137,131 +137,15 @@ void printStats()
 	setLine(3, frameBuff, printBuf);
 	i++;
 }
-//buss port
-#define BUS_DDR					DDRA
-#define BUS_PORT				PORTA
-#define BUS_PORT_IN				PINA
-
-#define BUS_INPUT				(BUS_DDR = 0x00)
-#define BUS_OUTPUT				(BUS_DDR = 0xFF)
-
-#define BUS_WRITE(X)			(PORTA = X)
-#define BUS_READ				(PINA)
-
-//pin defs for the buss
-/*Controle lines*/
-#define CONTROLE_LINE_DDR		DDRJ
-#define CONTROLE_LINE_PORT		PORTJ
-
-/*enable pins.*/
-#define LSB_REG_ENABLE_PIN		PJ5
-#define LSB_REG_CP_PIN			PJ2
-
-#define LSB_REG_CP_INPUT		(CONTROLE_LINE_DDR &= ~(1<<LSB_REG_CP_PIN))
-#define LSB_REG_ENABLE_INPUT	(CONTROLE_LINE_DDR &= ~(1<<LSB_REG_CP_PIN))
-#define LSB_REG_CP_OUTPUT		(CONTROLE_LINE_DDR |= (1<<LSB_REG_CP_PIN))
-#define LSB_REG_ENABLE_OUTPUT	(CONTROLE_LINE_DDR |= (1<<LSB_REG_ENABLE_PIN))
-//clock is on rising edge
-#define LSB_REG_SET_CP 			(CONTROLE_LINE_PORT |= (1<<LSB_REG_CP_PIN))
-#define LSB_REG_CLEAR_CP		(CONTROLE_LINE_PORT &= ~(1<<LSB_REG_CP_PIN))
-//enable is active low.
-#define LSB_REG_SET_ENABLE		(CONTROLE_LINE_PORT &= ~(1<<LSB_REG_ENABLE_PIN))
-#define LSB_REG_CLEAR_ENABLE	(CONTROLE_LINE_PORT |= (1<<LSB_REG_ENABLE_PIN))
-
-/*clock pins.*/
-#define MSB_REG_ENABLE_PIN		PJ4
-#define MSB_REG_CP_PIN			PJ3
-
-#define MSB_REG_CP_INPUT		(CONTROLE_LINE_DDR &= ~(1<<MSB_REG_CP_PIN))
-#define MSB_REG_ENABLE_INPUT	(CONTROLE_LINE_DDR &= ~(1<<MSB_REG_ENABLE_PIN))
-#define MSB_REG_CP_OUTPUT		(CONTROLE_LINE_DDR |= (1<<MSB_REG_CP_PIN))
-#define MSB_REG_ENABLE_OUTPUT	(CONTROLE_LINE_DDR |= (1<<MSB_REG_ENABLE_PIN))
-//clock is on rising edge
-#define MSB_REG_SET_CP			(CONTROLE_LINE_PORT |= (1<<MSB_REG_CP_PIN))
-#define MSB_REG_CLEAR_CP		(CONTROLE_LINE_PORT &= ~(1<<MSB_REG_CP_PIN))
-//enable is active low.
-#define MSB_REG_SET_ENABLE		(CONTROLE_LINE_PORT &= ~(1<<MSB_REG_ENABLE_PIN))
-#define MSB_REG_CLEAR_ENABLE	(CONTROLE_LINE_PORT |= (1<<MSB_REG_ENABLE_PIN))
-
-/*ram controle lines.*/
-#define WRITE_ENABLE_PIN		PJ7
-#define OUTPUT_ENABLE_PIN		PJ6
-
-#define WRITE_ENABLE_OUTPUT		(CONTROLE_LINE_DDR |= (1<<WRITE_ENABLE_PIN))
-#define WRITE_ENABLE_INPUT		(CONTROLE_LINE_DDR &= ~(1<<OUTPUT_ENABLE_PIN))
-#define OUTPUT_ENABLE_OUTPUT
-#define OUTPUT_ENABLE_INPUT
-/*both writeEnable and outputEnable are active low*/
-#define SET_WRITE_ENABLE 
-#define CLEAR_WRITE_ENABLE
-#define SET_OUTPUT_ENABLE
-#define CLEAR_OUTPUT_ENABLE
-
-void writeLsbRegister(uint8_t data)
-{
-	/*first setup the bus to output*/
-	BUS_OUTPUT;
-	/*controle lines to output*/
-	LSB_REG_CP_OUTPUT;
-	LSB_REG_ENABLE_OUTPUT;
-	/*put lsb of address into buss and put it in lsb register.*/
-	BUS_PORT = data;
-	/*enable the chip*/
-	LSB_REG_SET_ENABLE;
-	/*clock the data in*/
-	LSB_REG_SET_CP;
-	LSB_REG_CLEAR_CP;
-	LSB_REG_CLEAR_ENABLE;
-}
-void writeMsbRegister(uint8_t data)
-{
-	/*first setup the bus to output*/
-	BUS_OUTPUT;
-	/*controle lines to output*/
-	LSB_REG_CP_OUTPUT;
-	LSB_REG_ENABLE_OUTPUT;
-	/*put lsb of address into buss and put it in lsb register.*/
-	BUS_PORT = data;
-	/*enable the chip*/
-	LSB_REG_SET_ENABLE;
-	/*clock the data in*/
-	LSB_REG_SET_CP;
-	LSB_REG_CLEAR_CP;
-	LSB_REG_CLEAR_ENABLE;
-}
-
-void writeRamData(uint16_t address, uint8_t data)
-{
-	/*write the data for lsb address part*/
-	writeLsbRegister(address&0xFF);
-	/*write the data for msb address part*/
-	writeMsbRegister(address&0xFF);
-	
-	/*set ram chip controle lines in the right mode*/
-	WRITE_ENABLE_OUTPUT;
-	OUTPUT_ENABLE_OUTPUT;
-	CLEAR_OUTPUT_ENABLE; //keep read pin high
-	/*put the ram chip in the correct mode*/
-	SET_WRITE_ENABLE;
-}
-
-uint8_t readRamData(uint16_t address)
-{
-	
-}
-
-void setupRamPins()
-{
-	//all pins to input.
-	
-}
 
 void setup()
 {
 	Serial1.begin(115200);
 	Serial1.println(">> Start \n");
 	Serial.begin(9600);
-	
+	/*setup ram io first.*/
+	setupRamIO();
+	/*button pin to input and enable internal pullup*/
 	pinMode(12, INPUT);
 	digitalWrite(12, HIGH);
 	
