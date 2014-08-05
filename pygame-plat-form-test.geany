@@ -13,9 +13,8 @@ detect_indent_width=false
 indent_mode=2
 
 [project]
-name=pygame-Circles
-base_path=/home/robert/projects/pygame-Circles/
-description=
+name=pygame-plat-form-test
+base_path=/home/robert/projects/pygame-plat-form-test/
 
 [long line marker]
 long_line_behaviour=1
@@ -23,7 +22,6 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=827;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-Circles%2Fpygame-circles1.py;0;4
 
 [VTE]
-last_dir=/home/robert/projects/pygame-Circles
+last_dir=/home/robert/nbody/apps

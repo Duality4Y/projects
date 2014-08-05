@@ -24,9 +24,8 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=908;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2Finterperter.ino;0;4
-FILE_NAME_1=366;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2Fsend.py;0;4
-FILE_NAME_2=4314;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2FDmDisplay%2FDmDisplay.cpp;0;4
+FILE_NAME_0=445;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2Finterperter.ino;0;4
+FILE_NAME_1=4314;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Farduino-cc-interpreter%2FDmDisplay%2FDmDisplay.cpp;0;4
 
 [VTE]
 last_dir=/home/robert/projects/arduino-cc-interpreter

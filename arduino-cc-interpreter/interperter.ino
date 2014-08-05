@@ -143,8 +143,6 @@ void setup()
 	Serial1.begin(115200);
 	Serial1.println(">> Start \n");
 	Serial.begin(9600);
-	/*setup ram io first.*/
-	setupRamIO();
 	/*button pin to input and enable internal pullup*/
 	pinMode(12, INPUT);
 	digitalWrite(12, HIGH);
