@@ -24,6 +24,9 @@ class GameObject(object):
 	def __init__(self, x, y):
 		self.x = x
 		self.y = y
+		self.ident = "GameObject"
+	def getIdent(self):
+		return self.ident
 	def getPos(self):
 		return (self.x, self.y)
 	def setPos(self, x, y):
@@ -33,8 +36,9 @@ class GameObject(object):
 class GameBlock(GameObject):
 	def __init__(self, x, y, width, height):
 		super(GameBlock, self).__init__(x, y)
-		self.width = width;
-		self.height = height;
+		self.width = width
+		self.height = height
+		self.ident = "GameBlock"
 	def getRect(self):
 		return (self.x, self.y, self.width, self.height)
 	def setRect(self, x, y, width, height):
@@ -55,15 +59,21 @@ class GameTile(GameBlock):
 	def __init__(self, x, y, width, height, tile):
 		super(GameTile, self).__init__(x, y, width, height)
 		self.tile = tile
+		self.ident = "GameTile"
 	def getTile(self):
 		return (self.tile)
 	def setTile(self, tile):
 		self.tile = tile
+	def getWidth():
+		return self.width
+	def getHeight():
+		return self.height
 
 class GameMob(GameBlock):
 	def __init__(self, x, y, width, height, spriteset):
 		super(GameMob, self).__init__(x, y, width, height)
 		self.spriteset = spriteset
+		self.ident = "GameMob"
 	def getTileset(self):
 		return (self.spriteset)
 	def setTileset(self, spriteset):
@@ -82,6 +92,8 @@ class companionCube(GameMob):
 		
 		self.base = window_height - platform_base_height
 		self.gameobjects = None
+		
+		self.ident = "companionCube"
 	def getTileset(self):
 		return (self.spriteset)
 	def setTileset(self, spriteset):
@@ -96,8 +108,9 @@ class companionCube(GameMob):
 			if event.key == K_SPACE:
 				self.jumping = True
 			if event.key == K_p and self.gameobjects:
+				print "p pressed"
 				for tile in self.gameobjects:
-					print type(tile)
+					print str(tile.getIdent())
 		if event.type == KEYUP:
 			if event.key == K_a:
 				self.moveLeft = False
@@ -113,3 +126,9 @@ class companionCube(GameMob):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 	def handleCollisions(self, gameobjects):
 		self.gameobjects = gameobjects
+		for item in gameobjects:
+			if item.getIdent == "GameTile":
+				if ((self.y >= item.y) and (self.x > item.x) and (self.x < item.x+item.width)):
+					self.y = item.y
+				else:
+					self.y -= 1
