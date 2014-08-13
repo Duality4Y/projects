@@ -54,6 +54,23 @@ class GameBlock(GameObject):
 		pass
 	def draw(self, surface):
 		pygame.draw.rect(surface, blue, self.getRect(), 0)
+		pygame.draw.rect(surface, white, self.getRect(), 1)
+	def getWidth(self):
+		return self.width
+	def getHeight(self):
+		return self.height
+	def detectCollision(self, rect1, rect2):
+		#if (rect1.x < rect2.x + rect2.width and
+		#	rect1.x + rect1.width > rect2.x and
+		#	rect1.y < rect2.y + rect2.height and
+		#	rect1.height + rect1.y > rect2.y):
+		#		return 1
+		if (rect1[0] < rect2[0] + rect2[2] and
+			rect1[0] + rect1[2] > rect2[0] and
+			rect1[1] < rect2[1] + rect2[3] and
+			rect1[3] + rect1[1] > rect2[1]):
+				return 1
+		return 0
 
 class GameTile(GameBlock):
 	def __init__(self, x, y, width, height, tile):
@@ -64,10 +81,6 @@ class GameTile(GameBlock):
 		return (self.tile)
 	def setTile(self, tile):
 		self.tile = tile
-	def getWidth():
-		return self.width
-	def getHeight():
-		return self.height
 
 class GameMob(GameBlock):
 	def __init__(self, x, y, width, height, spriteset):
@@ -84,51 +97,35 @@ class companionCube(GameMob):
 		super(GameMob, self).__init__(x, y, width, height)
 		self.spriteset = spriteset
 		
+		#speed in pixels
+		self.p_speed = 4
+		#movement booleans (keeping track of what movement to do
 		self.moveLeft = False
 		self.moveRight = False
+		self.moveDown = False
+		self.moveUp = False
 		
+		#jumping related varaibles
 		self.jumpHeight = 0
 		self.jumping = False
 		
-		self.base = window_height - platform_base_height
-		self.gameobjects = None
-		
+		#our own identity if someones searches for us you know.
 		self.ident = "companionCube"
 	def getTileset(self):
 		return (self.spriteset)
 	def setTileset(self, spriteset):
 		self.spriteset = spriteset
 	def handleEvents(self, event):
-		#handle all events moving in this case
 		if event.type == KEYDOWN:
-			if event.key == K_a:
-				self.moveLeft = True
-			elif event.key == K_d:
-				self.moveRight = True
-			if event.key == K_SPACE:
-				self.jumping = True
-			if event.key == K_p and self.gameobjects:
-				print "p pressed"
-				for tile in self.gameobjects:
-					print str(tile.getIdent())
+			if event.key == K_UP:
+				self.moveUp = True
 		if event.type == KEYUP:
-			if event.key == K_a:
-				self.moveLeft = False
-			elif event.key == K_d:
-				self.moveRight = False
-	#a function that update this that move and sprites and stuff.
+			if event.key == K_UP:
+				self.moveUp = False
 	def update(self):
-		if self.moveRight:
-			self.setPos(self.getPos()[0]+1, self.getPos()[1]);
-		if self.moveLeft:
-			self.setPos(self.getPos()[0]-1, self.getPos()[1]);
+		if self.moveUp:
+			self.setPos(self.getPos()[0], self.getPos()[1]-self.p_speed)
 	def draw(self, surface):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 	def handleCollisions(self, gameobjects):
-		self.gameobjects = gameobjects
-		for item in gameobjects:
-			if item.getIdent == "GameTile":
-				if ((self.y >= item.y) and (self.x > item.x) and (self.x < item.x+item.width)):
-					self.y = item.y
-				else:
-					self.y -= 1
+		pass
