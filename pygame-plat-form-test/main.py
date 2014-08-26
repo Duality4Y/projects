@@ -7,9 +7,9 @@ mob = companionCube(100, 100, 25, 25, None);
 gameobjects = []
 gameobjects.append(mob)
 for i in range(0,window_width/2, tile_width):
-	tile = GameTile(i,(window_height/2)-tile_height, tile_width+2, tile_height, None)
+	tile = GameTile(i,(window_height/2)-tile_height, tile_width, tile_height, None)
 	gameobjects.append(tile)
-gameobjects.append(GameTile(400,300, 40, 40, None))
+gameobjects.append(GameTile(200,150, 40, 40, None))
 
 pygame.init()
 

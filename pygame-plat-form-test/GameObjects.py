@@ -98,7 +98,9 @@ class companionCube(GameMob):
 		self.spriteset = spriteset
 		
 		#speed in pixels
-		self.p_speed = 4
+		self.p_speed = 5
+		self.vx = self.p_speed
+		self.vy = self.p_speed
 		#movement booleans (keeping track of what movement to do
 		self.moveLeft = False
 		self.moveRight = False
@@ -117,15 +119,47 @@ class companionCube(GameMob):
 		self.spriteset = spriteset
 	def handleEvents(self, event):
 		if event.type == KEYDOWN:
-			if event.key == K_UP:
+			if event.key == K_w:
 				self.moveUp = True
+			if event.key == K_a:
+				self.moveLeft = True
+			if event.key == K_d:
+				self.moveRight = True
+			if event.key == K_s:
+				self.moveDown = True
 		if event.type == KEYUP:
-			if event.key == K_UP:
+			if event.key == K_w:
 				self.moveUp = False
+			if event.key == K_a:
+				self.moveLeft = False
+			if event.key == K_d:
+				self.moveRight = False
+			if event.key == K_s:
+				self.moveDown = False
 	def update(self):
 		if self.moveUp:
-			self.setPos(self.getPos()[0], self.getPos()[1]-self.p_speed)
+			self.setPos(self.getPos()[0], self.getPos()[1]-self.vy)
+		if self.moveDown:
+			self.setPos(self.getPos()[0], self.getPos()[1]+self.vy)
+		if self.moveLeft:
+			self.setPos(self.getPos()[0]-self.vx, self.getPos()[1])
+		if self.moveRight:
+			self.setPos(self.getPos()[0]+self.vx, self.getPos()[1])
 	def draw(self, surface):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 	def handleCollisions(self, gameobjects):
-		pass
+		for identity in gameobjects:
+			if identity.ident == "GameTile":
+				if((self.y+self.height > identity.getPos()[1]) and (self.y < identity.getPos()[1]+identity.getWidth())) and (self.x + self.width > identity.getPos()[0]) and (self.x < identity.getPos()[0]+identity.getWidth()):
+					if self.moveRight and ((self.x+self.width) > identity.getPos()[0]):
+						print "Hit left wall."
+						self.x -= self.vx
+					if self.moveLeft and (self.x < identity.getPos()[0]+identity.getWidth()):
+						print "Hit Right wall."
+						self.x += self.vx
+					if self.moveDown and ((self.y+self.height) > identity.getPos()[1]):
+						print "Hit upper wall."
+						self.y -= self.vy
+					if self.moveUp and (self.y < (identity.getPos()[1]+identity.getHeight())):
+						print "Hit bottom wall."
+						self.y += self.vy

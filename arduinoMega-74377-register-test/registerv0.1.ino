@@ -26,21 +26,22 @@ void setupRam()
 	SET_OE_HIGH;
 	SET_WE_HIGH;
 }
-
+//sets address onto the addres buss.
 void setRamAddr(uint16_t address)
 {
+	//first writes the low order byte, after that the high order byte.
 	paralelWrite(&lsb_reg, address&0xFF);
 	paralelWrite(&msb_reg, address>>8); 
 }
-
+//writes out data.
 void writeToRam(uint16_t addr, uint8_t data)
 {
+	SET_OE_HIGH;
 	BUS_OUTPUT;
 	setRamAddr(addr);
 	SET_CE_LOW;
-	SET_WE_LOW;
-	SET_OE_HIGH;
 	BUS_WRITE(data);
+	SET_WE_LOW;
 	SET_WE_HIGH;
 	SET_CE_HIGH;
 	BUS_INPUT;
@@ -49,13 +50,16 @@ void writeToRam(uint16_t addr, uint8_t data)
 uint8_t readRam(uint16_t addr)
 {
 	setRamAddr(addr);
+	BUS_INPUT;
 	SET_CE_LOW;
 	SET_WE_HIGH;
 	SET_OE_LOW;
-	BUS_INPUT;
+	asm volatile(
+	"nop\n\t"
+	::);
 	uint8_t byte = PINK;
-	SET_CE_HIGH;
 	SET_OE_HIGH;
+	SET_CE_HIGH;
 	return byte;
 }
 
@@ -64,7 +68,6 @@ void writeRam(uint8_t byte, uint16_t addr)
 	while(readRam(addr) != byte)
 	{
 		writeToRam(addr, byte);
-		delay(1);
 	}
 }
 
@@ -89,11 +92,14 @@ void setup()
 	Serial.print("writing took: ");
 	Serial.println(current);
 	Serial.println("Reading: ");
+	byte check = 0x00;
 	for(int i = 0;i<32767;i++)
-		readRam(i);
+		check ^= (readRam(0xFF));
 	current = millis()-current;
 	Serial.print("reading took: ");
 	Serial.println(current);
+	Serial.print("check byte: ");
+	Serial.println(check, HEX);
 }
 void loop()
 {

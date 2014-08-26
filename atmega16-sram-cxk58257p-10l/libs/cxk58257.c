@@ -34,7 +34,6 @@ uint8_t read(unsigned int address)
 	SET_WE
 	CLEAR_CE
 	CLEAR_OE
-	_delay_ms(10);
 	readByte = DATA_IN;
 	SET_OE
 	SET_CE
@@ -48,7 +47,6 @@ void write(unsigned int address, uint8_t data)
 	SET_OE
 	CLEAR_CE
 	CLEAR_WE
-	_delay_ms(10);
 	DATA_PORT = data;
 	SET_WE 
 	SET_CE

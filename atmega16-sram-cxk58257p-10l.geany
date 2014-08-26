@@ -25,10 +25,9 @@ long_line_column=72
 [files]
 current_page=0
 FILE_NAME_0=150;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Fmain.c;0;4
-FILE_NAME_1=944;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Flibs%2Fcxk58257.c;0;4
+FILE_NAME_1=847;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Flibs%2Fcxk58257.c;0;4
 FILE_NAME_2=228;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Flibs%2Fcxk58257.h;0;4
 FILE_NAME_3=1605;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-sram-cxk58257p-10l%2Flibs%2FpinDefs.h;0;4
-FILE_NAME_4=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Favr-gameboy%2Fmain.c;0;4
 
 [VTE]
 last_dir=/home/robert/projects/atmega16-sram-cxk58257p-10l
