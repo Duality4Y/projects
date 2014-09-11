@@ -58,18 +58,41 @@
  * what part of the data goes where.
  * */
 
-#define ADDR_BUS_INPUT		(ADDR_BUS_A_DDR = ADDR_BUS_B_DDR = 0x00) (ADDR_BUS_C_DDR |= ( 1<<PD6)|( 1<<PD7));
-#define ADDR_BUS_OUTPUT		(ADDR_BUS_A_DDR = ADDR_BUS_B_DDR = 0xFF) (ADDR_BUS_C_DDR &= ~( (1<<PD6)|(1<<PD7) ));
+//#define ADDR_BUS_INPUT		do{(ADDR_BUS_A_DDR = ADDR_BUS_B_DDR = 0x00);(ADDR_BUS_C_DDR |= ( 1<<PD6)|( 1<<PD7));}while(0);
+//#define ADDR_BUS_OUTPUT		do{(ADDR_BUS_A_DDR = ADDR_BUS_B_DDR = 0xFF);(ADDR_BUS_C_DDR &= ~( (1<<PD6)|(1<<PD7) ));}while(0);
 
-#define ADDR_BUS_WRITE(X)	(ADDR_BUS_A_PORT = (X&0xFF));(ADDR_BUS_B_PORT = (X&0xFF00));( ADDR_BUS_C_PORT = ( X&( ( 1<<PD6)|( 1<<PD7))));
-#define ADDR_BUS_READ		(0x00 | (ADDR_BUS_A_DPIN) | (ADDR_BUS_B_DPIN<<8) | (ADDR_BUS_C_DPIN&( ( 1<<PD6)|( 1<<PD7))<<16) )
+//#define ADDR_BUS_WRITE(X)	do{(ADDR_BUS_A_PORT = (X&0xFF));(ADDR_BUS_B_PORT = (X&0xFF00));( ADDR_BUS_C_PORT = ( X&( ( 1<<PD6)|( 1<<PD7))));}while(0);
+//#define ADDR_BUS_READ		(0x000000 | (ADDR_BUS_A_DPIN) | (ADDR_BUS_B_DPIN<<8) | (ADDR_BUS_C_DPIN&( ( 1<<PD6)|( 1<<PD7))<<16) )
+
+//#define ADDR_BUS_WRITE(X)	(ADDR_BUS_A_PORT = X)
+//#define ADDR_BUS_READ		(ADDR_BUS_A_PIN)
+
+#define ADDR_BUS_A_INPUT	(ADDR_BUS_A_DDR = 0x00)
+#define ADDR_BUS_B_INPUT	(ADDR_BUS_B_DDR = 0x00)
+#define ADDR_BUS_C_INPUT	(ADDR_BUS_C_DDR &= ~((1<<PD6)|(1<<PD7)))
+
+#define ADDR_BUS_A_OUTPUT	(ADDR_BUS_A_DDR = 0xFF)
+#define ADDR_BUS_B_OUTPUT	(ADDR_BUS_B_DDR = 0xFF)
+#define ADDR_BUS_C_OUTPUT	(ADDR_BUS_C_DDR |= (1<<PD6)|(1<<PD7))
+
+#define ADDR_BUS_A_WRITE(X)
+#define ADDR_BUS_B_WRITE(X)
+#define ADDR_BUS_C_WRITE(X)
+
+#define ADDR_BUS_A_READ
+#define ADDR_BUS_B_READ
+#define ADDR_BUS_C_READ
 
 #define MANUFACTURER_ID
+
+
 
 void init_flash_interface()
 {
 	DATA_BUS_INPUT;
-	ADDR_BUS_INPUT;
+	ADDR_BUS_A_INPUT;
+	ADDR_BUS_B_INPUT;
+	ADDR_BUS_C_INPUT;
 	CONTROLE_OUTPUT;
 	
 	CLEAR_CE;
@@ -77,6 +100,32 @@ void init_flash_interface()
 	CLEAR_WE;
 }
 
+void writeAddress(uint32_t address)
+{
+	ADDR_BUS_A_WRITE(address&0xFF);
+	ADDR_BUS_B_WRITE((address>>8)&0xFF);
+	ADDR_BUS_C_WRITE((address>>16)&0xFF);
+}
+
+uint8_t read_flash(uint32_t address)
+{
+	DATA_BUS_INPUT;
+	SET_CE;
+	SET_OE;
+	CLEAR_WE;
+	ADDR_BUS_A_OUTPUT;
+	ADDR_BUS_B_OUTPUT;
+	ADDR_BUS_C_OUTPUT;
+	//ADDR_BUS_WRITE(address);
+	writeAddress(address);
+	short readByte = DATA_BUS_READ;
+	CLEAR_OE;
+	CLEAR_CE;
+	ADDR_BUS_A_INPUT;
+	ADDR_BUS_B_INPUT;
+	ADDR_BUS_C_INPUT;
+	return readByte;
+}
 int main(void)
 {
 	init_uart();
@@ -85,19 +134,9 @@ int main(void)
 	{
 		unsigned long adder = 0;
 		unsigned long limit = 0xFF;
-		for(adder = 0;adder < limit;adder++)
+		for(adder = 0;adder <= limit;adder++)
 		{
-			DATA_BUS_INPUT;
-			SET_CE;
-			SET_OE;
-			CLEAR_WE;
-			ADDR_BUS_OUTPUT;
-			ADDR_BUS_WRITE(adder);
-			short readByte = DATA_BUS_READ;
-			CLEAR_OE;
-			CLEAR_CE;
-			ADDR_BUS_INPUT;
-			uart_putdata(readByte);
+			uart_putdata(read_flash(adder));
 		}
 		break;
 	}
