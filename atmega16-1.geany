@@ -23,13 +23,13 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=41;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-1%2Fmain.c;0;4
-FILE_NAME_1=1364;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-2.geany;0;4
-FILE_NAME_2=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-1%2FDmDisplay%2Fmain.cpp;0;4
+current_page=0
+FILE_NAME_0=2589;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-1%2Fmain.c;0;4
+FILE_NAME_1=199;C++;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-1%2Fuart.cpp;0;4
+FILE_NAME_2=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2FarduinoMega-74377-register-test%2Fregisterv0.1.ino;0;4
 
 [VTE]
-last_dir=/home/robert/projects/atmega16-1
+last_dir=/home/robert/projects
 
 [build-menu]
 EX_00_LB=_Upload

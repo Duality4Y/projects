@@ -150,16 +150,11 @@ class companionCube(GameMob):
 	def handleCollisions(self, gameobjects):
 		for identity in gameobjects:
 			if identity.ident == "GameTile":
-				if((self.y+self.height > identity.getPos()[1]) and (self.y < identity.getPos()[1]+identity.getWidth())) and (self.x + self.width > identity.getPos()[0]) and (self.x < identity.getPos()[0]+identity.getWidth()):
-					if self.moveRight and ((self.x+self.width) > identity.getPos()[0]):
-						print "Hit left wall."
-						self.x -= self.vx
-					if self.moveLeft and (self.x < identity.getPos()[0]+identity.getWidth()):
-						print "Hit Right wall."
-						self.x += self.vx
-					if self.moveDown and ((self.y+self.height) > identity.getPos()[1]):
-						print "Hit upper wall."
-						self.y -= self.vy
-					if self.moveUp and (self.y < (identity.getPos()[1]+identity.getHeight())):
-						print "Hit bottom wall."
-						self.y += self.vy
+				if self.detectCollision(identity.getRect(), self.getRect()) and self.moveDown:
+					self.setPos(self.x, identity.getPos()[1]-self.getHeight())
+				if self.detectCollision(identity.getRect(), self.getRect()) and self.moveUp:
+					self.setPos(self.x, identity.getPos()[1]+self.getHeight())
+				if self.detectCollision(identity.getRect(), self.getRect()) and self.moveRight:
+					pass
+				if self.detectCollision(identity.getRect(), self.getRect()) and self.moveLeft:
+					pass
