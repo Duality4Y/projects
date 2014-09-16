@@ -151,21 +151,29 @@ class companionCube(GameMob):
 			self.setPos(self.getPos()[0]-self.vx, self.getPos()[1])
 		if self.moveRight and (not self.collidingLeft):
 			self.setPos(self.getPos()[0]+self.vx, self.getPos()[1])
+			
+		if self.collidingBottom:
+			pass
+		if self.collidingTop:
+			pass
+		if self.collidingLeft:
+			pass
+		if self.collidingRight:
+			pass
 	def draw(self, surface):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 	def handleCollisions(self, gameobjects):
 		for identity in gameobjects:
+			#do all collision detection checking on tiles.
 			if identity.ident == "GameTile":
 				if self.detectCollision(identity.getRect(), self.getRect()):
 					if self.moveDown:
-						self.setPos(self.x, identity.getPos()[1]-self.getHeight())
 						self.collidingTop = True
 					if self.moveUp:
-						self.setPos(self.x, identity.getPos()[1]+identity.getHeight())
 						self.collidingBottom = True
 					if self.moveRight:
-						self.setPos(identity.getPos()[0]-self.getWidth(), self.y)
 						self.collidingLeft = True
 					if self.moveLeft:
-						self.setPos(identity.getPos()[0]+identity.getWidth(), self.y)
 						self.collidingRight = True
+				else:
+					self.collidingTop = self.collidingBottom = self.collidingRight = self.collidingLeft = False
