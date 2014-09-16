@@ -38,13 +38,13 @@ def main():
 	running = True
 	while running:
 		windowSurface.fill(black)
-		updateObjects()
-		handleColitions()
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				running = False
 			else:
 				handleEvents(event)
+		updateObjects()
+		handleColitions()
 		drawObjects(windowSurface)
 		pygame.display.update()
 		fpsClock.tick(60)

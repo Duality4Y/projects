@@ -111,6 +111,12 @@ class companionCube(GameMob):
 		self.jumpHeight = 0
 		self.jumping = False
 		
+		#keep track on what side we are colliding
+		self.collidingRight = False
+		self.collidingLeft = False
+		self.collidingTop = False
+		self.collidingBottom = False
+		
 		#our own identity if someones searches for us you know.
 		self.ident = "companionCube"
 	def getTileset(self):
@@ -121,40 +127,45 @@ class companionCube(GameMob):
 		if event.type == KEYDOWN:
 			if event.key == K_w:
 				self.moveUp = True
+			elif event.key == K_s:
+				self.moveDown = True
 			if event.key == K_a:
 				self.moveLeft = True
-			if event.key == K_d:
+			elif event.key == K_d:
 				self.moveRight = True
-			if event.key == K_s:
-				self.moveDown = True
 		if event.type == KEYUP:
 			if event.key == K_w:
 				self.moveUp = False
+			elif event.key == K_s:
+				self.moveDown = False
 			if event.key == K_a:
 				self.moveLeft = False
-			if event.key == K_d:
+			elif event.key == K_d:
 				self.moveRight = False
-			if event.key == K_s:
-				self.moveDown = False
 	def update(self):
-		if self.moveUp:
+		if self.moveUp and (not self.collidingBottom):
 			self.setPos(self.getPos()[0], self.getPos()[1]-self.vy)
-		if self.moveDown:
+		if self.moveDown and (not self.collidingTop):
 			self.setPos(self.getPos()[0], self.getPos()[1]+self.vy)
-		if self.moveLeft:
+		if self.moveLeft and (not self.collidingRight):
 			self.setPos(self.getPos()[0]-self.vx, self.getPos()[1])
-		if self.moveRight:
+		if self.moveRight and (not self.collidingLeft):
 			self.setPos(self.getPos()[0]+self.vx, self.getPos()[1])
 	def draw(self, surface):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 	def handleCollisions(self, gameobjects):
 		for identity in gameobjects:
 			if identity.ident == "GameTile":
-				if self.detectCollision(identity.getRect(), self.getRect()) and self.moveDown:
-					self.setPos(self.x, identity.getPos()[1]-self.getHeight())
-				if self.detectCollision(identity.getRect(), self.getRect()) and self.moveUp:
-					self.setPos(self.x, identity.getPos()[1]+self.getHeight())
-				if self.detectCollision(identity.getRect(), self.getRect()) and self.moveRight:
-					pass
-				if self.detectCollision(identity.getRect(), self.getRect()) and self.moveLeft:
-					pass
+				if self.detectCollision(identity.getRect(), self.getRect()):
+					if self.moveDown:
+						self.setPos(self.x, identity.getPos()[1]-self.getHeight())
+						self.collidingTop = True
+					if self.moveUp:
+						self.setPos(self.x, identity.getPos()[1]+identity.getHeight())
+						self.collidingBottom = True
+					if self.moveRight:
+						self.setPos(identity.getPos()[0]-self.getWidth(), self.y)
+						self.collidingLeft = True
+					if self.moveLeft:
+						self.setPos(identity.getPos()[0]+identity.getWidth(), self.y)
+						self.collidingRight = True
