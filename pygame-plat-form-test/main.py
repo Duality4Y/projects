@@ -43,8 +43,8 @@ def main():
 				running = False
 			else:
 				handleEvents(event)
-		handleColitions()
 		updateObjects()
+		handleColitions()
 		drawObjects(windowSurface)
 		pygame.display.update()
 		fpsClock.tick(60)
