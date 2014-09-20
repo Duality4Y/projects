@@ -20,6 +20,7 @@ rightwall = 2   #(0,1,0,0)
 topwall   = 3   #(0,0,1,0)
 botwall   = 4   #(0,0,0,1)
 
+"""Basic game object, from which everything is build."""
 class GameObject(object):
 	def __init__(self, x, y):
 		self.x = x
@@ -32,12 +33,16 @@ class GameObject(object):
 	def setPos(self, x, y):
 		self.x = x
 		self.y = y
-
+"""tiles and players and mobs are derived from this object."""
 class GameBlock(GameObject):
 	def __init__(self, x, y, width, height):
 		super(GameBlock, self).__init__(x, y)
 		self.width = width
 		self.height = height
+		self.left = self.x
+		self.right = self.x+self.width
+		self.top = self.y
+		self.bottom = self.y+self.height
 		self.ident = "GameBlock"
 	def getRect(self):
 		return (self.x, self.y, self.width, self.height)
@@ -46,32 +51,34 @@ class GameBlock(GameObject):
 		self.y = y
 		self.width = width
 		self.height = height
-	def handleCollisions(self, gameobjects):
-		pass
-	def update(self):
-		pass
-	def handleEvents(self, event):
-		pass
-	def draw(self, surface):
-		pygame.draw.rect(surface, blue, self.getRect(), 0)
-		pygame.draw.rect(surface, white, self.getRect(), 1)
+	def getTopRightCorner(self):
+		return ( (self.x+self.width), self.y)
+	def getBottomLeftCorner(self):
+		return (self.x, (self.y+self.height))
+	def getBottomRightCorner(self):
+		return (self.x+self.width, self.y+self.height)
 	def getWidth(self):
 		return self.width
 	def getHeight(self):
 		return self.height
 	def detectCollision(self, rect1, rect2):
-		#if (rect1.x < rect2.x + rect2.width and
-		#	rect1.x + rect1.width > rect2.x and
-		#	rect1.y < rect2.y + rect2.height and
-		#	rect1.height + rect1.y > rect2.y):
-		#		return 1
 		if (rect1[0] < rect2[0] + rect2[2] and
 			rect1[0] + rect1[2] > rect2[0] and
 			rect1[1] < rect2[1] + rect2[3] and
 			rect1[3] + rect1[1] > rect2[1]):
 				return 1
 		return 0
-
+	def handleCollisions(self, gameobjects):
+		pass
+	def update(self):
+		pass
+	def handleEvents(self, event):
+		pass
+	#handle that is called to draw things. in this case a test cube with a line around it.
+	def draw(self, surface):
+		pygame.draw.rect(surface, blue, self.getRect(), 0)
+		pygame.draw.rect(surface, white, self.getRect(), 1)
+"""tiles have static sprites (mostely)"""
 class GameTile(GameBlock):
 	def __init__(self, x, y, width, height, tile):
 		super(GameTile, self).__init__(x, y, width, height)
@@ -81,7 +88,7 @@ class GameTile(GameBlock):
 		return (self.tile)
 	def setTile(self, tile):
 		self.tile = tile
-
+"""game mobs have dynamic sprites"""
 class GameMob(GameBlock):
 	def __init__(self, x, y, width, height, spriteset):
 		super(GameMob, self).__init__(x, y, width, height)
@@ -144,33 +151,20 @@ class companionCube(GameMob):
 			elif event.key == K_d:
 				self.moveRight = False
 	def update(self):
-		if self.moveUp and (not self.collidingBottom):
+		if self.moveUp:
 			self.setPos(self.getPos()[0], self.getPos()[1]-self.vy)
-		if self.moveDown and (not self.collidingTop):
+		if self.moveDown:
 			self.setPos(self.getPos()[0], self.getPos()[1]+self.vy)
-		if self.moveLeft and (not self.collidingRight):
+		if self.moveLeft:
 			self.setPos(self.getPos()[0]-self.vx, self.getPos()[1])
-		if self.moveRight and (not self.collidingLeft):
+		if self.moveRight:
 			self.setPos(self.getPos()[0]+self.vx, self.getPos()[1])
 	def draw(self, surface):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
+		pygame.draw.rect(surface, white, self.getRect(), 1)
 	def handleCollisions(self, gameobjects):
 		for identity in gameobjects:
 			#do all collision detection checking on tiles.
 			if identity.ident == "GameTile":
-				if self.detectCollision(identity.getRect(), self.getRect()):
-					self.colliding = True
-					if self.moveDown:
-						self.setPos(self.getPos()[0], identity.getPos()[1]-self.getHeight())
-						self.collidingTop = True
-					if self.moveUp:
-						self.setPos(self.getPos()[0], identity.getPos()[1]+identity.getHeight())
-						self.collidingBottom = True
-					if self.moveRight:
-						self.setPos(identity.getPos()[0]-self.getWidth(), self.getPos()[1])
-						self.collidingLeft = True
-					if self.moveLeft:
-						self.setPos(identity.getPos()[0]+identity.getWidth(), self.getPos()[1])
-						self.collidingRight = True
-				else:
-					self.collidingTop = self.collidingBottom = self.collidingRight = self.collidingLeft = self.collision = False
+				if self.detectCollision(self.getRect(), identity.getRect()):
+					pass

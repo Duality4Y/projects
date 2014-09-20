@@ -2,8 +2,8 @@ import pygame, sys
 from pygame.locals import *
 from GameObjects import *
 
-#mob  = companionCube(10,10,16,33, None);
-mob = companionCube(100, 100, 25, 25, None);
+mob  = companionCube(10,10,tile_width,2*tile_height, None);
+#mob = companionCube(100, 100, 25, 25, None);
 gameobjects = []
 gameobjects.append(mob)
 for i in range(0,window_width/2, tile_width):
@@ -43,9 +43,9 @@ def main():
 				running = False
 			else:
 				handleEvents(event)
-		updateObjects()
 		handleColitions()
 		drawObjects(windowSurface)
+		updateObjects()
 		pygame.display.update()
 		fpsClock.tick(60)
 	pygame.quit()
