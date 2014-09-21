@@ -7,7 +7,7 @@ red = (255,0,0)
 green = (0,255,0)
 blue = (0,0,255)
 
-tile_height = 16
+tile_height = 40
 tile_width = tile_height
 
 window_height = 480
@@ -39,10 +39,6 @@ class GameBlock(GameObject):
 		super(GameBlock, self).__init__(x, y)
 		self.width = width
 		self.height = height
-		self.left = self.x
-		self.right = self.x+self.width
-		self.top = self.y
-		self.bottom = self.y+self.height
 		self.ident = "GameBlock"
 	def getRect(self):
 		return (self.x, self.y, self.width, self.height)
@@ -51,6 +47,18 @@ class GameBlock(GameObject):
 		self.y = y
 		self.width = width
 		self.height = height
+	def getRight(self):
+		return (self.x+self.width)
+	def getLeft(self):
+		return (self.x)
+	def getTop(self):
+		return (self.y)
+	def getBottom(self):
+		return (self.y+self.height)
+	def getMidPos(self):
+		return (self.x+(self.width/2), self.y+(self.height/2))
+	def getTopLeftCorner(self):
+		return self.getPos()
 	def getTopRightCorner(self):
 		return ( (self.x+self.width), self.y)
 	def getBottomLeftCorner(self):
@@ -61,6 +69,21 @@ class GameBlock(GameObject):
 		return self.width
 	def getHeight(self):
 		return self.height
+	def printDebug(self):
+		print "Position:			{}".format(self.getPos())
+		print "self:				{}".format(self)
+		print "rect:				{}".format(self.getRect())
+		print "Left:				{}".format(self.getLeft())
+		print "Right:				{}".format(self.getRight())
+		print "Top:					{}".format(self.getTop())
+		print "Bottom:				{}".format(self.getBottom())
+		print "Width:				{}".format(self.getWidth())
+		print "Height:				{}".format(self.getHeight())
+		print "TopLeftCorner:		{}".format(self.getTopLeftCorner())
+		print "TopRightCorner:		{}".format(self.getTopRightCorner())
+		print "BottomLeftCorner:	{}".format(self.getBottomLeftCorner())
+		print "BottomRightCorner:	{}".format(self.getBottomRightCorner())
+		print "MidPosition:			{}".format(self.getMidPos())
 	def detectCollision(self, rect1, rect2):
 		if (rect1[0] < rect2[0] + rect2[2] and
 			rect1[0] + rect1[2] > rect2[0] and
@@ -78,6 +101,7 @@ class GameBlock(GameObject):
 	def draw(self, surface):
 		pygame.draw.rect(surface, blue, self.getRect(), 0)
 		pygame.draw.rect(surface, white, self.getRect(), 1)
+
 """tiles have static sprites (mostely)"""
 class GameTile(GameBlock):
 	def __init__(self, x, y, width, height, tile):
@@ -105,18 +129,16 @@ class companionCube(GameMob):
 		self.spriteset = spriteset
 		
 		#speed in pixels
-		self.p_speed = 5
-		self.vx = self.p_speed
+		self.p_speed = 2
+		self.vx = 0
 		self.vy = self.p_speed
-		#movement booleans (keeping track of what movement to do
-		self.moveLeft = False
-		self.moveRight = False
-		self.moveDown = False
-		self.moveUp = False
+		self.accel = 4
+		self.accelX = 2
 		
 		#jumping related varaibles
-		self.jumpHeight = 0
+		self.jumpHeight = tile_height*3
 		self.jumping = False
+		self.currentHeight = self.y
 		
 		#keep track on what side we are colliding
 		self.colliding = False
@@ -124,6 +146,8 @@ class companionCube(GameMob):
 		self.collidingLeft = False
 		self.collidingTop = False
 		self.collidingBottom = False
+		
+		self.mouseControlle = False
 		
 		#our own identity if someones searches for us you know.
 		self.ident = "companionCube"
@@ -133,32 +157,41 @@ class companionCube(GameMob):
 		self.spriteset = spriteset
 	def handleEvents(self, event):
 		if event.type == KEYDOWN:
-			if event.key == K_w:
-				self.moveUp = True
-			elif event.key == K_s:
-				self.moveDown = True
 			if event.key == K_a:
-				self.moveLeft = True
+				self.vx = -self.p_speed
 			elif event.key == K_d:
-				self.moveRight = True
+				self.vx = self.p_speed
+			elif event.key == K_SPACE:
+				if not self.jumping:
+					self.jumping = True
+				self.currentHeight = self.y
+			elif event.key == K_p:
+				self.printDebug()
+			elif event.key == K_m:
+				self.mouseControlle = True
 		if event.type == KEYUP:
-			if event.key == K_w:
-				self.moveUp = False
-			elif event.key == K_s:
-				self.moveDown = False
 			if event.key == K_a:
-				self.moveLeft = False
+				self.vx = 0
 			elif event.key == K_d:
-				self.moveRight = False
+				self.vx = 0
 	def update(self):
-		if self.moveUp:
-			self.setPos(self.getPos()[0], self.getPos()[1]-self.vy)
-		if self.moveDown:
-			self.setPos(self.getPos()[0], self.getPos()[1]+self.vy)
-		if self.moveLeft:
-			self.setPos(self.getPos()[0]-self.vx, self.getPos()[1])
-		if self.moveRight:
-			self.setPos(self.getPos()[0]+self.vx, self.getPos()[1])
+		if self.mouseControlle:
+			self.x,self.y = pygame.mouse.get_pos()
+		else:
+			#apply gravity
+			if not self.jumping:
+				self.y += self.vy*self.accel
+			else:
+				self.y -= self.vy*self.accel
+			#apply side ways movement
+			self.x += self.vx*self.accelX
+		
+		if (self.currentHeight - self.y) >= self.jumpHeight and self.jumping:
+			self.jumping = False
+		if self.jumping and self.colliding:
+			self.jumping = False
+		print "jumping  : {}".format(self.jumping)
+		print "colliding: {}".format(self.colliding)
 	def draw(self, surface):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 		pygame.draw.rect(surface, white, self.getRect(), 1)
@@ -166,5 +199,11 @@ class companionCube(GameMob):
 		for identity in gameobjects:
 			#do all collision detection checking on tiles.
 			if identity.ident == "GameTile":
-				if self.detectCollision(self.getRect(), identity.getRect()):
-					pass
+				self.colliding = self.detectCollision(identity.getRect(), self.getRect())
+				if self.colliding:
+					if(self.x+self.width > identity.x-self.vx*2) and (self.x < identity.x+identity.width):
+						if(self.y+self.height)>identity.y:
+							self.y = identity.y-self.height
+					if((self.y+self.height) > identity.y) and (self.y < (identity.y+identity.height)):
+						if((self.x + self.width) >= identity.x) and ((self.x+self.width) <= (identity.x+self.vx)):
+							self.x = identity.x-self.width+self.vy

@@ -2,14 +2,18 @@ import pygame, sys
 from pygame.locals import *
 from GameObjects import *
 
-mob  = companionCube(10,10,tile_width,2*tile_height, None);
+mob  = companionCube(10,14,tile_width/4,2*(tile_height/4), None);
 #mob = companionCube(100, 100, 25, 25, None);
 gameobjects = []
 gameobjects.append(mob)
+#a floor of small blocks
 for i in range(0,window_width/2, tile_width):
 	tile = GameTile(i,(window_height/2)-tile_height, tile_width, tile_height, None)
 	gameobjects.append(tile)
-gameobjects.append(GameTile(200,150, 40, 40, None))
+#a big block above the floor
+gameobjects.append(GameTile(200,160, 40, 40, None))
+#a big block not above the floor
+gameobjects.append(GameTile(400,160, 40, 40, None))
 
 pygame.init()
 
@@ -41,8 +45,10 @@ def main():
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				running = False
-			else:
-				handleEvents(event)
+			if event.type == KEYDOWN:
+				if event.key == K_q:
+					running = False
+			handleEvents(event)
 		handleColitions()
 		drawObjects(windowSurface)
 		updateObjects()
