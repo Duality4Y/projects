@@ -14,7 +14,7 @@ call print_string
 ;mov dx, 0xABCD
 ;call print_hex
 
-mov dx, 0x1234
+mov dx, 0x1fb6
 call print_hex
 
 jmp $
