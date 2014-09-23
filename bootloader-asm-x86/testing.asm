@@ -6,6 +6,14 @@ call print_string
 mov bx, GOODBYE_MSG
 call print_string
 
+;A = 10
+;B = 11
+;C = 12
+;D = 13
+;prints n thus A+13
+;mov dx, 0xABCD
+;call print_hex
+
 mov dx, 0x1fb6
 call print_hex
 
