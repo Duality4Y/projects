@@ -24,7 +24,7 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=412;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fbootloader-asm-x86%2Fboot3.asm;0;4
+FILE_NAME_0=140;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fbootloader-asm-x86%2Fboot3.asm;0;4
 FILE_NAME_1=298;ASM;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fbootloader-asm-x86%2Fdisk_load.asm;0;4
 
 [VTE]
