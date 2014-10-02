@@ -6,6 +6,15 @@
 /*define a stack size limit*/
 #define STACK_SIZE 100
 
+char isOperator(char character)
+{
+	if(character == '+' || character == '-')
+		return 1;
+	else
+		return 0;
+	return 0;
+}
+
 void getUserInputString(char *input)
 {
 	printf(">> ");
@@ -16,9 +25,9 @@ void getUserInputString(char *input)
 	while(value != '\n')
 	{
 		/*put our input value into the input string*/
-		input[index++] = value;
+		input[index] = value;
 		/*make the last character a '\0'*/
-		input[index] = '\0';
+		input[++index] = '\0';
 		/*read in out new value.*/
 		value = getc(stdin);
 	}
@@ -98,17 +107,16 @@ int main(void)
 	int operator_stackPointer = 0;
 	
 	int accumulator = 0;
-	//push initial accumulator value onto the value stack
-	push(value_stack, &value_stackPointer, accumulator);
+	
+	bool wasNumber = false;
 	
 	bool running = true;
 	
 	/*
 	 * print some general info like usefull commands.
-	 * like '>' for displaying accumulator value.
-	 * and '^' for displaying stack contents.
+	 * and '>' for displaying stack contents.
 	 */
-	puts(">> Type <Stack> to display stack and it's contents.");
+	puts("\nInput '>' to display stack and it's contents.");
 		
 	while(running)
 	{
@@ -124,9 +132,17 @@ int main(void)
 			//are we dealing with a number ?
 			if(isdigit(*str))
 			{
-				//in this way the value is stored in the stack
-				accumulator = (pop(value_stack, &value_stackPointer)*10)+((*str)-'0');
+				//extract that number, set a flag that we dealt with number
+				while(isdigit(*str))
+				{
+					//in this way the value is stored in the stack
+					accumulator = (accumulator*10)+((*str)-'0');
+					str++;
+				}
+				//push that number onto the value stack if we have a new value.
 				push(value_stack, &value_stackPointer, accumulator);
+				//reset the accumulator
+				accumulator = 0;
 			}
 			//print stack contents
 			else if( (*str) == '>')
@@ -136,44 +152,30 @@ int main(void)
 				printf("<Operator stack> \n");
 				printStack(operator_stack, operator_stackPointer);
 			}
-			else// if( (*str) != '\0')
+			//push operators onto the stack
+			else if(isOperator(*str))
+			{
+				push(operator_stack, &operator_stackPointer, *str);
+			}
+			//if e is enterd the program exits.
+			else if((*str) == 'e')
+			{
+				running = false;
+			}
+			else
 			{
 				puts("input error");
 			}
 			str++;
 		}
-		//we are done with the original input?
-		inputString[0] = '\0';
-		/*
-		int i;
-		for(i = 0;i<inputLength;i++)
-		{
-			int token = inputString[i];
-			//check for number and collect it in the accumulator
-			if(token >= '0' && token <= '9')
-			{
-				accumulator = (accumulator*10)+(token-'0');
-			}
-			//if exit is typed we exit the program
-			else if(!strcmp("exit", inputString))
-			{
-				running = false;
-				break;
-			}
-			//print the stack for debugging
-			else if(token == '^')
-			{
-				printf("<Value stack> \n");
-				printStack(value_stack, value_stackPointer);
-				printf("<Operator stack> \n");
-				printStack(operator_stack, operator_stackPointer);
-			}
-			else
-			{
-				printf("input error %d \n", i);
-				break;
-			}
-		}*/
+		//still have to implement the process function (which does the actual calculating)
+		//after processing we clear the stacks.
+		//and we clear the original input string.
+		memset(value_stack, '\0', value_stackPointer);
+		value_stackPointer = 0;
+		memset(operator_stack, '\0', operator_stackPointer);
+		operator_stackPointer = 0;
+		memset(inputString, '\0', inputLength);
 		//testRun(stack, stackPointer);
 	}
 	
