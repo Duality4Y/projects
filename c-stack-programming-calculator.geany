@@ -24,7 +24,7 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=509;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fmain.c;0;4
+FILE_NAME_0=79;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fmain.c;0;4
 
 [VTE]
 last_dir=/home/robert/projects/c-stack-programming-calculator
@@ -37,3 +37,6 @@ CFT_01_LB=_Build
 CFT_01_CM=gcc -o "%e" "%f"
 CFT_01_WD=
 filetypes=C;
+EX_00_LB=_Execute
+EX_00_CM="./%e"
+EX_00_WD=
