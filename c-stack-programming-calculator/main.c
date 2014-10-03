@@ -8,7 +8,7 @@
 
 char isOperator(char character)
 {
-	if(character == '+' || character == '-')
+	if(character == '+' || character == '-' || character = '/' || character = '*')
 		return 1;
 	else
 		return 0;
@@ -132,17 +132,20 @@ int main(void)
 			//are we dealing with a number ?
 			if(isdigit(*str))
 			{
-				//extract that number, set a flag that we dealt with number
+				//extract that number
 				while(isdigit(*str))
 				{
-					//in this way the value is stored in the stack
+					//use the accumulator to store and modify the number.
 					accumulator = (accumulator*10)+((*str)-'0');
 					str++;
 				}
-				//push that number onto the value stack if we have a new value.
+				//push that number onto the value stack
 				push(value_stack, &value_stackPointer, accumulator);
 				//reset the accumulator
 				accumulator = 0;
+				printf("now: %c \n", *str);
+				str-=1; //if not set back by one there is a bug that it skips the next
+				//character since at the end of controle we advance one and thus skip.
 			}
 			//print stack contents
 			else if( (*str) == '>')
@@ -161,6 +164,7 @@ int main(void)
 			else if((*str) == 'e')
 			{
 				running = false;
+				break;
 			}
 			else
 			{
