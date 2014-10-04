@@ -5,10 +5,11 @@
 
 /*define a stack size limit*/
 #define STACK_SIZE 100
+#define INPUT_STRING_MAX 100
 
 char isOperator(char character)
 {
-	if(character == '+' || character == '-' || character = '/' || character = '*')
+	if(character == '+' || character == '-' || character == '/' || character == '*')
 		return 1;
 	else
 		return 0;
@@ -75,6 +76,7 @@ void printStack(int *stack, int stackPointer)
 	printf("\n");
 }
 
+
 void testRun(int *stack, int stackPointer)
 {
 	printf("push R: %d \n", 'R');
@@ -109,12 +111,13 @@ int main(void)
 	int accumulator = 0;
 	
 	bool wasNumber = false;
-	
+	bool nextNumNegative = false;
 	bool running = true;
 	
 	/*
 	 * print some general info like usefull commands.
 	 * and '>' for displaying stack contents.
+	 * and '^' for printing accumulator.
 	 */
 	puts("\nInput '>' to display stack and it's contents.");
 		
@@ -122,8 +125,6 @@ int main(void)
 	{
 		getUserInputString(inputString);
 		inputLength = strlen(inputString);
-		
-		printf("Parsing \n");
 		
 		/*parse the input*/
 		char *str = inputString;
@@ -140,12 +141,24 @@ int main(void)
 					str++;
 				}
 				//push that number onto the value stack
-				push(value_stack, &value_stackPointer, accumulator);
+				//push a negative number if it has a '-' infront of it.
+				if(nextNumNegative)
+				{
+					push(value_stack, &value_stackPointer, -accumulator);
+					nextNumNegative = false;
+				}
+				else //else we just push the positive number
+				{
+					push(value_stack, &value_stackPointer, accumulator);
+				}
 				//reset the accumulator
 				accumulator = 0;
-				printf("now: %c \n", *str);
-				str-=1; //if not set back by one there is a bug that it skips the next
-				//character since at the end of controle we advance one and thus skip.
+				//only if not first element
+				if( (str-inputString) > 0 )
+				{
+					str-=1; //if not set back by one there is a bug that it skips the next
+					//character since at the end of controle we advance one and thus skip.
+				}
 			}
 			//print stack contents
 			else if( (*str) == '>')
@@ -155,10 +168,17 @@ int main(void)
 				printf("<Operator stack> \n");
 				printStack(operator_stack, operator_stackPointer);
 			}
-			//push operators onto the stack
+			//push operators onto the stack and/or handle special cases.
 			else if(isOperator(*str))
 			{
-				push(operator_stack, &operator_stackPointer, *str);
+				if ( (*str) == '-')
+				{
+					nextNumNegative = true;
+				}
+				else
+				{
+					push(operator_stack, &operator_stackPointer, *str);
+				}
 			}
 			//if e is enterd the program exits.
 			else if((*str) == 'e')
@@ -166,20 +186,54 @@ int main(void)
 				running = false;
 				break;
 			}
+			//ignore spaces.
 			else
 			{
 				puts("input error");
+				printf("input: %c at: %ld \n", (*str), (str-inputString)+1);
 			}
 			str++;
 		}
-		//still have to implement the process function (which does the actual calculating)
-		//after processing we clear the stacks.
+		//process the data and do calculations.
+		while(value_stackPointer > 1)
+		{
+			char operator = pop(operator_stack, &operator_stackPointer);
+			bool invalidOp = false;
+			switch(operator)
+			{
+				case '+': //do addition
+					accumulator = pop(value_stack, &value_stackPointer)+pop(value_stack, &value_stackPointer);
+					push(value_stack, &value_stackPointer, accumulator);
+					break;
+				case '-': //do subtraction
+					break;
+				case '*': //do multiplication
+					break;
+				case '/': //do division
+					break;
+				default:
+					puts("invalid data on operator stack");
+					invalidOp = true;
+				break;
+			}
+			if(invalidOp)
+				break;
+		}
+		//after processing we display the result we know we have atleast 1 thing on the stack,
+		//and that is our answer.
+		if(value_stackPointer == 1)
+		{
+			printf("%d \n", pop(value_stack, &value_stackPointer));
+		}
 		//and we clear the original input string.
-		memset(value_stack, '\0', value_stackPointer);
+		//and stacks.
+		memset(value_stack, '\0', STACK_SIZE);
 		value_stackPointer = 0;
-		memset(operator_stack, '\0', operator_stackPointer);
+		memset(operator_stack, '\0', STACK_SIZE);
 		operator_stackPointer = 0;
-		memset(inputString, '\0', inputLength);
+		memset(inputString, '\0', INPUT_STRING_MAX);
+		//set the accumulator to 0
+		accumulator = 0;
 		//testRun(stack, stackPointer);
 	}
 	
