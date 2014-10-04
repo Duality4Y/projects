@@ -54,7 +54,7 @@ void push(int *stack, int *stackPointer, int value)
 int pop(int *stack, int *stackPointer)
 {
 	int value;
-	if(*stackPointer >= 0 )
+	if((*stackPointer) >= 0 )
 	{
 		value = stack[--(*stackPointer)];
 		stack[*stackPointer] = '\0';
