@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <ctype.h>
 
 /*define a stack size limit*/
@@ -104,7 +105,7 @@ void testRun(int *stack, int stackPointer)
 void displayError(char *inString, char *str_ptr)
 {
 	puts(inString);
-	int i; //by calculating the difference between these
+	ptrdiff_t i; //by calculating the difference between these
 	//we can pinpoint where the "error occured in the input"
 	for(i = 0;i<(str_ptr-inString);i++)
 		putchar(' ');
