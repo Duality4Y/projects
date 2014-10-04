@@ -25,10 +25,14 @@ void getUserInputString(char *input)
 	
 	while(value != '\n')
 	{
-		/*put our input value into the input string*/
-		input[index] = value;
-		/*make the last character a '\0'*/
-		input[++index] = '\0';
+		//ignore input like spaces. and check if input was printable.
+		if(isprint(value) && !isspace(value))
+		{
+			/*put our input value into the input string*/
+			input[index] = value;
+			/*make the last character a '\0'*/
+			input[++index] = '\0';
+		}
 		/*read in out new value.*/
 		value = getc(stdin);
 	}
@@ -94,6 +98,19 @@ void testRun(int *stack, int stackPointer)
 	printStack(stack, stackPointer);
 }
 
+
+//fancy way of displaying the error.
+//makes finding it easier i think.
+void displayError(char *inString, char *str_ptr)
+{
+	puts(inString);
+	int i; //by calculating the difference between these
+	//we can pinpoint where the "error occured in the input"
+	for(i = 0;i<(str_ptr-inString);i++)
+		putchar(' ');
+	puts("^");
+}
+
 int main(void)
 {
 	/*array that holds the input string*/
@@ -117,7 +134,6 @@ int main(void)
 	/*
 	 * print some general info like usefull commands.
 	 * and '>' for displaying stack contents.
-	 * and '^' for printing accumulator.
 	 */
 	puts("\nInput '>' to display stack and it's contents.");
 		
@@ -156,8 +172,7 @@ int main(void)
 				//only if not first element
 				if( (str-inputString) > 0 )
 				{
-					str-=1; //if not set back by one there is a bug that it skips the next
-					//character since at the end of controle we advance one and thus skip.
+					str--; //or else we would skip a token
 				}
 			}
 			//print stack contents
@@ -173,24 +188,56 @@ int main(void)
 			{
 				if ( (*str) == '-')
 				{
-					nextNumNegative = true;
+					
+					//count the number of '-' operators we encounter.
+					int numOfOps = 0;//atleast 1 is found
+					while( (*str) ==  '-')
+					{
+						numOfOps++;
+						str++;
+					}
+					str--; //or else we would skip a token.
+					printf("num of ops: %d \n", numOfOps);
+					
+					if(numOfOps == 1)
+					{
+						//if first token in string, and next token is a digit.
+						if( !(str-inputString) && isdigit( (*(str+1)) ))
+						{
+							nextNumNegative = true;
+						}
+						//if previous token is not a digit and next is a digit.
+						else if( !isdigit( *(str-1) ) && isdigit( *(str+1) ))
+						{
+							nextNumNegative = true;
+						}
+						else if(isdigit( *(str-1) ) && isdigit( *(str+1) ))
+						{
+							push(operator_stack, &operator_stackPointer, *str);
+						}
+						else
+						{
+							displayError(inputString, str);
+						}
+					}
 				}
+				
 				else
 				{
 					push(operator_stack, &operator_stackPointer, *str);
 				}
 			}
 			//if e is enterd the program exits.
-			else if((*str) == 'e')
+			else if(!strcmp(str, "exit"))
 			{
 				running = false;
 				break;
 			}
-			//ignore spaces.
 			else
 			{
 				puts("input error");
-				printf("input: %c at: %ld \n", (*str), (str-inputString)+1);
+				displayError(inputString, str);
+				break;
 			}
 			str++;
 		}
@@ -206,6 +253,8 @@ int main(void)
 					push(value_stack, &value_stackPointer, accumulator);
 					break;
 				case '-': //do subtraction
+					accumulator = pop(value_stack, &value_stackPointer)-pop(value_stack, &value_stackPointer);
+					push(value_stack, &value_stackPointer, accumulator);
 					break;
 				case '*': //do multiplication
 					break;
