@@ -35,7 +35,7 @@ void getUserInputString(char *input)
 			input[++index] = '\0';
 		}
 		/*read in out new value.*/
-		value = getc(stdin);
+		value = getchar();//getc(stdin);
 	}
 }
 
@@ -198,7 +198,7 @@ int main(void)
 						str++;
 					}
 					str--; //or else we would skip a token.
-					printf("num of ops: %d \n", numOfOps);
+					//printf("num of ops: %d \n", numOfOps);
 					
 					if(numOfOps == 1)
 					{
@@ -246,15 +246,17 @@ int main(void)
 		while(value_stackPointer > 1)
 		{
 			char operator = pop(operator_stack, &operator_stackPointer);
+			int rvalue = pop(value_stack, &value_stackPointer);
+			int lvalue = pop(value_stack, &value_stackPointer);
 			bool invalidOp = false;
 			switch(operator)
 			{
 				case '+': //do addition
-					accumulator = pop(value_stack, &value_stackPointer)+pop(value_stack, &value_stackPointer);
+					accumulator = lvalue+rvalue;
 					push(value_stack, &value_stackPointer, accumulator);
 					break;
 				case '-': //do subtraction
-					accumulator = pop(value_stack, &value_stackPointer)-pop(value_stack, &value_stackPointer);
+					accumulator = lvalue-rvalue;
 					push(value_stack, &value_stackPointer, accumulator);
 					break;
 				case '*': //do multiplication
@@ -271,7 +273,7 @@ int main(void)
 		}
 		//after processing we display the result we know we have atleast 1 thing on the stack,
 		//and that is our answer.
-		if(value_stackPointer == 1)
+		if(value_stackPointer == 1 )
 		{
 			printf("%d \n", pop(value_stack, &value_stackPointer));
 		}
