@@ -114,14 +114,19 @@ void testRun(int *stack, int stackPointer)
 	printStack(stack, stackPointer);
 }
 
-//fancy way of displaying the error.
-//makes finding it easier i think.
-void displayError(char *inString, char *str_ptr)
+//this function checks if we are at the first token.
+bool isFirstToken(char *inString, char *str_ptr)
+{
+	return (!(bool)(str_ptr-inString));
+}
+
+//this function will display in which point we are with processing.
+void displayProcessingPoint(char *inString, char *str_ptr)
 {
 	puts(inString);
 	ptrdiff_t i; //by calculating the difference between these
 	//we can pinpoint where the "error occured in the input"
-	for(i = 0;i<(str_ptr-inString);i++)
+	for(i = 0;i<(!isFirstToken(inString, str_ptr));i++)
 		putchar(' ');
 	puts("^");
 }
@@ -142,7 +147,9 @@ int main(void)
 	
 	int accumulator = 0;
 	
-	bool wasNumber = false;
+	int numOfOps = 0; //variable for operator counting.
+	
+	bool errorOccured = false;
 	bool nextNumNegative = false;
 	bool running = true;
 	
@@ -185,10 +192,10 @@ int main(void)
 				//reset the accumulator
 				accumulator = 0;
 				//only if not first element
-				//if( (str-inputString) > 0 )
-				//{
+				if(!isFirstToken(inputString, str))
+				{
 					str--; //or else we would skip a token
-				//}
+				}
 			}
 			//push operators onto the stack and/or handle special cases.
 			else if(isOperator(*str))
@@ -197,7 +204,7 @@ int main(void)
 				{
 					
 					//count the number of '-' operators we encounter.
-					int numOfOps = 0;//atleast 1 is found
+					numOfOps = 0;
 					while( (*str) ==  '-')
 					{
 						numOfOps++;
@@ -209,22 +216,26 @@ int main(void)
 					if(numOfOps == 1)
 					{
 						//if first token in string, and next token is a digit.
-						if( !(str-inputString) && isdigit( (*(str+1)) ))
+						if( isFirstToken(inputString, str) && isdigit( (*(str+1)) ))
 						{
 							nextNumNegative = true;
+							displayProcessingPoint(inputString, str);
 						}
 						//if previous token is not a digit and next is a digit.
 						else if( !isdigit( *(str-1) ) && isdigit( *(str+1) ))
 						{
 							nextNumNegative = true;
 						}
+						//if previous token is a digit and the next is also a digit.
 						else if(isdigit( *(str-1) ) && isdigit( *(str+1) ))
 						{
 							push(operator_stack, &operator_stackPointer, *str);
 						}
 						else
 						{
-							displayError(inputString, str);
+							displayProcessingPoint(inputString, str);
+							errorOccured = true;
+							break;
 						}
 					}
 				}
@@ -235,22 +246,20 @@ int main(void)
 				}
 				else if((*str) == '*')
 				{
-					while(*str == '*')
-						str++;
-					str--;
+					countTokens('*', &str);
 					push(operator_stack, &operator_stackPointer, *str);
 				}
 				else if((*str) == '/')
 				{
-					while(*str == '/')
-						str++;
-					str--;
+					countTokens('/', &str);
 					push(operator_stack, &operator_stackPointer, *str);
 				}
 				else
 				{
 					printf("unknow operator parsed: %c \n", *str);
-					displayError(inputString, str);
+					displayProcessingPoint(inputString, str);
+					errorOccured = true;
+					break;
 				}
 			}
 			//print stack contents
@@ -269,14 +278,15 @@ int main(void)
 			}
 			else
 			{
-				puts("input error");
-				displayError(inputString, str);
+				puts("input error at: ");
+				displayProcessingPoint(inputString, str);
+				errorOccured = true;
 				break;
 			}
 			str++;
 		}
 		//process the data and do calculations.
-		while(operator_stackPointer)
+		while(value_stackPointer > 1)
 		{
 			/*
 			printf("<Value stack> \n");
@@ -287,8 +297,8 @@ int main(void)
 			int operator = pop(operator_stack, &operator_stackPointer);
 			int rvalue = pop(value_stack, &value_stackPointer);
 			int lvalue = pop(value_stack, &value_stackPointer);
+			printf("%d%c%d \n", lvalue, operator, rvalue);
 			/*
-			printf("%d %c %d \n", lvalue, operator, rvalue);
 			printf("value_stackPointer: %d \n", value_stackPointer);
 			printf("operator_stackPointer: %d \n", operator_stackPointer);
 			*/
@@ -312,12 +322,12 @@ int main(void)
 					break;
 				default:
 					puts("invalid data on operator stack");
-				break;
+					break;
 			}
 		}
 		//after processing we display the result we know we have atleast 1 thing on the stack,
 		//and that is our answer.
-		if(value_stackPointer == 1)
+		if(value_stackPointer == 1 && !errorOccured)
 			printf("%d \n", pop(value_stack, &value_stackPointer));
 		//and we clear the original input string.
 		//and stacks.
