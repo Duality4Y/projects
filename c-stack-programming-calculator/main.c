@@ -17,6 +17,22 @@ char isOperator(char character)
 	return 0;
 }
 
+int countTokens(char value, char **str)
+{
+	/* this function will modify the original strings address.
+	 * that is why pointer to pointer. so we can modify the pointers address
+	 **/
+	int numOfTokens = 0;
+	while( (**str) == value)
+	{
+		numOfTokens++;
+		(*str)++;
+	}
+	//for parsing reasons
+	(*str)--;
+	return numOfTokens;
+}
+
 void getUserInputString(char *input)
 {
 	printf(">> ");
@@ -55,7 +71,7 @@ void push(int *stack, int *stackPointer, int value)
 int pop(int *stack, int *stackPointer)
 {
 	int value;
-	if((*stackPointer) >= 0 )
+	if((*stackPointer) >= 1)
 	{
 		value = stack[--(*stackPointer)];
 		stack[*stackPointer] = '\0';
@@ -63,10 +79,10 @@ int pop(int *stack, int *stackPointer)
 	}
 	else
 	{
-		puts("I think we got a stack underflow");
-		return -1;
+		puts("Stack underflow!");
+		return 0;
 	}
-	return -1;
+	return 0;
 }
 
 void printStack(int *stack, int stackPointer)
@@ -80,7 +96,6 @@ void printStack(int *stack, int stackPointer)
 	}
 	printf("\n");
 }
-
 
 void testRun(int *stack, int stackPointer)
 {
@@ -98,7 +113,6 @@ void testRun(int *stack, int stackPointer)
 	printf("pop: %d \n", pop(stack, &stackPointer));
 	printStack(stack, stackPointer);
 }
-
 
 //fancy way of displaying the error.
 //makes finding it easier i think.
@@ -171,18 +185,10 @@ int main(void)
 				//reset the accumulator
 				accumulator = 0;
 				//only if not first element
-				if( (str-inputString) > 0 )
-				{
+				//if( (str-inputString) > 0 )
+				//{
 					str--; //or else we would skip a token
-				}
-			}
-			//print stack contents
-			else if( (*str) == '>')
-			{
-				printf("<Value stack> \n");
-				printStack(value_stack, value_stackPointer);
-				printf("<Operator stack> \n");
-				printStack(operator_stack, operator_stackPointer);
+				//}
 			}
 			//push operators onto the stack and/or handle special cases.
 			else if(isOperator(*str))
@@ -222,13 +228,40 @@ int main(void)
 						}
 					}
 				}
-				
-				else
+				else if((*str) == '+')
 				{
+					countTokens('+', &str);
 					push(operator_stack, &operator_stackPointer, *str);
 				}
+				else if((*str) == '*')
+				{
+					while(*str == '*')
+						str++;
+					str--;
+					push(operator_stack, &operator_stackPointer, *str);
+				}
+				else if((*str) == '/')
+				{
+					while(*str == '/')
+						str++;
+					str--;
+					push(operator_stack, &operator_stackPointer, *str);
+				}
+				else
+				{
+					printf("unknow operator parsed: %c \n", *str);
+					displayError(inputString, str);
+				}
 			}
-			//if e is enterd the program exits.
+			//print stack contents
+			else if( (*str) == '>')
+			{
+				printf("<Value stack> \n");
+				printStack(value_stack, value_stackPointer);
+				printf("<Operator stack> \n");
+				printStack(operator_stack, operator_stackPointer);
+			}
+			//if exit is enterd the program exits.
 			else if(!strcmp(str, "exit"))
 			{
 				running = false;
@@ -243,12 +276,22 @@ int main(void)
 			str++;
 		}
 		//process the data and do calculations.
-		while(value_stackPointer > 1)
+		while(operator_stackPointer)
 		{
-			char operator = pop(operator_stack, &operator_stackPointer);
+			/*
+			printf("<Value stack> \n");
+			printStack(value_stack, value_stackPointer);
+			printf("<Operator stack> \n");
+			printStack(operator_stack, operator_stackPointer);
+			*/
+			int operator = pop(operator_stack, &operator_stackPointer);
 			int rvalue = pop(value_stack, &value_stackPointer);
 			int lvalue = pop(value_stack, &value_stackPointer);
-			bool invalidOp = false;
+			/*
+			printf("%d %c %d \n", lvalue, operator, rvalue);
+			printf("value_stackPointer: %d \n", value_stackPointer);
+			printf("operator_stackPointer: %d \n", operator_stackPointer);
+			*/
 			switch(operator)
 			{
 				case '+': //do addition
@@ -260,23 +303,22 @@ int main(void)
 					push(value_stack, &value_stackPointer, accumulator);
 					break;
 				case '*': //do multiplication
+					accumulator = lvalue*rvalue;
+					push(value_stack, &value_stackPointer, accumulator);
 					break;
 				case '/': //do division
+					accumulator = lvalue/rvalue;
+					push(value_stack, &value_stackPointer, accumulator);
 					break;
 				default:
 					puts("invalid data on operator stack");
-					invalidOp = true;
 				break;
 			}
-			if(invalidOp)
-				break;
 		}
 		//after processing we display the result we know we have atleast 1 thing on the stack,
 		//and that is our answer.
-		if(value_stackPointer == 1 )
-		{
+		if(value_stackPointer == 1)
 			printf("%d \n", pop(value_stack, &value_stackPointer));
-		}
 		//and we clear the original input string.
 		//and stacks.
 		memset(value_stack, '\0', STACK_SIZE);
@@ -286,7 +328,6 @@ int main(void)
 		memset(inputString, '\0', INPUT_STRING_MAX);
 		//set the accumulator to 0
 		accumulator = 0;
-		//testRun(stack, stackPointer);
 	}
 	
 	return 0;
