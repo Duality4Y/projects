@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -114,6 +115,16 @@ void testRun(int *stack, int stackPointer)
 	printStack(stack, stackPointer);
 }
 
+void reverseArray(int *array, unsigned int size)
+{
+	int i, j, temp;
+	for(i = 0, j = (size-1);i<j;i++,j--)
+	{
+		temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
+}
 //this function checks if we are at the first token.
 bool isFirstToken(char *inString, char *str_ptr)
 {
@@ -163,7 +174,6 @@ int main(void)
 	{
 		getUserInputString(inputString);
 		inputLength = strlen(inputString);
-		
 		/*parse the input*/
 		char *str = inputString;
 		while(*str)
@@ -285,8 +295,14 @@ int main(void)
 			}
 			str++;
 		}
+		reverseArray(operator_stack, operator_stackPointer);
+		reverseArray(value_stack, value_stackPointer);
+		printf("<Value stack> \n");
+		printStack(value_stack, value_stackPointer);
+		printf("<Operator stack> \n");
+		printStack(operator_stack, operator_stackPointer);
 		//process the data and do calculations.
-		while(value_stackPointer > 1)
+		while(operator_stackPointer)
 		{
 			/*
 			printf("<Value stack> \n");
