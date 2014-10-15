@@ -24,10 +24,10 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=5219;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fmain.c;0;4
+FILE_NAME_0=8280;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fold%2F15_10_2014%2Fmain.c;0;4
 
 [VTE]
-last_dir=/home/robert/projects
+last_dir=/home/robert/projects/c-stack-programming-calculator/old/15_10_2014
 
 [build-menu]
 CFT_00_LB=_Compile

@@ -1,3 +1,63 @@
+/*
+ * author: Duality
+ * 
+ * edited:
+ * 15-10-2014
+ * worked on alot, didn't really document (shame on me)
+ * but this is a calculator that kinda works.
+ * but the principle is there. it does however not use percedence
+ * so percedence for * operator equals that of - or +
+ * also it works backwards. the parser works, could be build upon.
+ * and the lexer is really simple.
+ * the lexer just creates a string for the parser to use.
+ * that has only printable characters in it. and no spaces.
+ * input is from a kind of console/terminal/interpreter
+ * the part of the code that executes the code is just a switch case.
+ * that runs down a operator stack + value stack.
+ * and does push/pop operations according to the things on the stack.
+ * 
+ * you can do math operations only with the operators * / - +
+ * 
+ * 100*21/3 for example.
+ * will be executed like:
+ * 21/3 = 7
+ * 100*7 = 700
+ * and this shows in what order it executes the operations.
+ * 
+ * if you put a > infront of the operations.
+ * it will show the stacks as empty like:
+ * <Value stack> 
+ * stackPointer: 0 
+ * stack: 
+ * <Operator stack> 
+ * stackPointer: 0 
+ * stack: 
+ * 
+ * you can put the '>' operator anywhere in the calculation to show what's on the stack.
+ * for example 100*>21/3
+ * will show:
+ * >> 100*>21/3
+ * <Value stack> 
+ * stackPointer: 1 
+ * stack: 100 
+ * <Operator stack> 
+ * stackPointer: 1 
+ * stack: 42
+ * 
+ * by putting the '>' operator on the end it will show all the things on the stack.
+ * 
+ * in addition the prompt wil also show the order of operations.
+ * for example inputing 100*21/3 shows:
+ * 21/3 
+ * 100*7 
+ * 700
+ * the last number is the result.
+ * 
+ * there is some error checking like inputting wrong input is kinda detected/
+ * the detection of input errors is implemented as it points in the interpreter to where the error happend.
+ * but is more buggy that anything.
+ * */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -160,7 +220,7 @@ int main(void)
 	
 	int numOfOps = 0; //variable for operator counting.
 	
-	bool errorOccured = false;
+	bool parseErr = false;
 	bool nextNumNegative = false;
 	bool running = true;
 	
@@ -244,7 +304,7 @@ int main(void)
 						else
 						{
 							displayProcessingPoint(inputString, str);
-							errorOccured = true;
+							parseErr = true;
 							break;
 						}
 					}
@@ -268,7 +328,7 @@ int main(void)
 				{
 					printf("unknow operator parsed: %c \n", *str);
 					displayProcessingPoint(inputString, str);
-					errorOccured = true;
+					parseErr = true;
 					break;
 				}
 			}
@@ -290,19 +350,13 @@ int main(void)
 			{
 				puts("input error at: ");
 				displayProcessingPoint(inputString, str);
-				errorOccured = true;
+				parseErr = true;
 				break;
 			}
 			str++;
 		}
-		reverseArray(operator_stack, operator_stackPointer);
-		reverseArray(value_stack, value_stackPointer);
-		printf("<Value stack> \n");
-		printStack(value_stack, value_stackPointer);
-		printf("<Operator stack> \n");
-		printStack(operator_stack, operator_stackPointer);
 		//process the data and do calculations.
-		while(operator_stackPointer)
+		while(operator_stackPointer && (!parseErr))
 		{
 			/*
 			printf("<Value stack> \n");
@@ -343,7 +397,7 @@ int main(void)
 		}
 		//after processing we display the result we know we have atleast 1 thing on the stack,
 		//and that is our answer.
-		if(value_stackPointer == 1 && !errorOccured)
+		if( (value_stackPointer == 1) && (!parseErr))
 			printf("%d \n", pop(value_stack, &value_stackPointer));
 		//and we clear the original input string.
 		//and stacks.
@@ -354,6 +408,8 @@ int main(void)
 		memset(inputString, '\0', INPUT_STRING_MAX);
 		//set the accumulator to 0
 		accumulator = 0;
+		//clear all the flags.
+		parseErr = false;
 	}
 	
 	return 0;

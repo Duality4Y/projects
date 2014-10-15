@@ -1,22 +1,17 @@
-#include <avr/io.h>
-#include <util/delay.h>
+#define WIFI_BAUD 115200
+#define SERIAL_BAUD 115200
 
-#define SSID "GOGBOT2014"
+#define WIFI_SERIAL Serial3
 
 void setup()
 {
-	Serial.begin(57600);
-	Serial1.begin(57600);
-	pinMode(13, OUTPUT);
-	pinMode(12, OUTPUT);
-	pinMode(11, OUTPUT);
-	pinMode(10, OUTPUT);
-	digitalWrite(13, HIGH);
-	digitalWrite(12, HIGH);
-	digitalWrite(11, HIGH);
-	digitalWrite(10, HIGH);
+	Serial.begin(115200);
+	WIFI_SERIAL.begin(115200);
 }
 void loop()
 {
-	Serial1.println("AT+RST");
+	if(Serial.available() > 0)
+		WIFI_SERIAL.write(Serial.read());
+	if(WIFI_SERIAL.available() > 0)
+		Serial.write(WIFI_SERIAL.read());
 }
