@@ -23,18 +23,21 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=8280;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fold%2F15_10_2014%2Fmain.c;0;4
+current_page=3
+FILE_NAME_0=126;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2Flexer.h;0;4
+FILE_NAME_1=46;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2Flexer.c;0;4
+FILE_NAME_2=666;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2FToken.h;0;4
+FILE_NAME_3=83;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2Fmain.c;0;4
 
 [VTE]
-last_dir=/home/robert/projects/c-stack-programming-calculator/old/15_10_2014
+last_dir=/home/robert/projects/c-stack-programming-calculator/src
 
 [build-menu]
 CFT_00_LB=_Compile
 CFT_00_CM=gcc  -c "%f"
 CFT_00_WD=
 CFT_01_LB=_Build
-CFT_01_CM=gcc -o "%e" "%f"
+CFT_01_CM=gcc -o "%e" *.c
 CFT_01_WD=
 filetypes=C;
 EX_00_LB=_Execute
