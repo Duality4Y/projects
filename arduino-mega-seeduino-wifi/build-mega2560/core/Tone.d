@@ -1,4 +1,5 @@
-build-mega2560/wifi-module.o: wifi-module.ino \
+build-mega2560/core/Tone.o:  \
+ /home/robert/arduino-1.0.5/hardware/arduino//cores/arduino/Tone.cpp \
   /home/robert/arduino-1.0.5/hardware/arduino//cores/arduino/Arduino.h \
   /home/robert/arduino-1.0.5/hardware/arduino//cores/arduino/binary.h \
   /home/robert/arduino-1.0.5/hardware/arduino//cores/arduino/WCharacter.h \
