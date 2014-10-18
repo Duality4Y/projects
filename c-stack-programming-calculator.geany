@@ -24,13 +24,14 @@ long_line_column=72
 
 [files]
 current_page=3
-FILE_NAME_0=126;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2Flexer.h;0;4
-FILE_NAME_1=46;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2Flexer.c;0;4
-FILE_NAME_2=666;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2FToken.h;0;4
-FILE_NAME_3=83;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2Fmain.c;0;4
+FILE_NAME_0=219;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2Flexer.h;0;4
+FILE_NAME_1=397;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2Flexer.c;0;4
+FILE_NAME_2=481;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2FToken.h;0;4
+FILE_NAME_3=68;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fsrc%2Fmain.c;0;4
+FILE_NAME_4=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-stack-programming-calculator%2Fold%2F15_10_2014%2Fmain.c;0;4
 
 [VTE]
-last_dir=/home/robert/projects/c-stack-programming-calculator/src
+last_dir=/home/robert/projects
 
 [build-menu]
 CFT_00_LB=_Compile
