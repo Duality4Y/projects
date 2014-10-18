@@ -1,6 +1,11 @@
 #ifndef LIST_H
 #define LIST_H
 
+/*
+ * learning doubly linked lists from here: 
+ * http://c.learncodethehardway.org/book/ex32.html
+ * */
+
 #include <stdio.h>
 #include <malloc.h>
 
