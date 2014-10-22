@@ -95,5 +95,28 @@ void List_unshift(List *list, void *value)
 		list->first->prev = node;
 		list->first = node;
 	}
-	lsit->count++;
+	list->count++;
+	return;
+}
+
+void *List_shift(List *list)
+{
+	ListNode *node = list->first;
+	return node != NULL ? List_remove(list, node): NULL;
+}
+
+void *List_remove(List *list, ListNode *node)
+{
+	void *result = NULL;
+	
+	if(node == list->first && node == list->last)
+	{
+		list->first = NULL;
+		list->last = NULL;
+	}
+	else if(node == list->first)
+	{
+		
+	}
+	return result;
 }
