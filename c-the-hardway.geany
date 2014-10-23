@@ -23,10 +23,9 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=91;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-the-hardway%2Fex1.c;0;4
-FILE_NAME_1=150;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-the-hardway%2Fex3.c;0;4
-FILE_NAME_2=33;Make;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-the-hardway%2FMakefile;0;4
+current_page=0
+FILE_NAME_0=288;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-the-hardway%2Fex12.c;0;4
+FILE_NAME_1=244;Make;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-the-hardway%2FMakefile;0;4
 
 [VTE]
 last_dir=/home/robert/projects/c-the-hardway
