@@ -1,7 +1,6 @@
 CFLAGS=-Wall -g
-
-all:
-	make ex19
-
+all: ex19
+ex19: object.o
 clean:
 	rm ex19
+	rm *.o
