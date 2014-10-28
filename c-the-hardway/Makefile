@@ -1,6 +1,7 @@
 CFLAGS=-Wall -g
-all: ex19
-ex19: object.o
+PROGRAM=ex20
+all: $(PROGRAM)
+ex20: object.o
 clean:
-	rm ex19
+	rm $(PROGRAM)
 	rm *.o
