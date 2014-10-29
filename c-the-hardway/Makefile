@@ -1,7 +1,7 @@
 #compile flags we will be using.
-CFLAGS=-Wall -g
+CFLAGS=-Wall -g -DNDEBUG
 #our program name
-PROGRAM=ex24
+PROGRAM=ex25
 #the libs we want to use and be compiled too.
 LIBS=ex22.o object.o
 
