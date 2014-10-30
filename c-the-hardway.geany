@@ -23,9 +23,9 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=288;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-the-hardway%2Fex12.c;0;4
-FILE_NAME_1=244;Make;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-the-hardway%2FMakefile;0;4
+current_page=1
+FILE_NAME_0=192;Make;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-the-hardway%2Fdevpkg%2FMakefile;0;4
+FILE_NAME_1=206;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fc-the-hardway%2Fdevpkg%2Fdb.h;0;4
 
 [VTE]
 last_dir=/home/robert/projects/c-the-hardway
@@ -33,14 +33,17 @@ last_dir=/home/robert/projects/c-the-hardway
 [build-menu]
 CFT_00_LB=_Make-Clean
 CFT_00_CM=make clean
-CFT_00_WD=
+CFT_00_WD=/home/robert/projects/c-the-hardway/devpkg/
 CFT_01_LB=_Make-All
 CFT_01_CM=make
-CFT_01_WD=
+CFT_01_WD=/home/robert/projects/c-the-hardway/devpkg/
 filetypes=C;
 EX_01_LB=_Excute-Valgrind
 EX_01_CM=valgrind --track-origins=yes "./%e"
-EX_01_WD=
+EX_01_WD=/home/robert/projects/c-the-hardway/devpkg/
 CFT_02_LB=_Git-it
 CFT_02_CM=
 CFT_02_WD=
+EX_00_LB=_Execute
+EX_00_CM="./%e"
+EX_00_WD=/home/robert/projects/c-the-hardway/devpkg/
