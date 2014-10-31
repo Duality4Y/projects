@@ -2,6 +2,8 @@
 #include <apr_errno.h>
 #include <apr_file_io.h>
 
+/*this file holds database code*/
+
 #include "db.h"
 #include "bstrlib.h"
 #include "dbg.h"
