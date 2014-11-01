@@ -1,3 +1,9 @@
 #include "shell.h"
 #include "dbg.h"
 #include <stdarg.h>
+
+int Shell_exec(Shell template, ... )
+{
+	apr_pool_t *p = NULL;
+	
+}
