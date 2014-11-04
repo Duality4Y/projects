@@ -112,9 +112,6 @@ class GameTile(GameBlock):
 		return (self.tile)
 	def setTile(self, tile):
 		self.tile = tile
-	def handleCollisions(self, gameObjects):
-		for gameObject in gameObjects:
-			print gameObject.ident;
 
 """game mobs have dynamic sprites"""
 class GameMob(GameBlock):
@@ -134,8 +131,8 @@ class companionCube(GameMob):
 		
 		#speed in pixels
 		self.p_speed = 1
-		self.vx = 0
-		self.vy = self.p_speed
+		self.dx = 0
+		self.dy = 0
 		self.accel = 4
 		self.accelX = 2
 		
@@ -152,34 +149,32 @@ class companionCube(GameMob):
 	def handleEvents(self, event):
 		if event.type == KEYDOWN:
 			if event.key == K_a:
-				self.vx = -self.p_speed
-			elif event.key == K_d:
-				self.vx = self.p_speed
+				self.dx = -self.p_speed
+			if event.key == K_d:
+				self.dx = self.p_speed
 			elif event.key == K_SPACE:
 				if not self.jumping:
 					self.jumping = True
-				self.currentHeight = self.y
 			elif event.key == K_p:
 				self.printDebug()
 			elif event.key == K_m:
 				self.mouseControlle = True
 		if event.type == KEYUP:
 			if event.key == K_a:
-				self.vx = 0
-			elif event.key == K_d:
-				self.vx = 0
+				self.dx = 0
+			if event.key == K_d:
+				self.dx = 0
 	def update(self):
 		if self.mouseControlle:
 			self.x,self.y = pygame.mouse.get_pos()
 		else:
 			#apply gravity
-			if not self.jumping:
-				self.y += self.vy*self.accel
-			else:
-				self.y -= self.vy*self.accel
+			#if not self.jumping:
+			#	self.y += self.vy*self.accel
+			#else:
+			#	self.y -= self.vy*self.accel
 			#apply side ways movement
-			self.x += self.vx*self.accelX
-		
+			self.x += self.dx*self.accelX
 		if (self.currentHeight - self.y) >= self.jumpHeight and self.jumping:
 			self.jumping = False
 		if self.jumping and self.colliding:
