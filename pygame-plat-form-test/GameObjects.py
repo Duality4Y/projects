@@ -112,6 +112,10 @@ class GameTile(GameBlock):
 		return (self.tile)
 	def setTile(self, tile):
 		self.tile = tile
+	def handleCollisions(self, gameObjects):
+		for gameObject in gameObjects:
+			print gameObject.ident;
+
 """game mobs have dynamic sprites"""
 class GameMob(GameBlock):
 	def __init__(self, x, y, width, height, spriteset):
@@ -129,7 +133,7 @@ class companionCube(GameMob):
 		self.spriteset = spriteset
 		
 		#speed in pixels
-		self.p_speed = 2
+		self.p_speed = 1
 		self.vx = 0
 		self.vy = self.p_speed
 		self.accel = 4
@@ -140,17 +144,7 @@ class companionCube(GameMob):
 		self.jumping = False
 		self.currentHeight = self.y
 		
-		#keep track on what side we are colliding
-		self.colliding = False
-		self.collidingRight = False
-		self.collidingLeft = False
-		self.collidingTop = False
-		self.collidingBottom = False
-		
 		self.mouseControlle = False
-		
-		#our own identity if someones searches for us you know.
-		self.ident = "companionCube"
 	def getTileset(self):
 		return (self.spriteset)
 	def setTileset(self, spriteset):
@@ -191,19 +185,8 @@ class companionCube(GameMob):
 		if self.jumping and self.colliding:
 			self.jumping = False
 		print "jumping  : {}".format(self.jumping)
-		print "colliding: {}".format(self.colliding)
 	def draw(self, surface):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 		pygame.draw.rect(surface, white, self.getRect(), 1)
 	def handleCollisions(self, gameobjects):
-		for identity in gameobjects:
-			#do all collision detection checking on tiles.
-			if identity.ident == "GameTile":
-				self.colliding = self.detectCollision(identity.getRect(), self.getRect())
-				if self.colliding:
-					if(self.x+self.width > identity.x-self.vx*2) and (self.x < identity.x+identity.width):
-						if(self.y+self.height)>identity.y:
-							self.y = identity.y-self.height
-					if((self.y+self.height) > identity.y) and (self.y < (identity.y+identity.height)):
-						if((self.x + self.width) >= identity.x) and ((self.x+self.width) <= (identity.x+self.vx)):
-							self.x = identity.x-self.width+self.vy
+		pass
