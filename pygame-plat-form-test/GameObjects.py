@@ -162,9 +162,4 @@ class companionCube(GameMob):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 		pygame.draw.rect(surface, white, self.getRect(), 1)
 	def handleCollisions(self, gameobjects):
-		for gameobject in gameobjects:
-			if gameobject.ident == "GameTile":
-				if gameobject.detectCollision(self.getRect(), gameobject.getRect()):
-					if self.dx > 0:
-						print "colliding to the left"
-						self.dx = -self.dx
+		pass
