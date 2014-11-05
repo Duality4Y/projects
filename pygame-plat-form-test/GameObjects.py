@@ -144,6 +144,18 @@ class companionCube(GameMob):
 		self.spriteset = spriteset
 	def handleEvents(self):
 		keys = pygame.key.get_pressed()
+		if keys[K_a]:
+			self.dx = -self.p_speed
+		if keys[K_d]:
+			self.dx = self.p_speed
+		if keys[K_s]:
+			self.dy = self.p_speed
+		if keys[K_w]:
+			self.dy = -self.p_speed
+		if not keys[K_w] and not keys[K_s]:
+			self.dy = 0;
+		if not keys[K_a] and not keys[K_d]:
+			self.dx = 0;
 	def update(self):
 		if self.mouseControlle:
 			self.x,self.y = pygame.mouse.get_pos()
@@ -162,4 +174,9 @@ class companionCube(GameMob):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 		pygame.draw.rect(surface, white, self.getRect(), 1)
 	def handleCollisions(self, gameobjects):
-		pass
+		for gameobject in gameobjects:
+			if gameobject.ident == "GameTile":
+				if gameobject.detectCollision(self.getRect(), gameobject.getRect()):
+					self.move = False
+				else:
+					self.move = True

@@ -49,8 +49,8 @@ def main():
 				if event.key == K_q:
 					running = False
 		handleEvents()
-		handleColitions()
 		updateObjects()
+		handleColitions()
 		drawObjects(windowSurface)
 		pygame.display.update()
 		fpsClock.tick(60)
