@@ -15,11 +15,6 @@ window_width = 640
 
 platform_base_height = 40
 
-leftwall  = 1   #(1,0,0,0)
-rightwall = 2   #(0,1,0,0)
-topwall   = 3   #(0,0,1,0)
-botwall   = 4   #(0,0,0,1)
-
 """Basic game object, from which everything is build."""
 class GameObject(object):
 	def __init__(self, x, y):
@@ -134,7 +129,8 @@ class companionCube(GameMob):
 		self.dx = 0
 		self.dy = 0
 		self.accel = 4
-		self.accelX = 2
+		self.accelX = 4
+		self.move = True
 		
 		#jumping related varaibles
 		self.jumpHeight = tile_height*3
@@ -150,8 +146,12 @@ class companionCube(GameMob):
 		if event.type == KEYDOWN:
 			if event.key == K_a:
 				self.dx = -self.p_speed
-			if event.key == K_d:
+			elif event.key == K_d:
 				self.dx = self.p_speed
+			elif event.key == K_s:
+				self.dy = self.p_speed
+			elif event.key == K_w:
+				self.dy = -self.p_speed
 			elif event.key == K_SPACE:
 				if not self.jumping:
 					self.jumping = True
@@ -162,8 +162,12 @@ class companionCube(GameMob):
 		if event.type == KEYUP:
 			if event.key == K_a:
 				self.dx = 0
-			if event.key == K_d:
+			elif event.key == K_d:
 				self.dx = 0
+			elif event.key == K_s:
+				self.dy = 0
+			elif event.key == K_w:
+				self.dy = 0
 	def update(self):
 		if self.mouseControlle:
 			self.x,self.y = pygame.mouse.get_pos()
@@ -173,8 +177,13 @@ class companionCube(GameMob):
 			#	self.y += self.vy*self.accel
 			#else:
 			#	self.y -= self.vy*self.accel
-			#apply side ways movement
-			self.x += self.dx*self.accelX
+			
+			if self.move:
+				#apply side ways movement
+				self.x += self.dx*self.accelX
+				#apply upwart/downwart movement
+				self.y += self.dy*self.accel
+			
 		if (self.currentHeight - self.y) >= self.jumpHeight and self.jumping:
 			self.jumping = False
 		if self.jumping and self.colliding:
@@ -184,4 +193,6 @@ class companionCube(GameMob):
 		pygame.draw.rect(surface, green, self.getRect(), 0)
 		pygame.draw.rect(surface, white, self.getRect(), 1)
 	def handleCollisions(self, gameobjects):
-		pass
+		for gameobject in gameobjects:
+			if gameobject.ident == "GameTile":
+				pass

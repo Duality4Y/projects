@@ -42,6 +42,7 @@ def main():
 	running = True
 	while running:
 		windowSurface.fill(black)
+		handleColitions()
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				running = False
@@ -49,7 +50,6 @@ def main():
 				if event.key == K_q:
 					running = False
 			handleEvents(event)
-		handleColitions()
 		drawObjects(windowSurface)
 		updateObjects()
 		pygame.display.update()
