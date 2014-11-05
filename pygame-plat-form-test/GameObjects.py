@@ -90,7 +90,7 @@ class GameBlock(GameObject):
 		pass
 	def update(self):
 		pass
-	def handleEvents(self, event):
+	def handleEvents(self):
 		pass
 	#handle that is called to draw things. in this case a test cube with a line around it.
 	def draw(self, surface):
@@ -125,7 +125,7 @@ class companionCube(GameMob):
 		self.spriteset = spriteset
 		
 		#speed in pixels
-		self.p_speed = 1
+		self.p_speed = 5
 		self.dx = 0
 		self.dy = 0
 		self.accel = 4
@@ -142,47 +142,16 @@ class companionCube(GameMob):
 		return (self.spriteset)
 	def setTileset(self, spriteset):
 		self.spriteset = spriteset
-	def handleEvents(self, event):
-		if event.type == KEYDOWN:
-			if event.key == K_a:
-				self.dx = -self.p_speed
-			elif event.key == K_d:
-				self.dx = self.p_speed
-			elif event.key == K_s:
-				self.dy = self.p_speed
-			elif event.key == K_w:
-				self.dy = -self.p_speed
-			elif event.key == K_SPACE:
-				if not self.jumping:
-					self.jumping = True
-			elif event.key == K_p:
-				self.printDebug()
-			elif event.key == K_m:
-				self.mouseControlle = True
-		if event.type == KEYUP:
-			if event.key == K_a:
-				self.dx = 0
-			elif event.key == K_d:
-				self.dx = 0
-			elif event.key == K_s:
-				self.dy = 0
-			elif event.key == K_w:
-				self.dy = 0
+	def handleEvents(self):
+		keys = pygame.key.get_pressed()
 	def update(self):
 		if self.mouseControlle:
 			self.x,self.y = pygame.mouse.get_pos()
-		else:
-			#apply gravity
-			#if not self.jumping:
-			#	self.y += self.vy*self.accel
-			#else:
-			#	self.y -= self.vy*self.accel
-			
-			if self.move:
-				#apply side ways movement
-				self.x += self.dx*self.accelX
-				#apply upwart/downwart movement
-				self.y += self.dy*self.accel
+		if self.move:
+			#apply side ways movement
+			self.x += self.dx
+			#apply upwart/downwart movement
+			self.y += self.dy
 			
 		if (self.currentHeight - self.y) >= self.jumpHeight and self.jumping:
 			self.jumping = False
@@ -195,4 +164,7 @@ class companionCube(GameMob):
 	def handleCollisions(self, gameobjects):
 		for gameobject in gameobjects:
 			if gameobject.ident == "GameTile":
-				pass
+				if gameobject.detectCollision(self.getRect(), gameobject.getRect()):
+					if self.dx > 0:
+						print "colliding to the left"
+						self.dx = -self.dx
