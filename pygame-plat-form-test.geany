@@ -23,7 +23,18 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
+current_page=10
+FILE_NAME_0=5314;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2FGameObjects.py;0;4
+FILE_NAME_1=514;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2Fmain.py;0;4
+FILE_NAME_2=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FSuper-Mario-Bros-Python-v0.1release%2Fgamelib%2Fcutscenes.py;0;4
+FILE_NAME_3=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FSuper-Mario-Bros-Python-v0.1release%2Fgamelib%2Fdata.py;0;4
+FILE_NAME_4=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FSuper-Mario-Bros-Python-v0.1release%2Fgamelib%2Fezmenu.py;0;4
+FILE_NAME_5=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FSuper-Mario-Bros-Python-v0.1release%2Fgamelib%2Fgame.py;0;4
+FILE_NAME_6=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FSuper-Mario-Bros-Python-v0.1release%2Fgamelib%2F__init__.py;0;4
+FILE_NAME_7=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FSuper-Mario-Bros-Python-v0.1release%2Fgamelib%2Flevel.py;0;4
+FILE_NAME_8=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FSuper-Mario-Bros-Python-v0.1release%2Fgamelib%2Fmain.py;0;4
+FILE_NAME_9=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FSuper-Mario-Bros-Python-v0.1release%2Fgamelib%2Fmenu.py;0;4
+FILE_NAME_10=3008;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2FSuper-Mario-Bros-Python-v0.1release%2Fgamelib%2Fsprites.py;0;4
 
 [VTE]
 last_dir=/home/robert/projects
