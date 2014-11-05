@@ -26,9 +26,9 @@ def drawObjects(surface):
 	for gameobject in gameobjects:
 		gameobject.draw(surface)
 
-def handleEvents(event):
+def handleEvents():
 	for gameobject in gameobjects:
-		gameobject.handleEvents(event)
+		gameobject.handleEvents()
 
 def handleColitions():
 	for gameobject in gameobjects:
@@ -48,10 +48,10 @@ def main():
 			if event.type == KEYDOWN:
 				if event.key == K_q:
 					running = False
-			handleEvents(event)
+		handleEvents()
 		handleColitions()
-		drawObjects(windowSurface)
 		updateObjects()
+		drawObjects(windowSurface)
 		pygame.display.update()
 		fpsClock.tick(60)
 	pygame.quit()

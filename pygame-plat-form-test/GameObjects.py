@@ -15,11 +15,6 @@ window_width = 640
 
 platform_base_height = 40
 
-leftwall  = 1   #(1,0,0,0)
-rightwall = 2   #(0,1,0,0)
-topwall   = 3   #(0,0,1,0)
-botwall   = 4   #(0,0,0,1)
-
 """Basic game object, from which everything is build."""
 class GameObject(object):
 	def __init__(self, x, y):
@@ -95,7 +90,7 @@ class GameBlock(GameObject):
 		pass
 	def update(self):
 		pass
-	def handleEvents(self, event):
+	def handleEvents(self):
 		pass
 	#handle that is called to draw things. in this case a test cube with a line around it.
 	def draw(self, surface):
@@ -112,9 +107,6 @@ class GameTile(GameBlock):
 		return (self.tile)
 	def setTile(self, tile):
 		self.tile = tile
-	def handleCollisions(self, gameObjects):
-		for gameObject in gameObjects:
-			print gameObject.ident;
 
 """game mobs have dynamic sprites"""
 class GameMob(GameBlock):
@@ -133,11 +125,12 @@ class companionCube(GameMob):
 		self.spriteset = spriteset
 		
 		#speed in pixels
-		self.p_speed = 1
-		self.vx = 0
-		self.vy = self.p_speed
+		self.p_speed = 5
+		self.dx = 0
+		self.dy = 0
 		self.accel = 4
-		self.accelX = 2
+		self.accelX = 4
+		self.move = True
 		
 		#jumping related varaibles
 		self.jumpHeight = tile_height*3
@@ -149,37 +142,17 @@ class companionCube(GameMob):
 		return (self.spriteset)
 	def setTileset(self, spriteset):
 		self.spriteset = spriteset
-	def handleEvents(self, event):
-		if event.type == KEYDOWN:
-			if event.key == K_a:
-				self.vx = -self.p_speed
-			elif event.key == K_d:
-				self.vx = self.p_speed
-			elif event.key == K_SPACE:
-				if not self.jumping:
-					self.jumping = True
-				self.currentHeight = self.y
-			elif event.key == K_p:
-				self.printDebug()
-			elif event.key == K_m:
-				self.mouseControlle = True
-		if event.type == KEYUP:
-			if event.key == K_a:
-				self.vx = 0
-			elif event.key == K_d:
-				self.vx = 0
+	def handleEvents(self):
+		keys = pygame.key.get_pressed()
 	def update(self):
 		if self.mouseControlle:
 			self.x,self.y = pygame.mouse.get_pos()
-		else:
-			#apply gravity
-			if not self.jumping:
-				self.y += self.vy*self.accel
-			else:
-				self.y -= self.vy*self.accel
+		if self.move:
 			#apply side ways movement
-			self.x += self.vx*self.accelX
-		
+			self.x += self.dx
+			#apply upwart/downwart movement
+			self.y += self.dy
+			
 		if (self.currentHeight - self.y) >= self.jumpHeight and self.jumping:
 			self.jumping = False
 		if self.jumping and self.colliding:
