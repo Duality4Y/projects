@@ -1,3 +1,4 @@
+import math
 import pygame
 from pygame.locals import *
 
@@ -6,6 +7,7 @@ black = (0,0,0)
 red = (255,0,0)
 green = (0,255,0)
 blue = (0,0,255)
+yellow = (255,255,0)
 
 tile_height = 40
 tile_width = tile_height
@@ -17,9 +19,10 @@ platform_base_height = 40
 
 """Basic game object, from which everything is build."""
 class GameObject(object):
-	def __init__(self, x, y):
+	def __init__(self, x, y, surface):
 		self.x = x
 		self.y = y
+		self.surface = surface
 		self.ident = "GameObject"
 	def getIdent(self):
 		return self.ident
@@ -30,8 +33,8 @@ class GameObject(object):
 		self.y = y
 """tiles and players and mobs are derived from this object."""
 class GameBlock(GameObject):
-	def __init__(self, x, y, width, height):
-		super(GameBlock, self).__init__(x, y)
+	def __init__(self, x, y, width, height, surface):
+		super(GameBlock, self).__init__(x, y, surface)
 		self.width = width
 		self.height = height
 		self.ident = "GameBlock"
@@ -93,14 +96,14 @@ class GameBlock(GameObject):
 	def handleEvents(self):
 		pass
 	#handle that is called to draw things. in this case a test cube with a line around it.
-	def draw(self, surface):
-		pygame.draw.rect(surface, blue, self.getRect(), 0)
-		pygame.draw.rect(surface, white, self.getRect(), 1)
+	def draw(self):
+		pygame.draw.rect(self.surface, blue, self.getRect(), 0)
+		pygame.draw.rect(self.surface, white, self.getRect(), 1)
 
 """tiles have static sprites (mostely)"""
 class GameTile(GameBlock):
-	def __init__(self, x, y, width, height, tile):
-		super(GameTile, self).__init__(x, y, width, height)
+	def __init__(self, x, y, width, height, tile, surface):
+		super(GameTile, self).__init__(x, y, width, height, surface)
 		self.tile = tile
 		self.ident = "GameTile"
 	def getTile(self):
@@ -110,8 +113,8 @@ class GameTile(GameBlock):
 
 """game mobs have dynamic sprites"""
 class GameMob(GameBlock):
-	def __init__(self, x, y, width, height, spriteset):
-		super(GameMob, self).__init__(x, y, width, height)
+	def __init__(self, x, y, width, height, spriteset, surface):
+		super(GameMob, self).__init__(x, y, width, height, surface)
 		self.spriteset = spriteset
 		self.ident = "GameMob"
 	def getTileset(self):
@@ -120,8 +123,8 @@ class GameMob(GameBlock):
 		self.spriteset = spriteset
 
 class companionCube(GameMob):
-	def __init__(self, x, y, width, height, spriteset):
-		super(GameMob, self).__init__(x, y, width, height)
+	def __init__(self, x, y, width, height, spriteset=None, surface=None):
+		super(GameMob, self).__init__(x, y, width, height, surface)
 		self.spriteset = spriteset
 		
 		#speed in pixels
@@ -156,6 +159,9 @@ class companionCube(GameMob):
 			self.dy = 0;
 		if not keys[K_a] and not keys[K_d]:
 			self.dx = 0;
+		if keys[K_m]:
+			if not keys[K_m]:
+				self.mouseControlle != self.mouseControlle
 	def update(self):
 		if self.mouseControlle:
 			self.x,self.y = pygame.mouse.get_pos()
@@ -169,14 +175,27 @@ class companionCube(GameMob):
 			self.jumping = False
 		if self.jumping and self.colliding:
 			self.jumping = False
-		print "jumping  : {}".format(self.jumping)
-	def draw(self, surface):
-		pygame.draw.rect(surface, green, self.getRect(), 0)
-		pygame.draw.rect(surface, white, self.getRect(), 1)
+		#print "jumping  : {}".format(self.jumping)
+	def draw(self):
+		pygame.draw.rect(self.surface, green, self.getRect(), 0)
+		pygame.draw.rect(self.surface, white, self.getRect(), 1)
 	def handleCollisions(self, gameobjects):
 		for gameobject in gameobjects:
 			if gameobject.ident == "GameTile":
-				if gameobject.detectCollision(self.getRect(), gameobject.getRect()):
-					self.move = False
-				else:
-					self.move = True
+			#if gameobject.detectCollision(self.getRect(), gameobject.getRect()):
+				xdif = gameobject.x-self.x
+				ydif = gameobject.y-self.y
+				#draw the x difference line in red
+				#draw the y difference line in yellow
+				pygame.draw.line(self.surface, red, (gameobject.x+xdif, gameobject.y), gameobject.getPos(), 1)
+				pygame.draw.line(self.surface, yellow, (gameobject.x, gameobject.y+ydif), gameobject.getPos(), 1)
+				#calc hypotnues and draw it.
+				hypo = math.hypot(xdif,ydif)
+				pygame.draw.line(self.surface, green, [10,10], [10+hypo, 10])
+				
+				try:
+					print "sin:"+str(ydif/hypo)
+					print "cos:"+str(xdif/hypo)
+					print 360/((ydif/hypo)+(xdif/hypo))*math.pi
+				except ZeroDivisionError:
+					pass
