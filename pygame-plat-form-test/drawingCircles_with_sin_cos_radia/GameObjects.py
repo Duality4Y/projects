@@ -1,4 +1,4 @@
-import math
+import math,sys,time
 import pygame
 from pygame.locals import *
 
@@ -197,11 +197,16 @@ class companionCube(GameMob):
 				
 				radius = gameobject.getWidth()
 				
-				self.theta += math.radians(01);
+				self.theta += math.radians(3);
 				self.y = round(gameobject.getMidPos()[1]+radius*math.cos(self.theta))
 				self.x = round(gameobject.getMidPos()[0]+radius*math.sin(self.theta))
-				print red
-				print self.getPos()
-				print radius
+				
 				self.dots.append( (self.x,self.y) )
 				pygame.draw.lines(self.surface, red, False, self.dots, 1)
+				
+				#print str(red)
+				#print str(self.getPos())
+				#print str(radius)
+				#print str(len(self.dots))
+				sys.stdout.write(str(red)+" "+str(self.getPos())+" "+str(radius)+" "+str(len(self.dots))+"\r");
+				sys.stdout.flush()
