@@ -18,9 +18,9 @@ gameobjects.append(mob)
 #	tile = GameTile(i,(window_height/2)-tile_height, tile_width, tile_height, None)
 #	gameobjects.append(tile)
 #a big block above the floor
-#gameobjects.append(GameTile(200,160, 40, 40, None))
+gameobjects.append(GameTile(300,300, 40, 40, None, windowSurface))
 #a big block not above the floor
-gameobjects.append(GameTile(150,150, 40, 40, None, windowSurface))
+#gameobjects.append(GameTile(150,150, 40, 40, None, windowSurface))
 
 def drawObjects():
 	for gameobject in gameobjects:

@@ -97,8 +97,9 @@ class GameBlock(GameObject):
 		pass
 	#handle that is called to draw things. in this case a test cube with a line around it.
 	def draw(self):
-		pygame.draw.rect(self.surface, blue, self.getRect(), 0)
-		pygame.draw.rect(self.surface, white, self.getRect(), 1)
+		#pygame.draw.rect(self.surface, blue, self.getRect(), 0)
+		#pygame.draw.rect(self.surface, white, self.getRect(), 1)
+		pass
 
 """tiles have static sprites (mostely)"""
 class GameTile(GameBlock):
@@ -135,8 +136,8 @@ class companionCube(GameMob):
 		self.accelX = 4
 		self.move = True
 		
-		self.theta = 0;
-		self.dots = [(0,0)]
+		self.theta = 0
+		self.dots = [self.getPos()]
 		#jumping related varaibles
 		self.jumpHeight = tile_height*3
 		self.jumping = False
@@ -158,9 +159,9 @@ class companionCube(GameMob):
 		if keys[K_w]:
 			self.dy = -self.p_speed
 		if not keys[K_w] and not keys[K_s]:
-			self.dy = 0;
+			self.dy = 0
 		if not keys[K_a] and not keys[K_d]:
-			self.dx = 0;
+			self.dx = 0
 		if keys[K_m]:
 			if not keys[K_m]:
 				self.mouseControlle != self.mouseControlle
@@ -179,14 +180,15 @@ class companionCube(GameMob):
 			self.jumping = False
 		#print "jumping  : {}".format(self.jumping)
 	def draw(self):
-		pygame.draw.rect(self.surface, green, self.getRect(), 0)
-		pygame.draw.rect(self.surface, white, self.getRect(), 1)
+		#pygame.draw.rect(self.surface, green, self.getRect(), 0)
+		#pygame.draw.rect(self.surface, white, self.getRect(), 1)
+		pygame.draw.circle(self.surface, white, self.getPos(), self.getWidth(), 1)
 	def handleCollisions(self, gameobjects):
 		for gameobject in gameobjects:
 			if gameobject.ident == "GameTile":
 			#if gameobject.detectCollision(self.getRect(), gameobject.getRect()):
-				xdif = gameobject.x-self.x
-				ydif = gameobject.y-self.y
+				xdif = self.x-gameobject.x
+				ydif = self.y-gameobject.y
 				#draw the x difference line in red
 				#draw the y difference line in yellow
 				pygame.draw.line(self.surface, red, (gameobject.x+xdif, gameobject.y), gameobject.getPos(), 1)
@@ -197,11 +199,16 @@ class companionCube(GameMob):
 				
 				radius = gameobject.getWidth()
 				
-				self.theta += math.radians(01);
-				self.y = round(gameobject.getMidPos()[1]+radius*math.cos(self.theta))
-				self.x = round(gameobject.getMidPos()[0]+radius*math.sin(self.theta))
+				self.theta += math.radians(1);
+				self.y = round(gameobject.y+radius*math.cos(self.theta))
+				self.x = round(gameobject.x+radius*math.sin(self.theta))
 				print red
 				print self.getPos()
 				print radius
+				print self.theta
+				print len(self.dots)
+				if(len(self.dots) > 100):
+					del self.dots[0]
 				self.dots.append( (self.x,self.y) )
 				pygame.draw.lines(self.surface, red, False, self.dots, 1)
+				print math.degrees(self.theta)
