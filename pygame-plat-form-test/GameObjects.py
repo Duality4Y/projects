@@ -1,4 +1,4 @@
-import math
+import math, sys
 import pygame
 from pygame.locals import *
 
@@ -202,13 +202,20 @@ class companionCube(GameMob):
 				self.theta += math.radians(1);
 				self.y = round(gameobject.y+radius*math.cos(self.theta))
 				self.x = round(gameobject.x+radius*math.sin(self.theta))
-				print red
-				print self.getPos()
-				print radius
-				print self.theta
-				print len(self.dots)
-				if(len(self.dots) > 100):
+				
+				color = str(red)
+				position = str(self.getPos())
+				radius = str(radius)
+				theta = str(self.theta)
+				len_dots = str(len(self.dots))
+				degrees = str(math.degrees(self.theta))
+				
+				if(len(self.dots) == 100):
 					del self.dots[0]
+				
 				self.dots.append( (self.x,self.y) )
+				
 				pygame.draw.lines(self.surface, red, False, self.dots, 1)
-				print math.degrees(self.theta)
+				
+				sys.stdout.write(color+" "+position+" "+radius+" "+theta+" "+len_dots+" "+degrees+"\r");
+				sys.stdout.flush()
