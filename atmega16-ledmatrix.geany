@@ -24,9 +24,10 @@ long_line_column=72
 
 [files]
 current_page=0
-FILE_NAME_0=947;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Fmain.c;0;4
-FILE_NAME_1=2012;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Ffont.h;0;4
-FILE_NAME_2=660;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Ffont5x7.h;0;4
+FILE_NAME_0=112;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Fmain.c;0;4
+FILE_NAME_1=0;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Fmatrix.c;0;4
+FILE_NAME_2=134;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Fmatrix.h;0;4
+FILE_NAME_3=384;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Ffont.h;0;4
 
 [VTE]
 last_dir=/home/robert/projects/atmega16-ledmatrix
@@ -40,5 +41,5 @@ CFT_01_CM=avr-objcopy -j .text -j .data -O ihex build.elf build.hex
 CFT_01_WD=
 filetypes=C;
 CFT_00_LB=_Compile
-CFT_00_CM=avr-gcc -mmcu=atmega16 -Wall -Os -o build.elf "%f"
+CFT_00_CM=avr-gcc -mmcu=atmega16 -Wall -Os main.c matrix.c -o build.elf
 CFT_00_WD=
