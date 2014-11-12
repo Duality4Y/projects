@@ -23,7 +23,7 @@ blue = 0,0,255
 
 colors = [black, red, green, blue]
 
-number_of_circles = 10000000
+number_of_circles = 10
 circles = []
 
 for n in range(number_of_circles):

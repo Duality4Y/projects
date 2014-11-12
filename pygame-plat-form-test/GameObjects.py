@@ -123,99 +123,10 @@ class GameMob(GameBlock):
 	def setTileset(self, spriteset):
 		self.spriteset = spriteset
 
-class companionCube(GameMob):
-	def __init__(self, x, y, width, height, spriteset=None, surface=None):
-		super(GameMob, self).__init__(x, y, width, height, surface)
-		self.spriteset = spriteset
-		
-		#speed in pixels
-		self.p_speed = 5
-		self.dx = 0
-		self.dy = 0
-		self.accel = 4
-		self.accelX = 4
-		self.move = True
-		
-		self.theta = 0
-		self.dots = [self.getPos()]
-		#jumping related varaibles
-		self.jumpHeight = tile_height*3
-		self.jumping = False
-		self.currentHeight = self.y
-		
-		self.mouseControlle = False
-	def getTileset(self):
-		return (self.spriteset)
-	def setTileset(self, spriteset):
-		self.spriteset = spriteset
-	def handleEvents(self):
-		keys = pygame.key.get_pressed()
-		if keys[K_a]:
-			self.dx = -self.p_speed
-		if keys[K_d]:
-			self.dx = self.p_speed
-		if keys[K_s]:
-			self.dy = self.p_speed
-		if keys[K_w]:
-			self.dy = -self.p_speed
-		if not keys[K_w] and not keys[K_s]:
-			self.dy = 0
-		if not keys[K_a] and not keys[K_d]:
-			self.dx = 0
-		if keys[K_m]:
-			if not keys[K_m]:
-				self.mouseControlle != self.mouseControlle
-	def update(self):
-		if self.mouseControlle:
-			self.x,self.y = pygame.mouse.get_pos()
-		if self.move:
-			#apply side ways movement
-			self.x += self.dx
-			#apply upwart/downwart movement
-			self.y += self.dy
-			
-		if (self.currentHeight - self.y) >= self.jumpHeight and self.jumping:
-			self.jumping = False
-		if self.jumping and self.colliding:
-			self.jumping = False
-		#print "jumping  : {}".format(self.jumping)
-	def draw(self):
-		#pygame.draw.rect(self.surface, green, self.getRect(), 0)
-		#pygame.draw.rect(self.surface, white, self.getRect(), 1)
-		pygame.draw.circle(self.surface, white, self.getPos(), self.getWidth(), 1)
-	def handleCollisions(self, gameobjects):
-		for gameobject in gameobjects:
-			if gameobject.ident == "GameTile":
-			#if gameobject.detectCollision(self.getRect(), gameobject.getRect()):
-				xdif = self.x-gameobject.x
-				ydif = self.y-gameobject.y
-				#draw the x difference line in red
-				#draw the y difference line in yellow
-				pygame.draw.line(self.surface, red, (gameobject.x+xdif, gameobject.y), gameobject.getPos(), 1)
-				pygame.draw.line(self.surface, yellow, (gameobject.x, gameobject.y+ydif), gameobject.getPos(), 1)
-				#calc hypotnues and draw it.
-				hypo = math.hypot(xdif,ydif)
-				pygame.draw.line(self.surface, green, [10,10], [10+hypo, 10], 1)
-				
-				radius = gameobject.getWidth()
-				
-				self.theta += math.radians(1);
-				self.y = round(gameobject.y+radius*math.cos(self.theta))
-				self.x = round(gameobject.x+radius*math.sin(self.theta))
-				
-				color = str(red)
-				position = str(self.getPos())
-				radius = str(radius)
-				theta = str(self.theta)
-				len_dots = str(len(self.dots))
-				degrees = str(math.degrees(self.theta))
-				
-				if(len(self.dots) == 100):
-					del self.dots[0]
-				
-				self.dots.append( (self.x,self.y) )
-				
-				pygame.draw.lines(self.surface, red, False, self.dots, 1)
-				
-				sys.stdout.write(color+" "+position+" "+radius+" "+theta+" "+len_dots+" "+degrees+"\r");
-				sys.stdout.flush()
+class Vector(object):
+	def __init__(self, position, angle=None, magnitude=None):
+		self.magnitude = magnitude	#length of the vector
+		self.angle = angle 			#angle in which it points.
+		self.position = position	#it's position
+		#unit vector
+		self.dx_unit = 0

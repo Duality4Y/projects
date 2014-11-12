@@ -23,13 +23,12 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=591;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2Fmain.py;0;4
-FILE_NAME_1=316;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2FGameObjects.py;0;4
-FILE_NAME_2=964;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2FPygame-Physics-Tutorial%2FTutorial2%2FRandomness_and_Order%21.py;0;4
+current_page=1
+FILE_NAME_0=1301;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2Fmain.py;0;4
+FILE_NAME_1=3241;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2FGameObjects.py;0;4
 
 [VTE]
-last_dir=/home/robert/projects/pygame-plat-form-test/Pygame-Physics-Tutorial/Tutorial2
+last_dir=/home/robert/projects/pygame-plat-form-test
 
 [build-menu]
 EX_00_LB=_Execute

@@ -41,19 +41,23 @@ def updateObjects():
 def main():
 	running = True
 	while running:
-		windowSurface.fill(black)
+		
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				running = False
 			if event.type == KEYDOWN:
 				if event.key == K_q:
 					running = False
+		
 		handleEvents()
 		updateObjects()
 		handleColitions()
+		
+		windowSurface.fill(black)
 		drawObjects()
 		pygame.display.update()
 		fpsClock.tick(60)
+		
 	pygame.quit()
 
 if __name__ == "__main__":
