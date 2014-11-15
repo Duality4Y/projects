@@ -13,7 +13,7 @@ detect_indent_width=false
 indent_mode=2
 
 [project]
-name=pygame
+name=pygame-plat-form-test
 base_path=/home/robert/projects/pygame-plat-form-test/
 description=
 file_patterns=
@@ -23,12 +23,14 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=1301;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2Fmain.py;0;4
-FILE_NAME_1=3241;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2FGameObjects.py;0;4
+current_page=3
+FILE_NAME_0=880;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2Fmain.py;0;4
+FILE_NAME_1=6428;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2FGameObjects.py;0;4
+FILE_NAME_2=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpygame-plat-form-test%2FdrawingCircles_with_sin_cos_radia%2FGameObjects.py;0;4
+FILE_NAME_3=7376;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2F9538871%2Fsightandlight.py;0;4
 
 [VTE]
-last_dir=/home/robert/projects/pygame-plat-form-test
+last_dir=/home/robert/projects
 
 [build-menu]
 EX_00_LB=_Execute
