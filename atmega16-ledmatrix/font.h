@@ -1,7 +1,8 @@
 #ifndef _FONT_H_
 #define _FONT_H_
+
 // Font (ugly imho)
-uint16_t font[760] = {
+uint8_t font[760] = {
   0,0,0,0,0,0,0,0,
   12,12,12,12,0,12,12,0,
   20,20,20,0,0,0,0,0,

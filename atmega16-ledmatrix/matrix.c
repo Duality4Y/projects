@@ -2,8 +2,7 @@
 #include "font.h"
 
 //the to display text.
-const char name[] = "Martijn";
-
+volatile char *name = "Tkkrlab";
 //offset used in shifting the letters across the display.
 volatile uint8_t offset = 0;
 
@@ -11,7 +10,7 @@ volatile uint8_t offset = 0;
 volatile unsigned char display_char = ' ';
 
 //scroll_speed is how many letters scroll by per second.
-volatile float scroll_speed = 0.6372;
+volatile float scroll_speed = 0.8372;
 
 void initMatrixDisplay(void)
 {
@@ -31,20 +30,36 @@ void initMatrixDisplay(void)
 	
 	sei();
 }
-
 void setPixel(uint8_t x, uint8_t y)
 {
 	ROW_PORT = ~(1<<x);
 	COL_PORT = (1<<y);
 }
 
-void displayAscii(uint16_t *image)
+void displayShift(volatile uint8_t *image)
 {
-	int i;
+	volatile static uint16_t data;
+	volatile uint8_t i;
+	for(i=0;i<8;i++)
+	{
+		data = image[i]<<7;
+		COL_PORT = data>>offset;
+		ROW_PORT = ~(1<<i);
+		_delay_ms(2);
+	}
+	if(offset == 8 && image[i+1])
+	{
+		data |= image[i+1];
+	}
+}
+
+void display(volatile char *image)
+{
+	volatile uint8_t i, data;
 	for(i = 0;i<0x08;i++)
 	{
-		uint16_t data = image[i]<<7;
-		COL_PORT = (data>>offset);
+		data = image[i];
+		COL_PORT = data;
 		ROW_PORT = ~(1<<i);
 		_delay_ms(2);
 	}
@@ -52,8 +67,9 @@ void displayAscii(uint16_t *image)
 
 void put_c(volatile char character)
 {
-	uint16_t *temp_char = &(font[(8*(character-32) )] );
-	displayAscii(temp_char);
+	uint8_t *temp_char = &(font[(8*(character-32) )] );
+	//display(temp_char);
+	displayShift(temp_char);
 }
 
 ISR(TIMER0_OVF_vect, ISR_NOBLOCK)
@@ -66,7 +82,7 @@ ISR(TIMER0_OVF_vect, ISR_NOBLOCK)
 	if( !(isr_count%(int)interval) )
 	{
 		offset = 0;
-		if(name[i])
+		if(name[i] && isprint(name[i]))
 		{
 			display_char = name[i];
 			i++;
@@ -76,7 +92,7 @@ ISR(TIMER0_OVF_vect, ISR_NOBLOCK)
 			i = 0;
 		}
 	}
-	if( !(isr_count%((int)interval/15)) && (offset <= 0xF0))
+	if( !(isr_count%((int)interval/15)) && (offset <= 0x10))
 	{
 		offset++;
 	}
