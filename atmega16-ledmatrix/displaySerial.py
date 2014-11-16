@@ -15,16 +15,27 @@ matrix_height = 8
 
 window_surface = pygame.display.set_mode((window_width, window_height));
 
+fpsClock = pygame.time.Clock()
+
+serial_port = serial.Serial('/dev/ttyUSB0', 9600)
+
 class Pixel(object):
 	def __init__(self, pos, color, surface):
 		self.normalColor = color
 		self.inColor = blue
-		self.pos = pos
+		
 		self.width = window_width/matrix_width
 		self.height = window_height/matrix_height
+		
+		self.pos = pos
 		self.x, self.y = self.pos
+		self.x_index = self.x/self.width
+		self.y_index = self.y/self.height
+		
 		self.rect = (self.x, self.y, self.width, self.height)
+		
 		self.surface = surface
+		
 		self.isSetOn = False
 	def draw(self):
 		if(self.isSetOn):
@@ -50,6 +61,7 @@ for y in height_range:
 		pixels.append(Pixel((x,y), green, window_surface))
 
 pixel_data = []
+display_byte_data = [0,0,0,0,0,0,0,0]
 
 pygame.init()
 running = True
@@ -58,19 +70,40 @@ while running:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			mouse_pos = pygame.mouse.get_pos()
-			for pixel in pixels:
-				pixel.inPixel(mouse_pos)
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_ESCAPE:
 				running = False
+			if event.key == pygame.K_r:
+				for pixel in pixels:
+					pixel.isSetOn = False
+			if event.key == pygame.K_s:
+				for pixel in pixels:
+					pixel.isSetOn = True
+			if event.key == pygame.K_i:
+				for pixel in pixels:
+					pixel.isSetOn = not pixel.isSetOn
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			#if the left button is pressed
+			if event.button == 1:
+				mouse_pos = pygame.mouse.get_pos()
+				for pixel in pixels:
+					pixel.inPixel(mouse_pos)
 	
 	window_surface.fill(black)
 	
 	for pixel in pixels:
 		pixel.draw()
 	
+	#make the list empty (nothing displayed)
+	display_byte_data = [0,0,0,0,0,0,0,0]
+	for index,pixel in enumerate(pixels):
+		display_byte_data[pixel.y_index] |= (pixel.isSetOn << (pixel.x_index) )
+	
+	for byte in display_byte_data:
+		serial_port.write(chr(byte))
+	
 	pygame.display.update()
+	fpsClock.tick(30)
 
+serial_port.close()
 pygame.quit()

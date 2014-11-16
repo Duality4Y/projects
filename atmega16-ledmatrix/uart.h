@@ -8,7 +8,7 @@
 #define BAUD 9600
 #define MY_UBRR (FOSC/16/(BAUD-1))
 
-#define UART_BUFFER_SIZE 8
+#define UART_BUFFER_SIZE 7
 
 volatile char uart_data[UART_BUFFER_SIZE+1];
 

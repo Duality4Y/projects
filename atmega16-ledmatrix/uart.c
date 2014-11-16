@@ -1,6 +1,6 @@
 #include "uart.h"
 
-volatile unsigned int uart_data_index = 0;
+volatile uint8_t uart_data_index = 0;
 
 void uart_init(void)
 {
@@ -51,13 +51,9 @@ unsigned char uart_receive(void)
 
 ISR(USART_RXC_vect)
 {
+	uart_data[uart_data_index++] = uart_receive();
 	if(uart_data_index > UART_BUFFER_SIZE)
 	{
 		uart_data_index = 0;
-	}
-	else if(uart_data_index <= UART_BUFFER_SIZE)
-	{
-		uart_data[uart_data_index] = uart_receive();
-		uart_data[++uart_data_index] = 0;
 	}
 }
