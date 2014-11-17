@@ -1,6 +1,6 @@
 
 compile:
-	avr-gcc -mmcu=atmega16 -Wall -Os -o build.elf main.c matrix.c
+	avr-gcc -mmcu=atmega16 -D F_CPU=8000000UL -Wall -Os main.c matrix.c uart.c -o build.elf
 
 obj-copy:
 	avr-objcopy -j .text -j .data -O ihex build.elf build.hex
@@ -14,4 +14,4 @@ fuses:
 clean:
 	rm *.elf
 	rm *.hex
-
+	rm *.pyc

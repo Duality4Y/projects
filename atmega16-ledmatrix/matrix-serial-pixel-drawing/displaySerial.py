@@ -20,7 +20,7 @@ window_surface = pygame.display.set_mode((window_width, window_height));
 fpsClock = pygame.time.Clock()
 
 #open a serial port for communication.
-com_baud = 38400
+com_baud = 500000
 com_device = '/dev/ttyUSB0'
 serial_port = serial.Serial(com_device, com_baud)
 
@@ -68,10 +68,10 @@ height_range = xrange(0, window_height, window_height/matrix_height)
 
 for y in height_range:
 	for x in width_range:
-		pixels.append(Pixel((x,y), green, window_surface))
+		pixels.append(Pixel((x,y), black, window_surface))
 
 #an list that will hold bytes that are send to the display
-display_byte_data = [0,0,0,0,0,0,0,0]
+display_byte_data = [0]*matrix_width
 
 #hold mouse button states.
 leftMpressed = False
@@ -139,7 +139,7 @@ while running:
 	
 	#make the list empty (nothing displayed)
 	#do some math create bytes depending on thier position and if they are on or not.
-	display_byte_data = [0,0,0,0,0,0,0,0]
+	display_byte_data = [0]*matrix_width
 	for index,pixel in enumerate(pixels):
 		display_byte_data[pixel.y_index] |= (pixel.isSetOn << (pixel.x_index) )
 	#transmit the screen over serial.
@@ -149,7 +149,7 @@ while running:
 	#pygame updates the screen so we can also see the pixels on our screen.
 	pygame.display.update()
 	#make pygame wait 30 ticks (30 fps or 1/30 seconds). for conserving cpu.
-	fpsClock.tick(60)
+	fpsClock.tick(30)
 
 #always close serial port.
 serial_port.close()

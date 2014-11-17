@@ -14,4 +14,4 @@ fuses:
 clean:
 	rm *.elf
 	rm *.hex
-
+	rm *.pyc

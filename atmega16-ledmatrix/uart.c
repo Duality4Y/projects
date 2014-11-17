@@ -1,12 +1,10 @@
 #include "uart.h"
 
-volatile uint8_t uart_data_index = 0;
-
 void uart_init(void)
 {
 	/* set the baud rate*/
-	UBRRH = (unsigned char)(MY_UBRR>>8);
-	UBRRL = (unsigned char)(MY_UBRR);
+	UBRRH = 0x00;//(unsigned char)(MY_UBRR>>8);
+	UBRRL = 0x00;//(unsigned char)(MY_UBRR);
 	/*enable recieving and transmitting*/
 	UCSRB = (1<<RXEN)|(1<<TXEN);
 	/*frame format: 8data, 2stop */

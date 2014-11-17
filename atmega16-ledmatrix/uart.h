@@ -10,7 +10,8 @@
 
 #define UART_BUFFER_SIZE 7
 
-volatile char uart_data[UART_BUFFER_SIZE+1];
+volatile uint8_t uart_data[UART_BUFFER_SIZE+1];
+volatile uint8_t uart_data_index;
 
 void uart_init(void);
 void uart_put_str(volatile char *);

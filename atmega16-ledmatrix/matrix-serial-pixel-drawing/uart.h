@@ -5,12 +5,13 @@
 #include <avr/interrupt.h>
 
 #define FOSC F_CPU
-#define BAUD 9600
+#define BAUD 38400
 #define MY_UBRR (FOSC/16/(BAUD-1))
 
 #define UART_BUFFER_SIZE 7
 
-volatile char uart_data[UART_BUFFER_SIZE+1];
+volatile uint8_t uart_data[UART_BUFFER_SIZE+1];
+volatile uint8_t uart_data_index;
 
 void uart_init(void);
 void uart_put_str(volatile char *);
