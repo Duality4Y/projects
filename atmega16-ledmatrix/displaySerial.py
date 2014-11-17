@@ -149,7 +149,7 @@ while running:
 	#pygame updates the screen so we can also see the pixels on our screen.
 	pygame.display.update()
 	#make pygame wait 30 ticks (30 fps or 1/30 seconds). for conserving cpu.
-	fpsClock.tick(30)
+	#fpsClock.tick(30)
 
 #always close serial port.
 serial_port.close()
