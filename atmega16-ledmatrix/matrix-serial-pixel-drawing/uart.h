@@ -5,7 +5,7 @@
 #include <avr/interrupt.h>
 
 #define FOSC F_CPU
-#define BAUD 38400
+#define BAUD 9600
 #define MY_UBRR (FOSC/16/(BAUD-1))
 
 #define UART_BUFFER_SIZE 7
