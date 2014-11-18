@@ -53,9 +53,9 @@ class Pixel(object):
 		pygame.draw.rect(self.surface, white, self.rect, 1)
 	#checks if pos is inside the pixel, and changes state acording to that.
 	def inPixel(self, pos):
-		mx,my = pos
-		if (mx > self.x) and (mx < self.x+self.width)		\
-			and (my > self.y) and (my < self.y+self.height):
+		x,y = pos
+		if (x > self.x) and (x < self.x+self.width)		\
+			and (y > self.y) and (y < self.y+self.height):
 				if(self.isSetOn):
 					self.isSetOn = False
 				else:
