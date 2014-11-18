@@ -58,7 +58,7 @@ void display(volatile uint8_t *image)
 		
 		COL_PORT = data;
 		ROW_PORT = ~(1<<i);
-		//_delay_ms(2);
+		_delay_ms(1);
 	}
 }
 

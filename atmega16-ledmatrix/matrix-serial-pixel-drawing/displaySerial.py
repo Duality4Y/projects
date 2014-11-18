@@ -77,6 +77,9 @@ display_byte_data = [0]*matrix_width
 leftMpressed = False
 rightMpressed = False
 
+#holds state for showing a "pixel" mouse on the led matrix or not
+showPixelMouse = False
+
 #initialize pygame.
 pygame.init()
 running = True
@@ -90,6 +93,9 @@ while running:
 			#or quit if the escape key was pressed.
 			if event.key == pygame.K_ESCAPE:
 				running = False
+			#enable showing mouse position on the ledmatrix
+			if event.key == pygame.K_m:
+				showPixelMouse = not showPixelMouse
 			#r for reseting all the pixels. (turning them off)
 			if event.key == pygame.K_r:
 				for pixel in pixels:
@@ -102,6 +108,10 @@ while running:
 			if event.key == pygame.K_i:
 				for pixel in pixels:
 					pixel.isSetOn = not pixel.isSetOn
+		#if event.type == pygame.KEYUP:
+			#disable showing "pixel" mouse position on ledmatrix
+			#if event.key == pygame.K_m:
+			#	showPixelMouse = False
 		#mouse button checking. and state setting.
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			if event.button == 1:
@@ -142,6 +152,15 @@ while running:
 	display_byte_data = [0]*matrix_width
 	for index,pixel in enumerate(pixels):
 		display_byte_data[pixel.y_index] |= (pixel.isSetOn << (pixel.x_index) )
+	
+	#show a "pixel" mouse if m is/was pressed once
+	if showPixelMouse:
+		mx,my = pygame.mouse.get_pos()
+		mx_index = mx/(window_width/matrix_width)
+		my_index = my/(window_height/matrix_height)
+		#print mx,my,mx_index,my_index
+		display_byte_data[my_index] ^= (1<<mx_index)
+	
 	#transmit the screen over serial.
 	for byte in display_byte_data:
 		serial_port.write(chr(byte))
@@ -149,7 +168,7 @@ while running:
 	#pygame updates the screen so we can also see the pixels on our screen.
 	pygame.display.update()
 	#make pygame wait 30 ticks (30 fps or 1/30 seconds). for conserving cpu.
-	#fpsClock.tick(30)
+	fpsClock.tick(30)
 
 #always close serial port.
 serial_port.close()
