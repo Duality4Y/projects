@@ -1,0 +1,23 @@
+the python script displaySerial.py
+does the following:
+with the m key you can toggle to display a cursor (where the mouse is on the screen)
+onto the ledmatrix
+the cursor will always be the inverse of the pixel it's sitting on.
+
+holding the left mouse button draw pixels (turns them on)
+and the right mouse button erases pixels (turns them off)
+
+the i key inverses what you've draw.
+the r key resets the display (turns all the pixels off)
+the s key sets all the pixels on the display on.
+
+the escape key and the x button close the application.
+
+planned for making with what i learned with this python script.
+are:
+
+a snake game controlled with you mouse or the keyboard on the ledmatrix.
+game of life simulation.
+maybe pong ?
+maybe fluid simulation ?
+maybe a nbody sim ? (a simple on)
