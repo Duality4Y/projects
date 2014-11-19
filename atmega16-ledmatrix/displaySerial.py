@@ -15,7 +15,7 @@ matrix_width = 8
 matrix_height = 8
 
 #create a surface to draw on.
-window_surface = pygame.display.set_mode((window_width, window_height), pygame.FULLSCREEN);
+window_surface = pygame.display.set_mode((window_width, window_height));
 
 fpsClock = pygame.time.Clock()
 
@@ -174,3 +174,4 @@ while running:
 serial_port.close()
 #and give free the resources pygame was using.
 pygame.quit()
+

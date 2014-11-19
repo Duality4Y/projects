@@ -37,12 +37,19 @@ void setPixel(uint8_t x, uint8_t y)
 	COL_PORT = (1<<y);
 }
 
-void testShift(volatile uint8_t *image)
+void testShift(volatile uint8_t *image, uint8_t direction)
 {
 	unsigned int i = 0;
 	for(i = 0;i<0x08;i++)
 	{
-		image[i] = (image[i]<<7)|(image[i]>>1);
+		if(direction)
+		{
+			image[i] = (image[i]<<7)|(image[i]>>1);
+		}
+		else
+		{
+			image[i] = (image[i]<<1)|(image[i]>>7);
+		}
 	}
 }
 
@@ -58,7 +65,6 @@ void display(volatile uint8_t *image)
 		
 		COL_PORT = data;
 		ROW_PORT = ~(1<<i);
-		_delay_ms(1);
 	}
 }
 
