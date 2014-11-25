@@ -108,10 +108,6 @@ while running:
 			if event.key == pygame.K_i:
 				for pixel in pixels:
 					pixel.isSetOn = not pixel.isSetOn
-		#if event.type == pygame.KEYUP:
-			#disable showing "pixel" mouse position on ledmatrix
-			#if event.key == pygame.K_m:
-			#	showPixelMouse = False
 		#mouse button checking. and state setting.
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			if event.button == 1:

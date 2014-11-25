@@ -18,9 +18,9 @@ com_device = '/dev/ttyUSB0'
 #a basic pixel class for drawing pixel representations onto the screen.
 class Pixel(object):
 	#"global variable" for the class Pixel
-	self.on = True
-	self.off = False
-	self.isSetOn = False
+	on = True
+	off = False
+	isSetOn = False
 	#initialization setting up some usefull variables.
 	def __init__(self, pos, color, surface, inColor = red):
 		self.normalColor = color
@@ -34,7 +34,7 @@ class Pixel(object):
 		self.x_index = self.x/self.width
 		self.y_index = self.y/self.height
 		
-		self.rect = (self.x, self.y, self.width, sefl.height)
+		self.rect = (self.x, self.y, self.width, self.height)
 		
 		self.surface = surface
 		
@@ -60,70 +60,96 @@ class Pixel(object):
 	def setPixel(self, state):
 		self.isSetOn = state
 
-#the app class.
-#Serial Display Led Matrix
+#data to matrix translation class.
+#also does data transmission
 class SDLM(object):
-	#states for event handling
-	#mouse states:
-	self.leftMpressed = False
-	self.rightMpressed = False
-	#state that whill determine
-	#if a mouse to be showed on the ledmatrix:
-	self.showPixelMouse = False
-	#game loop condition:
-	self.running = True
 	def __init__(self):
-		#create a surface to draw on
+		try:
+			self.serial_port = serial.Serial(com_device, com_baud)
+		except serial.SerialException:
+			print "No serial port to open. "
+			self.serial_port = None
+		self.display_data = [0]*matrix_width
+	def send(self):
+		if self.serial_port == None:
+			return
+		for byte in self.display_data:
+			self.serial_port.write(chr(byte))
+	def setPixel(self, x, y, isSet):
+		x_index = x/(window_width/matrix_width)
+		y_index = y/(window_height/matrix_height)
+		self.display_data[y_index] |= (isSet << (x_index))
+	def invertPixel(self, x, y):
+		x_index = x/(window_width/matrix_width)
+		y_index = y/(window_height/matrix_height)
+		self.display_data[y_index] ^= (1<<x_index)
+	def setAllPixels(self):
+		self.display_data = [0xff]*8
+	def clearAllPixels(self):
+		self.display_data = [0]*8
+	def invertPixels(self):
+		for index,byte in enumerate(self.display_data):
+			self.display_data[index] ^= 0xff
+	def close(self):
+		if self.serial_port == None:
+			return
+		self.serial_port.close()
+
+class Demo(object):
+	leftMpressed = False
+	rightMpressed = False
+	showPixelMouse = False
+	running = True
+	def __init__(self):
+		self.matrix_screen = SDLM()
+		
 		self.surface = pygame.display.set_mode((window_width, window_height))
-		#create a fps clock object (to limit cpu time more)
 		self.fpsClock = pygame.time.Clock()
+		self.FPS = 30
 		
-		#create ranges to make itteration easier (divide plane into junks over with and height)
-		self.width_range = xrange(0, window_width, window_width/matrix_width)
-		self.height_range = xrange(0, window_height, window_height/matrix_height)
-		
-		#create a empty list for keeping track on our pixels
 		self.pixels = []
+		width_range = xrange(0, window_width, window_width/matrix_width)
+		height_range = xrange(0, window_height, window_height/matrix_height)
 		
-		#itterate over the list and fill in the pixels
 		for y in height_range:
 			for x in width_range:
-				self.pixels.append( Pixel((x,y), black, self.surface) )
+				self.pixels.append( Pixel((x, y), black, self.surface))
 		
-		#creat a list with 0's in it that we will use to calculate pixel positions
-		#for the ledmatrix.
-		self.display_bytes = [0]*matrix_width
-		
-		#initialize pygame
 		pygame.init()
-		
-		#open a serial connection
-		self.serial_port = serial.Serial(com_device, com_baud)
 	def eventHandling(self, event):
-		#if x pressed quit the app
 		if event.type == pygame.QUIT:
 			self.running = False
 		if event.type == pygame.KEYDOWN:
-			#if the escape key pressed quit the app
-			if event.key == pygame.K_ESCAPE:
-				running = False
-			#enable showing mouse position on the ledmatrix.
-			if event.key == pygame.K_m:
-				self.showPixelMouse = not self.showPixelMouse
-			#r for resetting all the pixels. (turning them all off)
-			if event.key == pygame.K_r:
-				for pixel in self.pixels:
-					pixel.isSetOn = False
-			#s for setting all the pixels. (turning them all on)
-			if event.key == pygame.K_s:
-				for pixel in self.pixels:
-					pixel.isSetOn = True
-			#i for inversing all the pixels. (if on turn off and vice versa)
-			if event.key == pygame.k_i:
-				for pixel in self.pixels:
-					pixel.isSetOn = not pixels.isSetOn
-	def close(self):
-		pygame.quit()
-		self.serial_port.close()
+			pass
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			pass
+		if event.type == pygame.MOUSEBUTTONUP:
+			pass
+	def process(self):
+		#take action uppon events.
+		if self.leftMpressed:
+			pass
+		if self.rightMpressed:
+			pass
+		if self.showPixelMouse:
+			pass
+		#send out our data
+		SDLM.send()
+	def draw(self):
+		#fill a background with black
+		self.surface.fill(black)
+		#draw pixels over it.
+		for pixel in self.pixels:
+			pixel.draw()
+		#update the screen and wait a bit (for the amount of self.fps)
+		pygame.display.update()
+		self.fpsClock.tick(self.FPS)
 	def run(self):
-		
+		while self.running:
+			break;
+	def close(self):
+		self.matrix_screen.close()
+		pygame.quit()
+
+demoScreen = Demo()
+demoScreen.close()

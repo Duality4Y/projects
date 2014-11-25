@@ -16,11 +16,17 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=518;Python;0;16;1;1;0;/home/robert/projects/python_assembler/python_assembler_1.py;0;4
-FILE_NAME_1=2055;None;0;16;1;1;0;/home/robert/projects/python_assembler/ASM_INSTRUCTIONS;0;4
-FILE_NAME_2=0;None;0;16;1;1;0;/home/robert/projects/python_assembler/asm_instruct.pars;0;4
-FILE_NAME_3=976;Python;0;16;1;1;0;/home/robert/projects/python_tool.py;0;4
+current_page=0
+FILE_NAME_0=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython_assembler%2Fpython_assembler_1.py;0;4
+FILE_NAME_1=1655;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython_assembler%2FASM_INSTRUCTIONS;0;4
+FILE_NAME_2=0;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython_assembler%2Fasm_instruct.pars;0;4
+FILE_NAME_3=976;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fpython_tool.py;0;4
 
 [VTE]
 last_dir=/home/robert/projects/python_assembler
+
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false

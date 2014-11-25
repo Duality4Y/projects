@@ -23,16 +23,17 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
+current_page=6
 FILE_NAME_0=184;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Fmain.c;0;4
 FILE_NAME_1=1303;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Fmatrix.c;0;4
 FILE_NAME_2=38;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Fmatrix.h;0;4
 FILE_NAME_3=18;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Fuart.c;0;4
 FILE_NAME_4=101;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Fuart.h;0;4
 FILE_NAME_5=16;C;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2Ffont.h;0;4
+FILE_NAME_6=3092;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fatmega16-ledmatrix%2FdisplaySerial.py;0;4
 
 [VTE]
-last_dir=/home/robert/projects/atmega16-ledmatrix
+last_dir=/home/robert/projects/python_assembler
 
 [build-menu]
 EX_00_LB=_Execute
