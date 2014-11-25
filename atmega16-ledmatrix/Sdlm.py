@@ -67,7 +67,7 @@ class SDLM(object):
 		try:
 			self.serial_port = serial.Serial(com_device, com_baud)
 		except serial.SerialException:
-			print "No serial port to open. "
+			print "No device found on: %s" % com_device
 			self.serial_port = None
 		self.display_data = [0]*matrix_width
 	def send(self):
@@ -84,9 +84,9 @@ class SDLM(object):
 		y_index = y/(window_height/matrix_height)
 		self.display_data[y_index] ^= (1<<x_index)
 	def setAllPixels(self):
-		self.display_data = [0xff]*8
+		self.display_data = [0xff]*matrix_width
 	def clearAllPixels(self):
-		self.display_data = [0]*8
+		self.display_data = [0]*matrix_width
 	def invertPixels(self):
 		for index,byte in enumerate(self.display_data):
 			self.display_data[index] ^= 0xff
