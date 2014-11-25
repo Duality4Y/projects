@@ -53,12 +53,19 @@ class Pixel(object):
 				return True
 		else:
 			return False
+	#get pixel state
+	def getState(self):
+		return self.isSetOn
 	#toggles the pixel on/off state
-	def togglePixel(self):
+	def toggleState(self):
 		self.isSetOn = not self.isSetOn
 	#can be used to set the pixel on or off
-	def setPixel(self, state):
+	def setState(self, state):
 		self.isSetOn = state
+	def getPos(self):
+		return self.pos
+	def getIndexPos(self):
+		return (self.x_index, self.y_index)
 
 #data to matrix translation class.
 #also does data transmission
@@ -75,21 +82,26 @@ class SDLM(object):
 			return
 		for byte in self.display_data:
 			self.serial_port.write(chr(byte))
-	def setPixel(self, x, y, isSet):
-		x_index = x/(window_width/matrix_width)
-		y_index = y/(window_height/matrix_height)
-		self.display_data[y_index] |= (isSet << (x_index))
-	def invertPixel(self, x, y):
-		x_index = x/(window_width/matrix_width)
-		y_index = y/(window_height/matrix_height)
-		self.display_data[y_index] ^= (1<<x_index)
+	def setPixel(self, pos):
+		x, y = pos
+		self.display_data[y] |= (1 << (x))
+	def clearPixel(self, pos):
+		x,y = pos
+		self.display_data[y] &= ~(1 << (x))
+	def togglePixel(self, pos):
+		x, y = pos
+		self.display_data[y] ^= (1<<x)
 	def setAllPixels(self):
 		self.display_data = [0xff]*matrix_width
 	def clearAllPixels(self):
 		self.display_data = [0]*matrix_width
-	def invertPixels(self):
+	def togglePixels(self):
 		for index,byte in enumerate(self.display_data):
 			self.display_data[index] ^= 0xff
+	def getPixel(self, pos):
+		x,y = pos
+		state = self.display_data[y] & (1<<x)
+		return state
 	def close(self):
 		if self.serial_port == None:
 			return
@@ -120,21 +132,67 @@ class Demo(object):
 		if event.type == pygame.QUIT:
 			self.running = False
 		if event.type == pygame.KEYDOWN:
-			pass
+			#quit if escape pressed
+			if event.key == pygame.K_ESCAPE:
+				self.running = False
+			#enable showing mouse position on ledmatrix
+			if event.key == pygame.K_m:
+				self.showPixelMouse = not self.showPixelMouse
+			#r for reseting all the pixels. (turning them off)
+			if event.key == pygame.K_r:
+				for pixel in self.pixels:
+					pixel.setState(pixel.off)
+			#s for setting all the pixels. (turning them all on)
+			if event.key == pygame.K_s:
+				for pixel in self.pixels:
+					pixel.setState(pixel.on)
+			#i for inversing. turning leds that are on.
+			if event.key == pygame.K_i:
+				for pixel in self.pixels:
+					pixel.toggleState()
+		#left mouse button = 1
+		#right mouse button = 3
+		#midle mouse button = 2
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			pass
+			if event.button == 1:
+				self.leftMpressed = True
+			if event.button == 3:
+				self.rightMpressed = True
 		if event.type == pygame.MOUSEBUTTONUP:
-			pass
+			if event.button == 1:
+				self.leftMpressed = False
+			if event.button == 3:
+				self.rightMpressed = False
 	def process(self):
+		mouse_pos = pygame.mouse.get_pos()
 		#take action uppon events.
+		self.matrix_screen.clearAllPixels()
+		#if the left mouse button is pressed fill the pixel it's on.
 		if self.leftMpressed:
-			pass
+			for pixel in self.pixels:
+				if pixel.getState() == pixel.off and pixel.inPixel(mouse_pos):
+					pixel.toggleState()
+		#if the right mouse button is pressed switch the pixel it's on off.
 		if self.rightMpressed:
-			pass
+			for pixel in self.pixels:
+				if pixel.getState() == pixel.on and pixel.inPixel(mouse_pos):
+					pixel.toggleState()
+		
+		#translate Pixels into matrix_screen data
+		for pixel in self.pixels:
+			if pixel.getState():
+				self.matrix_screen.setPixel(pixel.getIndexPos())
+		
+		#overlay our mouse on the matrix data
+		#if this option is enabled (m pressed) show a mouse on the ledmatrix display.
 		if self.showPixelMouse:
-			pass
+			mx,my = pygame.mouse.get_pos()
+			mx_index = mx/(window_width/matrix_width)
+			my_index = my/(window_height/matrix_height)
+			self.matrix_screen.togglePixel( (mx_index, my_index) )
+		
 		#send out our data
-		SDLM.send()
+		self.matrix_screen.send()
 	def draw(self):
 		#fill a background with black
 		self.surface.fill(black)
@@ -146,10 +204,15 @@ class Demo(object):
 		self.fpsClock.tick(self.FPS)
 	def run(self):
 		while self.running:
-			break;
+			pygame.event.pump()
+			for event in pygame.event.get():
+				self.eventHandling(event)
+			self.process()
+			self.draw()
 	def close(self):
 		self.matrix_screen.close()
 		pygame.quit()
 
 demoScreen = Demo()
+demoScreen.run()
 demoScreen.close()
