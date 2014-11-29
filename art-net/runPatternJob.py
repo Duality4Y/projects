@@ -1,20 +1,17 @@
 import argparse, socket, time
-import sys, os, imp
+import imp
 
 from artnet import buildPacket
 from convert import convertSnakeModes
 
+from patterns import matrix_width, matrix_height
+
 UDP_PORT = 6454
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-d", "--delay", nargs="?", default=0.15, type=float)
-parser.add_argument("-c", "--config", nargs="?", default="default_conf.py", type=str)
+parser.add_argument("-d", "--delay", help="controlle flow speed.", metavar="<delay>", nargs="?", default=0.15, type=float)
+parser.add_argument("-c", "--config", help="load config.", metavar="<config_conf.py>", nargs="?", default="default_conf.py", type=str)
 args = parser.parse_args()
-
-#from configs import pattern_conf as config
-if args.config == None:
-	print "Please enter path to configuration --configs /path/to/config.py"
-	sys.exit(1)
 
 package = "configs"
 
@@ -30,6 +27,6 @@ while(True):
 	for t in TARGETS:
 		pattern = TARGETS[t]
 		data = pattern.generate()
-		data = convertSnakeModes(data, 10, 17)
+		data = convertSnakeModes(data, matrix_width, matrix_height)
 		sock.sendto(buildPacket(0, data), (t, UDP_PORT))
 	time.sleep(args.delay)

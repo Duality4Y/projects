@@ -21,7 +21,7 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
+current_page=-1
 
 [VTE]
-last_dir=/home/robert/art/py-gogbot-artnet
+last_dir=/home/robert/projects/art-net/py-gogbot-artnet
