@@ -22,10 +22,13 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=1088;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fart-net%2FrunPatternJob.py;0;4
-FILE_NAME_1=1998;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fart-net%2Fpatterns%2FRainPattern.py;0;4
+current_page=4
+FILE_NAME_0=699;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fart-net%2FrunPatternJob.py;0;4
+FILE_NAME_1=1414;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fart-net%2Fpatterns%2FRainPattern.py;0;4
 FILE_NAME_2=286;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fart-net%2Fconvert.py;0;4
+FILE_NAME_3=170;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fart-net%2Fconfigs%2Fdefault_conf.py;0;4
+FILE_NAME_4=108;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fart-net%2Fconfigs%2Fpattern_conf.py;0;4
+FILE_NAME_5=270;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fprojects%2Fart-net%2Fartnet.py;0;4
 
 [VTE]
-last_dir=/home/robert/projects/art-net/py-gogbot-artnet
+last_dir=/home/robert/projects/art-net

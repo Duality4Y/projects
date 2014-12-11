@@ -34,10 +34,10 @@ class RainPattern(object):
 		#put drop in data and increment it's position
 		for drop in self.drops:
 			#calculate where to put it
-			index = ((drop.y-1)*matrix_width+drop.x)-1
+			index = ( ((drop.y-1)*matrix_width)+drop.x)
 			#put drop op matrix screen
 			if index >= 0:
-				self.data[index] = drop.color
+				self.data[index-1] = drop.color
 			#increment it's height
 			drop.incrementHeight()
 			#if it falls of the screen remove it.
