@@ -15,6 +15,7 @@ indent_mode=2
 [project]
 name=SDL_projects
 base_path=/home/robert/projects/SDL_projects/
+description=
 
 [long line marker]
 long_line_behaviour=1
@@ -23,6 +24,7 @@ long_line_column=72
 [files]
 current_page=1
 FILE_NAME_0=336;Python;0;EUTF-8;0;1;0;%2Fhome%2Frobert%2Fpy-art-net%2Fconfigs%2Fpattern_conf.py;0;4
+FILE_NAME_1=0;Diff;0;EUTF-8;0;1;0;%2Ftmp%2Fpyserial.patch;0;4
 
 [VTE]
 last_dir=/home/robert/py-art-net
